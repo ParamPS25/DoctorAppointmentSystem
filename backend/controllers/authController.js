@@ -3,6 +3,7 @@ const BaseUser = require('../models/baseUserSchema');
 const Doctor = require('../models/doctorSchema');
 const Patient = require('../models/patientSchema');
 const Token = require('../models/tokenSchema');
+const {sendToken} = require('../services/jwtToken');
 
 async function signup(req,res,next){
     try{
@@ -96,14 +97,18 @@ async function login(req,res){
 
         // removing password from response
         user.password = undefined;
-        res.status(200).json({
-            success: true,
-            user
-        });
+        await sendToken(user, 200, res);  // send token in response
+
+        //error : as we are sending token in response, we don't need to send user in response so , was giving err Cannot set headers after they are sent to the client 
+        // as we are already sending response in sendToken function()
+        // return res.status(200).json({
+        //     success: true,
+        //     user
+        // });
 
     }catch(error){
         console.error(error);
-        res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: 'Error logging in'
         });
@@ -114,16 +119,17 @@ async function logout(req,res){
     try{
         const refreshToken = req.cookies.refreshToken;
 
-        if(refreshToken){
-            // remove refresh token from database
-            await Token.findOneAndUpdate({refreshToken},{
-                isValid: false
-            })
-        }
+        await Token.findOneAndDelete({ refreshToken });
 
         // clear cookies
-        res.clearCookie('accessToken');
-        res.clearCookie('refreshToken');
+        res.cookie('accessToken', '', {
+            expires: new Date(0),
+            httpOnly: true
+        });
+        res.cookie('refreshToken', '', {
+            expires: new Date(0),
+            httpOnly: true
+        });
 
         res.status(200).json({
             success: true,
@@ -179,4 +185,5 @@ module.exports = {
     signup,
     login,
     logout,
+    getUserProfile
 };

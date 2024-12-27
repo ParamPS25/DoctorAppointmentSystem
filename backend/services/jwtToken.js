@@ -1,9 +1,9 @@
 // generate a JSON Web Token (JWT) for a user and send it back to the client in a cookie.
-
+require('dotenv').config();
 const jwt = require('jsonwebtoken');
-const Token = require('../models/Token');
+const Token = require('../models/tokenSchema');
 
-exports.generateTokens = async (user) => {
+generateTokens = async (user) => {
     // Payload containing id, email, and role
     const payload = {
         id: user._id,
@@ -39,8 +39,8 @@ exports.generateTokens = async (user) => {
 };
 
 
-exports.sendTokens = async (user, statusCode, res) => {
-    const { accessToken, refreshToken } = await exports.generateTokens(user);
+exports.sendToken = async (user, statusCode, res) => {
+    const { accessToken, refreshToken } = await generateTokens(user);
 
     const accessTokenOptions = {
         expires: new Date(Date.now() + 15 * 60 * 1000), //expiration is set to 15 minutes from the current time.
@@ -65,7 +65,7 @@ exports.sendTokens = async (user, statusCode, res) => {
         phoneNumber: user.phoneNumber
     };
 
-    res.status(statusCode)
+    return res.status(statusCode)
         .cookie('accessToken', accessToken, accessTokenOptions)
         .cookie('refreshToken', refreshToken, refreshTokenOptions)
         .json({

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const BaseUser = require('../models/baseUserSchema');
-const Token = require('../models/Token');
+const Token = require('../models/tokenSchema');
 const generateTokens = require("../services/jwtToken");
 
 // 1. get access token from cookie, if no access token, return 401
