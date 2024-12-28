@@ -6,10 +6,6 @@ const patientSchema = new mongoose.Schema({
         ref: 'BaseUser', 
         required: true 
     },
-    gender: { 
-        type: String, 
-        enum: ['Male', 'Female', 'Other'] 
-    },
     medicalHistory: [
         {
             disease: { type: String },
