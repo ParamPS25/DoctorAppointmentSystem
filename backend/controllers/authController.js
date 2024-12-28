@@ -7,9 +7,9 @@ const {sendToken} = require('../services/jwtToken');
 
 async function signup(req,res,next){
     try{
-        const {firstname,lastname,email,password,phoneNumber,age,role, ...additionalInfo} = req.body;
+        const {firstname,lastname,email,password,phoneNumber,age,gender,role, ...additionalInfo} = req.body;
 
-        if (!firstname || !lastname || !email || !password || !phoneNumber || !role) {
+        if (!firstname || !lastname || !email || !password || !phoneNumber || !role || !gender) {
             return res.status(400).json({
                 success: false,
                 message: 'Please provide all required fields'
@@ -35,23 +35,24 @@ async function signup(req,res,next){
             password: hashedPassword,
             phoneNumber,
             age,
+            gender,
             role
         });
 
         // role based registration
         if(role === 'doctor'){
-            const {specialization, experience} = additionalInfo;
+            const {specialization, experience,fees} = additionalInfo;
             await Doctor.create({
                 baseUserId: baseUser._id,
                 specialization,
-                experience
+                experience,
+                fees
             });
         }
         else if(role === 'patient'){
-            const {gender,medicalHistory} = additionalInfo;
+            const {medicalHistory} = additionalInfo;
             await Patient.create({
                 baseUserId: baseUser._id,
-                gender,
                 medicalHistory
             });
         }
