@@ -28,12 +28,25 @@ generateTokens = async (user) => {
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
 
-    // Store refresh token in database
-    await Token.create({
-        userId: user._id,
-        refreshToken,
-        expiresAt
-    });
+    // Check if there's an existing refresh token for the user
+    const existingToken = await Token.findOne({ userId: user._id });
+
+    // previously there was a bug here, on each login, a new refresh token was created for the user, which was not the correct way to do it. as creates redundant tokens in the database with respect to the user id.
+
+    if (existingToken) {
+        // If a refresh token exists, update it with the new one
+        existingToken.refreshToken = refreshToken;
+        existingToken.expiresAt = expiresAt;
+        await existingToken.save();
+    } else {
+        // If no refresh token exists, create a new one
+        await Token.create({
+            userId: user._id,
+            refreshToken,
+            expiresAt
+        });
+    }
+
 
     return { accessToken, refreshToken };
 };
