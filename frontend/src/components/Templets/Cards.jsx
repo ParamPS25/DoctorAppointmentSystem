@@ -1,29 +1,75 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import './Cards.css';
 
 const Cards = () => {
-  const obj=[ {name:'Dr.abc',email:'abcd789@xyz.co',description:'Dr.Shantilal is well Known and exprinced doctor.he is specielist of Auyrvedik medicins',image:'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg'},
-    {name:'Dr.xyz',email:'abcd789@xyz.co',description:'Dr.Shantilal is well Known and exprinced doctor.he is specielist of Auyrvedik medicins',image:'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg'},
-    {name:'Dr.pqr',email:'abcd789@xyz.co',description:'Dr.Shantilal is well Known and exprinced doctor.he is specielist of Auyrvedik medicins',image:'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg'},
-    {name:'Dr.john',email:'abcd789@xyz.co',description:'Dr.Shantilal is well Known and exprinced doctor.he is specielist of Auyrvedik medicins',image:'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg'},
-    {name:'Dr.bean',email:'abcd789@xyz.co',description:'Dr.Shantilal is well Known and exprinced doctor.he is specielist of Auyrvedik medicins',image:'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg'},
-    {name:'Dr.nik',email:'abcd789@xyz.co',description:'Dr.Shantilal is well Known and exprinced doctor.he is specielist of Auyrvedik medicins',image:'https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg'}
-  ];
-  return (
-    <div className='w-full h-[70%] flex items-center justify-center flex-wrap '> 
-     {obj.map((item,index)=>(
-  <div key={index} className={`${index %2===0 ? 'bg-gradient-to-r from-[#cad2c5] to-[#2c7da0]':'bg-gradient-to-r from-[#2c7da0] to-[#cad3c5]'} m-2 p-3 rounded-lg hover:drop-shadow-2xl`}>
-  <div className='flex  items-center justify-center flex-col'>
- <img src='https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__480.jpg' className='w-20 h-20 rounded-full' alt='doctor'/>
-    <h1 className='text-2xl font-bold'>{item.name}</h1>
-    <p className='text-sm '>ShantilsjdjdjalDr@xyz.co</p>
-    <h3 className='mt-2 font-semibold'>Description</h3>
-    <h4 className='text-xs font-semibold'>Dr.Shantilal is well Known and exprinced doctor.he is specielist of Auyrvedik medicins</h4>
-  </div>
-  </div>
-     )
-    )}
-   </div>
-  )
-}
+  const [doctors, setDoctors] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredDoctors, setFilteredDoctors] = useState([]);
 
-export default Cards
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await axios.get('http://localhost:8080/api/doctors/');
+        if (response.data.message === 'success') {
+          setDoctors(response.data.doctors);
+          setFilteredDoctors(response.data.doctors);
+        }
+      } catch (error) {
+        console.error('Error fetching doctors:', error);
+      }
+    };
+
+    fetchDoctors();
+  }, []);
+
+  // search filtering based on name (firstname - lastname) and specialization
+  useEffect(() => {
+    const results = doctors.filter((doctor) => {
+      return (
+        `${doctor.baseUserId.firstname} ${doctor.baseUserId.lastname}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        doctor.specialization.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    });
+
+    setFilteredDoctors(results);
+  }, [searchTerm, doctors]);
+
+  return (
+    <div className="doctors-container">
+      <h1 className='title'>Our Doctors</h1>
+
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search doctors by name or specialization"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="search-input"
+        />
+      </div>
+
+      <div className="cards">
+        {filteredDoctors.length > 0 ? (
+          filteredDoctors.map((doctor, index) => (
+            <div key={index} className={`card ${doctor.color}`}>
+              <div className="profile-pic"><i className="ri-account-circle-fill"></i></div>
+              <h2>Dr. {doctor.baseUserId.firstname} {doctor.baseUserId.lastname}</h2>
+              <p><strong>Specialization:</strong> {doctor.specialization}</p>
+              <p><strong>Experience:</strong> {doctor.experience} years</p>
+              <p><strong>Fees per consultation:</strong> {doctor.fees} Rs</p>
+              <p><strong>Phone:</strong> {doctor.baseUserId.phoneNumber || "N/A"}</p>
+              <p><strong>Age:</strong> {doctor.baseUserId.age}</p>
+              <p><strong>Gender:</strong> {doctor.baseUserId.gender}</p>
+              <button className="btn">Book Appointment</button>
+            </div>
+          ))
+        ) : (
+          <p>No doctors available</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Cards;
