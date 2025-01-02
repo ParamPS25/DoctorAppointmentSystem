@@ -15,6 +15,9 @@ const doctorSchema = new mongoose.Schema({
     fees: { 
         type: Number 
     },
+    rating: { 
+        type: Number 
+    },
     // availability: [
     //     {
     //         day: { type: String, required: true },
