@@ -7,4 +7,5 @@ xgboost
 dill
 flask
 flask_cors
+imbalanced-learn
 # -e .

@@ -3,11 +3,37 @@ from flask_cors import CORS
 import numpy as np
 import pandas as pd
 
+from src.stroke.predict_pipeline import PredictPipeline as StrokePredictPipeline, CustomData as StrokeCustomData
 from src.diabetes.predict_pipeline import PredictPipeline as DiabetesPredictPipeline, CustomData as DiabetesCustomData
 from src.diseases_and_symptoms.predict_pipeline import PredictPipeline as DiseasePredictPipeline
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for cross-origin requests
+
+# Route for predicting stroke
+@app.route('/predict-stroke', methods=['POST'])
+def predict_stroke():
+    try:
+        data = request.get_json()
+
+        # Validate input data
+        required_fields = [
+            "gender", "age", "hypertension", "heart_disease", 
+            "ever_married", "work_type", "Residence_type", 
+            "avg_glucose_level", "bmi", "smoking_status"
+        ]
+        for field in required_fields:
+            if field not in data:
+                return jsonify({"error": f"Missing field: {field}"}), 400
+
+        custom_data = StrokeCustomData(**data)
+        input_df = custom_data.get_data_as_data_frame()
+        pipe = StrokePredictPipeline()
+        preds = pipe.predict(input_df)
+
+        return jsonify({"prediction": "Stroke" if preds[0] == 1 else "No Stroke"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 # Route for predicting diabetes
 @app.route('/predict-diabetes', methods=['POST'])
