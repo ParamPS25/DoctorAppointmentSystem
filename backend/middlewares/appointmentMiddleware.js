@@ -18,6 +18,19 @@ async function isPatient(req,res,next){
     
 }
 
+async function isDoctor(req,res,next){
+    try{
+        if(req.user.role !== 'doctor'){
+            return res.status(403).json({
+                message: 'Unauthorized access (Only doctors can update appointment status)'
+            });
+        }
+        next();
+    }catch(err){
+        res.status(500).json({message: 'Server error'});
+    }
+}
+
 const appointmentValidation = [
 
     // Validate doctorId from params
@@ -90,4 +103,5 @@ const appointmentValidation = [
 module.exports = {
     isPatient, 
     appointmentValidation,
+    isDoctor
 };
