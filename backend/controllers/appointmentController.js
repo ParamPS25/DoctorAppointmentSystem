@@ -1,7 +1,13 @@
 const Appointment = require('../models/appointmentSchema');
+const BaseUser = require('../models/baseUserSchema')
 const Doctor = require('../models/doctorSchema');
 const Patient = require('../models/patientSchema');
 const Notification = require('../models/notificationSchema');
+const emailTemplate = require('../services/emailTemplateStatus');
+
+const nodemailer = require('nodemailer');
+const handlebars = require('handlebars');
+const transporter = require('../services/nodeMailerAuth');
 
 // POST : api/book/:doctorId
 async function bookAppointment(req, res, next) {
@@ -53,6 +59,48 @@ async function bookAppointment(req, res, next) {
     }
 }
 
+async function sendAppointmentStatusEmail(appointment,status,doc_fname,doc_lname){
+    try{
+        const isConfirmed = status === "confirmed"
+
+        const templateData = {
+            status : status,
+            doctorName : `${doc_fname} ${doc_lname}`,
+            appointmentDate: appointment.appointmentDate,
+            appointmentTime: appointment.appointmentTime,
+            appointmentId: appointment._id,
+            headerColor: isConfirmed ? '#4CAF50' : '#f44336',
+            statusColor: isConfirmed ? '#4CAF50' : '#f44336',
+            isConfirmed: isConfirmed
+        }
+
+        const template = handlebars.compile(emailTemplate);
+        const htmlContent = template(templateData);
+
+        const patient = await Patient.findById(appointment.patientId).populate('baseUserId');
+        const patientEmail = patient.baseUserId.email;
+
+        const mailOptions = {
+            from : 'bhavsarparam1940@gmail.com',
+            to :    patientEmail,
+            subject: `Appointment ${status.charAt(0).toUpperCase() + status.slice(1)}`,
+            html : htmlContent,
+            attachments: [{
+                filename: `appointment-${status}.html`,
+                content: htmlContent
+            }]
+        };
+
+        // send mail
+        await transporter.sendMail(mailOptions);
+        return true;
+        
+    } catch(err){
+        console.error('Error sending appointment email:', err);
+        throw err;
+    }
+}
+
 // Patch : api/book/status/:appointmentId
 // here req.user will be the doctor 
 async function updateAppointmentStatus(req, res, next) {
@@ -71,6 +119,14 @@ async function updateAppointmentStatus(req, res, next) {
             });
         }
 
+        // check if req.user doc is same as releated with appointmentId
+        // if(appointment.doctorId !== req.user.id){
+        //     return res.status(403).json({
+        //         success : false,
+        //         message : "Unauthorized access"
+        //     })
+        // }
+
         appointment.status = status;        // status can be 'confirmed' or 'cancelled'
         await appointment.save();
 
@@ -88,6 +144,11 @@ async function updateAppointmentStatus(req, res, next) {
         }).save();                    // saving the notification
 
         // console.log(notifn);
+
+        // send email for confirmation or cancellation , // as here req.user will be doctor
+        const doc_fname = req.user.firstname
+        const doc_lname = req.user.lastname
+        await sendAppointmentStatusEmail(appointment,status,doc_fname,doc_lname); 
         
         res.status(200).json({
             success : true,
