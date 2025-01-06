@@ -14,6 +14,12 @@ import Signup from '../Templets/Signup';
 const AllPage = () => {
   return (
     <div>
+
+
+
+
+
+      
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/Appointment" element={<Appointment />} />
