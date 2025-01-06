@@ -1,6 +1,7 @@
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 const Login = () => {
   const { register, handleSubmit } = useForm();
@@ -42,12 +43,17 @@ const Login = () => {
         <Link className='text-blue-700'>
           <h1 className='mt-2 ml-60'>Forgot Password?</h1>
         </Link>
+       <Link to="/AllPage">
         <input 
           type='submit' 
           name='Login' 
           value="Sign in" 
           className='mt-7 p-2 w-52 text-zinc-200 bg-[#0077b6] placeholder-[#212529] rounded-md hover:bg-[#0096c7] font-semibold'
         />
+        </Link>
+        
+       
+       
       </form>
     </>
   )
