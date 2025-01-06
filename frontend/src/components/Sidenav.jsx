@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 const Sidenav = () => {
   return (
-    <div className='w-[20%] h-full text-zinc-400 text-2xl bg-[#212529] border-r-2 border-zinc-700 p-3'>
+    <div className='w-[100%] h-full text-zinc-400 text-2xl bg-[#212529] border-r-2 border-zinc-700 p-3'>
        <h1 className='font-bold font-sans text-center text-zinc-200'>
        <i className="ri-stethoscope-line pr-3 font-normal"></i>
         BookMyDoc</h1>

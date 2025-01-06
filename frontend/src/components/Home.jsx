@@ -8,7 +8,7 @@ const Home = () => {
     <>
     <Sidenav/>
 <div className='w-[80%] h-full'>
-    <Content/>
+    {/* <Content/> */}
 </div>
 </>
   )
