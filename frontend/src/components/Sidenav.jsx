@@ -10,23 +10,23 @@ const Sidenav = () => {
       </h1>
       <hr className='mt-2 border-0.2 border-zinc-200' />
       <div className='flex flex-col mt-10'>
-        <Link to="/appointment" className='p-2 rounded-md font-semibold hover:bg-[#ede5fa] hover:text-black duration-300'>
+        <Link to="/appointment" className='p-2 rounded-md font-semibold hover:bg-[#ede5fa] focus:bg-[#ede5fa] focus:text-black hover:text-black duration-300'>
           <i className="mr-4 ri-calendar-check-line font-normal"></i>
           Appointments
         </Link>
-        <Link to='/Symptoms' className='mt-7 p-2 rounded-md font-semibold hover:bg-[#ede5fa] hover:text-black duration-300'>
+        <Link to='/Symptoms' className='mt-7 p-2 rounded-md font-semibold focus:bg-[#ede5fa] focus:text-black hover:bg-[#ede5fa] hover:text-black duration-300'>
           <i className="mr-4 ri-first-aid-kit-line font-normal"></i>
           Symptoms
         </Link>
-        <Link to='/Doctor' className='mt-7 p-2 rounded-md font-semibold hover:bg-[#ede5fa] hover:text-black duration-300'>
+        <Link to='/Doctor' className='mt-7 p-2 rounded-md font-semibold focus:bg-[#ede5fa] focus:text-black hover:bg-[#ede5fa] hover:text-black duration-300'>
           <i className="mr-4 ri-stethoscope-fill font-normal"></i>
           Doctors
         </Link>
-        <Link to='/Messages' className='mt-7 p-2 rounded-md font-semibold hover:bg-[#ede5fa] hover:text-black duration-300'>
+        <Link to='/Messages' className='mt-7 p-2 rounded-md font-semibold focus:bg-[#ede5fa] focus:text-black hover:bg-[#ede5fa] hover:text-black duration-300'>
           <i className="mr-4 ri-message-2-line font-normal"></i>
           Notification
         </Link>
-        <Link to='/settings' className='mt-7 p-2 rounded-md font-semibold hover:bg-[#ede5fa] hover:text-black duration-300'>
+        <Link to='/settings' className='mt-7 p-2 rounded-md font-semibold focus:bg-[#ede5fa] focus:text-black hover:bg-[#ede5fa] hover:text-black duration-300'>
           <i className="mr-4 ri-settings-4-line font-normal"></i>
           Settings
         </Link>

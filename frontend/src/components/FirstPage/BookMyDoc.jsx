@@ -25,13 +25,13 @@ const BookMyDoc = () => {
 
   return (
     <div className="bookmeet-container">
-      <h2 className="section-title">WHY CHOOSE BOOKMYDOC</h2>
+      <h2 className="section-title">WHY CHOOSE BookMyDoc</h2>
       <p className="section-subtitle">
         Online Appointment, Phone-in Appointment, Walk-in Appointment with Token
       </p>
       <div className="features-grid">
         {features.map((feature, index) => (
-          <div className="feature-card" key={index}>
+          <div className="feature-card w-[25%]" key={index}>
             <div className="feature-icon">{feature.icon}</div>
             <h3 className="feature-title">{feature.title}</h3>
             <p className="feature-description">{feature.description}</p>

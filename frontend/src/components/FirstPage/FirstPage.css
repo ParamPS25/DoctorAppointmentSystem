@@ -10,11 +10,7 @@ body {
     text-decoration: none;
     color: #007bff;
   }
-  
-  a:hover {
-    text-decoration: underline;
-  }
-  
+    
   /* Navbar */
   .navbar {
     display: flex;
@@ -31,7 +27,6 @@ body {
   }
   
   .navbar .login-btn {
-    background-color: #007bff;
     color: #fff;
     border: none;
     padding: 10px 15px;

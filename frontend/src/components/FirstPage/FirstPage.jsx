@@ -11,22 +11,22 @@ const FirstPage = () => {
       <nav className="navbar">
         <div className="logo">Health</div>
         <Link to="./SigninInfo">
-          <button className="login-btn">Log In</button>
+          <button className="login-btn w-32 mr-3 bg-[#0077b6] font-semibold">Log In</button>
         </Link>
       </nav>
 
       {/* Hero Section */}
       <section className="hero">
         <div className="hero-content">
-          <h1>Find Your doctor and make an appointment</h1>
+          <h1>Find Your Doctor and Make an Appointment</h1>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua.
           </p>
           <div className="hero-buttons">
             <Link to="/Signup">
-              <button className="get-started-btn">Get Started</button></Link>
-            <a href="#learn-more" className="learn-more-link">
+              <button className="get-started-btn font-semibold">Get Started</button></Link>
+            <a href="#learn-more" className="learn-more-link mt-3 ml-8">
               Learn More →
             </a>
           </div>
