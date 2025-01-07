@@ -9,7 +9,7 @@ import Settings from './components/Templets/Settings';
 import Signup from './components/Templets/Signup';
 import FirstPage from './components/FirstPage/FirstPage';
 import SigninInfo from './components/FirstPage/SigninInfo';
-
+import AppointmentPatientSide from './components/Templets/AppointmentPatientSide';
 import AllPage from './components/FirstPage/AllPage';
 
 
@@ -26,7 +26,7 @@ const App = () => {
         <Route path='/' element={<FirstPage />} />
         <Route path='/Signup' element={<Signup />} />
         <Route path='/SigninInfo' element={<SigninInfo />} />
-        
+        <Route path='/AppointmentPatientSide' element={<AppointmentPatientSide />} />
 
         <Route path='/AllPage/*' element={<AllPage />} />
         <Route path='/Home' element={<Home />} />

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const AppointPatientSide = () => {
+const AppointmentPatientSide = () => {
   const [formData, setFormData] = useState({
     appointmentDate: '',
     appointmentTime: '',
@@ -128,4 +128,4 @@ const AppointPatientSide = () => {
   );
 };
 
-export default AppointPatientSide;
+export default AppointmentPatientSide;
