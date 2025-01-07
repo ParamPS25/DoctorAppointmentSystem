@@ -63,9 +63,9 @@ const Cards = () => {
               <p><strong>Age:</strong> {doctor.baseUserId.age}</p>
               <p><strong>Gender:</strong> {doctor.baseUserId.gender}</p>
 
-              <link to="/AppointPatientSide">
+              <Link to="/AppointmentPatientSide">
               <button className="btn">Book Appointment</button>
-              </link>
+              </Link>
             </div>
           ))
         ) : (
