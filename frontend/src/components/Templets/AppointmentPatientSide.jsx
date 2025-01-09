@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const AppointmentPatientSide = () => {
+  const { doctorId } = useParams(); // Extract doctorId from URL parameters
+  const navigate = useNavigate(); // Initialize useNavigate hook for page navigation
   const [formData, setFormData] = useState({
     appointmentDate: '',
     appointmentTime: '',
     notes: '',
   });
+  const [popupMessage, setPopupMessage] = useState(''); // New state for the popup message
+  const [isPopupVisible, setIsPopupVisible] = useState(false); // To control popup visibility
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,15 +20,62 @@ const AppointmentPatientSide = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Appointment Details:', formData);
-    alert('Appointment submitted successfully!');
-    setFormData({
-      appointmentDate: '',
-      appointmentTime: '',
-      notes: '',
-    });
+
+    // Include the doctorId in the API payload
+    const appointmentData = {
+      ...formData,
+      doctorId, // Add the doctorId
+    };
+
+    try {
+      const response = await fetch(`http://localhost:8080/api/book/${doctorId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include', // This ensures cookies are sent with the request
+        body: JSON.stringify(appointmentData),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        // Show success message based on the status
+        if (result.populatedResult.status === 'confirmed') {
+          setPopupMessage('Your appointment has been confirmed!');
+        } else if (result.populatedResult.status === 'cancelled') {
+          setPopupMessage('Your appointment has been cancelled!');
+        } else {
+          setPopupMessage('Your appointment is booked and is pending for confirmation.');
+        }
+        setIsPopupVisible(true); // Show the popup
+        
+        // Navigate to the "AllAppointments" page after successful booking
+        setTimeout(() => {
+          navigate('/Appointments'); // Redirect after 2 seconds (or as desired)
+        }, 5000); // Adjust time as necessary
+      } else {
+        setPopupMessage('Failed to book appointment.');
+        setIsPopupVisible(true);
+      }
+
+      // Clear the form data after submission
+      setFormData({
+        appointmentDate: '',
+        appointmentTime: '',
+        notes: '',
+      });
+    } catch (err) {
+      console.error('Error booking appointment:', err);
+      setPopupMessage('There was an error while booking your appointment.');
+      setIsPopupVisible(true);
+    }
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupVisible(false);
   };
 
   return (
@@ -51,8 +103,11 @@ const AppointmentPatientSide = () => {
         <h2 style={{ textAlign: 'center', color: '#333' }}>Book an Appointment</h2>
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '15px' }}>
-            <label htmlFor="appointmentDate" style={{ display: 'block', marginBottom: '5px', color: '#555' }}>
-            appointmentDate:
+            <label
+              htmlFor="appointmentDate"
+              style={{ display: 'block', marginBottom: '5px', color: '#555' }}
+            >
+              Appointment Date:
             </label>
             <input
               type="date"
@@ -70,8 +125,11 @@ const AppointmentPatientSide = () => {
             />
           </div>
           <div style={{ marginBottom: '15px' }}>
-            <label htmlFor="appointmentTime" style={{ display: 'block', marginBottom: '5px', color: '#555' }}>
-            appointmentTime:
+            <label
+              htmlFor="appointmentTime"
+              style={{ display: 'block', marginBottom: '5px', color: '#555' }}
+            >
+              Appointment Time:
             </label>
             <input
               type="time"
@@ -90,7 +148,7 @@ const AppointmentPatientSide = () => {
           </div>
           <div style={{ marginBottom: '15px' }}>
             <label htmlFor="notes" style={{ display: 'block', marginBottom: '5px', color: '#555' }}>
-            notes:
+              Notes:
             </label>
             <textarea
               id="notes"
@@ -124,6 +182,40 @@ const AppointmentPatientSide = () => {
           </button>
         </form>
       </div>
+
+      {/* Popup for appointment status */}
+      {isPopupVisible && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            backgroundColor: '#fff',
+            padding: '20px',
+            borderRadius: '8px',
+            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+            zIndex: '1000',
+            textAlign: 'center',
+          }}
+        >
+          <h3>{popupMessage}</h3>
+          <button
+            onClick={handleClosePopup}
+            style={{
+              padding: '10px',
+              backgroundColor: '#FF5722',
+              color: 'white',
+              border: 'none',
+              borderRadius: '5px',
+              cursor: 'pointer',
+              marginTop: '15px',
+            }}
+          >
+            Close
+          </button>
+        </div>
+      )}
     </div>
   );
 };

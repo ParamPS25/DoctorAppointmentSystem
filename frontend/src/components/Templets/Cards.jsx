@@ -11,7 +11,9 @@ const Cards = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/doctors/');
+        const response = await axios.get('http://localhost:8080/api/doctors/',{
+          withCredentials: true,
+        });
         if (response.data.message === 'success') {
           setDoctors(response.data.doctors);
           setFilteredDoctors(response.data.doctors);
@@ -63,7 +65,7 @@ const Cards = () => {
               <p><strong>Age:</strong> {doctor.baseUserId.age}</p>
               <p><strong>Gender:</strong> {doctor.baseUserId.gender}</p>
 
-              <Link to="/AppointmentPatientSide">
+              <Link to={`/AppointmentPatientSide/${doctor._id}`}>
               <button className="btn">Book Appointment</button>
               </Link>
             </div>
