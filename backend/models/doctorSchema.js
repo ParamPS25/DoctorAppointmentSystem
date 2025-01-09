@@ -25,12 +25,12 @@ const doctorSchema = new mongoose.Schema({
     //         endTime: { type: String, required: true },
     //     },
     // ],
-    appointments: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Appointment',
-        },
-    ],
+    // appointments: [
+    //     {
+    //         type: mongoose.Schema.Types.ObjectId,
+    //         ref: 'Appointment',
+    //     },
+    // ],
 },{timestamps: true});
 
 const Doctor = mongoose.model('Doctor', doctorSchema);

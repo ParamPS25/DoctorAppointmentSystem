@@ -14,11 +14,11 @@ async function bookAppointment(req, res, next) {
     try{
         const doctorId = req.params.doctorId;
         const userId = req.user.id
-        const patientId = await Patient.findOne({baseUserId: userId}).select('_id');
+        const patient = await Patient.findOne({baseUserId: userId}).select('_id firstname lastname');
         const {appointmentTime,appointmentDate,notes} = req.body;
 
         const appointment = new Appointment({
-            patientId,
+            patientId: patient._id,
             doctorId,
             appointmentTime,
             appointmentDate,
@@ -28,7 +28,8 @@ async function bookAppointment(req, res, next) {
 
         const result = await appointment.save();
 
-        await Doctor.findByIdAndUpdate(doctorId, {$push : {appointments : result._id}});  // updating the doctor's appointments array
+        // no need to push the appointments in doc appointments arr as already created seperate appointments schema 
+        // await Doctor.findByIdAndUpdate(doctorId, {$push : {appointments : result._id}});  // updating the doctor's appointments array
 
         // after saving the appointment, we create notification for the doctor
 
@@ -41,8 +42,21 @@ async function bookAppointment(req, res, next) {
         }).save();                    // saving the notification 
         
         const populatedResult = await Appointment.findById(result._id)
-        .populate('doctorId' )
-        .populate('patientId');
+        .populate({
+            path : 'doctorId',
+            select : 'fee specialization',
+            populate : {
+                path : 'baseUserId',
+                select : 'firstname lastname email'
+            }
+        })
+        .populate({
+            path: 'patientId',
+            populate: {
+                path: 'baseUserId',
+                select: 'firstname lastname email',
+            },
+        });
 
         res.status(201).json({
             success : true,
@@ -77,8 +91,10 @@ async function sendAppointmentStatusEmail(appointment,status,doc_fname,doc_lname
         const template = handlebars.compile(emailTemplate);
         const htmlContent = template(templateData);
 
-        const patient = await Patient.findById(appointment.patientId).populate('baseUserId');
-        const patientEmail = patient.baseUserId.email;
+        // const patient = await Patient.findById(appointment.patientId).populate('baseUserId');
+        // const patientEmail = patient.baseUserId.email;
+
+        const patientEmail = appointment.patientId.baseUserId.email ;
 
         const mailOptions = {
             from : 'bhavsarparam1940@gmail.com',
@@ -109,8 +125,21 @@ async function updateAppointmentStatus(req, res, next) {
         const {status} = req.body;          // doctor updates the status of the appointment 
 
         const appointment = await Appointment.findById(appointmentId)
-        .populate('doctorId')
-        .populate('patientId');
+        .populate({
+            path: 'doctorId',
+            select: 'fee specialization',
+            populate: {
+                path: 'baseUserId',
+                select: 'firstname lastname email',
+            },
+        })
+        .populate({
+            path: 'patientId',
+            populate: {
+                path: 'baseUserId',
+                select: 'firstname lastname email',
+            },
+        });
 
         if(!appointment){
             return res.status(404).json({
@@ -126,6 +155,14 @@ async function updateAppointmentStatus(req, res, next) {
         //         message : "Unauthorized access"
         //     })
         // }
+
+        // if appointment is already confirmed/cancelled -> to avoid duplicate statuses
+        if ((appointment.status === status)) {
+            return res.status(400).json({
+                success: false,
+                message: `Appointment is already ${status}`,
+            });
+        }
 
         appointment.status = status;        // status can be 'confirmed' or 'cancelled'
         await appointment.save();
@@ -149,7 +186,7 @@ async function updateAppointmentStatus(req, res, next) {
         const doc_fname = req.user.firstname
         const doc_lname = req.user.lastname
         await sendAppointmentStatusEmail(appointment,status,doc_fname,doc_lname); 
-        
+
         res.status(200).json({
             success : true,
             message : `Appointment ${status} successfully`, 
@@ -199,32 +236,81 @@ async function getNotifications(req,res,next){
     }
 }
 
-// GET : api/book/doc/all
-// get all the appointments for the logged in doctor
-async function getAllAppointments(req,res,next){
-    try{
-        const userId = req.user.id;
-        const doctor = await Doctor.findOne({baseUserId : userId}).select('_id');
+// GET : api/book/all-appointments
+// get all the appointments for the logged in doctor or patient
+async function getAllAppointments(req, res, next) {
+    try {
+        const userId = req.user.id; // Logged-in user's ID
 
-        const appointments = await Appointment.find({doctorId : doctor._id})
-        .populate('doctorId')
-        .populate('patientId')
-        //.sort({appointmentDate : -1});    
-
-        // ! need to implement get user details from patientId as baseUserId is linked to patientId and patientId is linked to appointment
+        // Check if the user is a doctor
+        const doctor = await Doctor.findOne({ baseUserId: userId }).select('_id');
         
-        res.status(200).json({  
-            success : true,
-            appointments
-        });
+        let appointments;
 
-    }catch(err){
+        if (doctor) {
+            // If the user is a doctor, fetch appointments for the doctor
+            appointments = await Appointment.find({ doctorId: doctor._id })
+                .populate({
+                    path: 'doctorId',
+                    select: 'fee specialization',
+                    populate: {
+                        path: 'baseUserId',
+                        select: 'firstname lastname email',
+                    },
+                })
+                .populate({
+                    path: 'patientId',
+                    populate: {
+                        path: 'baseUserId',
+                        select: 'firstname lastname email',
+                    },
+                });
+        } else {
+            // If the user is not a doctor, check if they are a patient
+            const patient = await Patient.findOne({ baseUserId: userId }).select('_id');
+
+            if (!patient) {
+                return res.status(404).json({
+                    success: false,
+                    message: "User is neither a doctor nor a patient",
+                });
+            }
+
+            // Fetch appointments for the patient
+            appointments = await Appointment.find({ patientId: patient._id })
+                .populate({
+                    path: 'doctorId',
+                    select: 'fee specialization',
+                    populate: {
+                        path: 'baseUserId',
+                        select: 'firstname lastname email',
+                    },
+                })
+                .populate({
+                    path: 'patientId',
+                    select: 'medicalHistory', // Include medical history from Patient
+                    populate: {
+                        path: 'baseUserId',
+                        select: 'firstname lastname email',
+                    },
+                });
+        }
+
+        // Send response
+        res.status(200).json({
+            success: true,
+            appointments,
+        });
+    } catch (err) {
+        console.error(err);
         res.status(500).json({
-            success : false,
-            message : "Failed to get appointments" 
+            success: false,
+            message: "Failed to get appointments",
+            error: err.message,
         });
     }
 }
+
 
 module.exports = {
     bookAppointment,

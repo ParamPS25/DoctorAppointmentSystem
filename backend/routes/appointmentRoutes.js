@@ -8,7 +8,7 @@ const {bookAppointment,updateAppointmentStatus,getNotifications,getAllAppointmen
 // api/book/:doctorId    (isLoggedin -> isPatient -> appointmentValidation)
 router.post('/:doctorId', protect,isPatient,appointmentValidation, bookAppointment);
 
-router.get('/doc/all', protect, isDoctor, getAllAppointments);
+router.get('/all-appointments', protect, getAllAppointments);
 
 router.patch('/status/:appointmentId', protect ,isDoctor, updateAppointmentStatus);
 
