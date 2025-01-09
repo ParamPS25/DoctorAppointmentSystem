@@ -1,6 +1,7 @@
                                            
 import React, { useState, useEffect } from "react";
 import "./NotificationPage.css";
+import { format } from 'date-fns';
 
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState([]);
@@ -36,6 +37,13 @@ const NotificationPage = () => {
     fetchNotifications();
   }, []);
 
+  const formatDate = (isoString) => {
+    const formattedDate = format(new Date(isoString), 'yyyy-MM-dd');
+    const formattedTime = format(new Date(isoString), 'HH:mm:ss');
+    
+    return  formattedTime + " " + formattedDate ;
+  }
+
   return (
     <div className="notification-container">
       <h1 className="notification-title">Notifications</h1>
@@ -60,7 +68,7 @@ const NotificationPage = () => {
                 <td>{notification.title}</td>
                 <td>{notification.message}</td>
                 <td>{notification.releatedTo}</td>
-                <td>{notification.createdAt}</td>
+                <td>{formatDate(notification.createdAt)}</td>
 
               </tr>
             ))}
