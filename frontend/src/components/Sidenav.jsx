@@ -10,7 +10,7 @@ const Sidenav = () => {
       </h1>
       <hr className='mt-2 border-0.2 border-zinc-200' />
       <div className='flex flex-col mt-10'>
-        <Link to="/appointment" className='p-2 rounded-md font-semibold hover:bg-[#ede5fa] focus:bg-[#ede5fa] focus:text-black hover:text-black duration-300'>
+        <Link to="/Appointments" className='p-2 rounded-md font-semibold hover:bg-[#ede5fa] focus:bg-[#ede5fa] focus:text-black hover:text-black duration-300'>
           <i className="mr-4 ri-calendar-check-line font-normal"></i>
           Appointments
         </Link>

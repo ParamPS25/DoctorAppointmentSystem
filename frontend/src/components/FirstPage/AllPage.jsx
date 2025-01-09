@@ -22,7 +22,7 @@ const AllPage = () => {
       
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/Appointment" element={<Appointment />} />
+        <Route path="/Appointments" element={<Appointment />} />
         <Route path="/Doctor" element={<Doctor />} />
         <Route path="/Symptoms" element={<Sysmptoms />} />
         <Route path="/Messages" element={<Messages />} />

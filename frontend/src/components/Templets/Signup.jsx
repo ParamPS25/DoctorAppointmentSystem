@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes,Link,Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-
-const Signup= () => {
+const Signup = () => {
   const [formData, setFormData] = useState({
     firstname: '',
     lastname: '',
@@ -12,21 +11,20 @@ const Signup= () => {
     age: '',
     gender: '',
     role: '',
-    // Doctor specific fields
     specialization: '',
     experience: '',
     fees: '',
-    // Patient specific fields
-    medicalHistory: []
+    medicalHistory: [],
   });
 
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate(); // For navigation
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -38,27 +36,29 @@ const Signup= () => {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // This enables the browser to include cookies
         body: JSON.stringify(formData),
       });
+
       const data = await response.json();
       if (data.success === false && data.message === 'User already exists') {
         setErrors({ submit: 'User already exists' });
         return;
       }
+
       if (!response.ok) {
-        throw new Error('Signup failed');
+        throw new Error(data.message || 'Signup failed');
       }
-      
-      // Handle successful signup
+
       console.log('Signup successful');
-      // Redirect to login or dashboard
+      navigate('/AllPage'); // Redirect to AllPage on success
     } catch (error) {
       setErrors({ submit: error.message });
     }
   };
 
   return (
-    <div className="h-full w-full  py-12 sm:px-6 lg:px-8">
+    <div className="h-full w-full py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="text-center text-3xl font-bold text-[#0077b6]">
           Create your account
@@ -240,14 +240,12 @@ const Signup= () => {
             )}
 
             <div>
-              <Link to="/AllPage">
               <button
                 type="submit"
                 className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 Sign up
               </button>
-              </Link>
             </div>
           </form>
         </div>
@@ -255,4 +253,5 @@ const Signup= () => {
     </div>
   );
 };
+
 export default Signup;
