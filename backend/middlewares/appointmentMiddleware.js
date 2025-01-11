@@ -7,6 +7,7 @@ const Appointment = require('../models/appointmentSchema');
 async function isPatient(req,res,next){
     try{
         if(req.user.role !== 'patient'){
+            //console.log('isPatient middleware:', req.user);
             return res.status(403).json({
                 message: 'Unauthorized access (Only patients can book appointments)'
             });
