@@ -1,4 +1,4 @@
-/* General App Styling */
+
 body {
     font-family: Arial;
     margin: 0;
@@ -18,7 +18,7 @@ body {
     align-items: center;
 }
 
-/* Table Container */
+
 .table-container,
 .appointment-table-container {
     margin-bottom: 40px;
@@ -27,18 +27,18 @@ body {
     padding: 20px;
     width: 96%;
     margin-left: 23px;
-    max-width: 1200px; /* Optional: You can adjust the max width */
+    max-width: 1200px; 
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .appointment-table-container {
-    /* margin-right: 80px; */
+    
     width: 99%;
     margin-left: 7px;
 }
 
-/* Table Heading */
+
 .table-heading {
     font-size: 1.5em;
     margin-bottom: 20px;
@@ -46,7 +46,7 @@ body {
     text-align: center;
 }
 
-/* Table Styling */
+
 .appointment-table {
     width: 100%;
     border-collapse: collapse;
@@ -76,7 +76,7 @@ body {
     border-bottom: 1px solid #ddd;
 }
 
-/* Dropdown Styling */
+
 .action-dropdown {
     padding: 5px;
     border-radius: 5px;
@@ -86,7 +86,7 @@ body {
     color: #495057;
 }
 
-/* Status Styling */
+
 .status-pending {
     color: #ffc107;
     font-weight: bold;
@@ -106,7 +106,7 @@ body {
     color: green;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
     .appointment-table th,
     .appointment-table td {
@@ -119,7 +119,7 @@ body {
     }
 }
 
-/* Appointment Card (Modal) Styling */
+
 .appointment-card {
     position: fixed;
     top: 50%;
