@@ -1,0 +1,189 @@
+
+body {
+    font-family: Arial;
+    margin: 0;
+    padding: 0;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.app {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.table-container,
+.appointment-table-container {
+    margin-bottom: 40px;
+    margin-top: 10px;
+    background-color: #ffffff;
+    padding: 20px;
+    width: 96%;
+    margin-left: 23px;
+    max-width: 1200px; 
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.appointment-table-container {
+    
+    width: 99%;
+    margin-left: 7px;
+}
+
+
+.table-heading {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #343a40;
+    text-align: center;
+}
+
+
+.appointment-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.appointment-table th,
+.appointment-table td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+.appointment-table th {
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+}
+
+.appointment-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.appointment-table tr:hover {
+    background-color: #e9ecef;
+}
+
+.appointment-table td {
+    border-bottom: 1px solid #ddd;
+}
+
+
+.action-dropdown {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    background-color: #ffffff;
+    font-size: 1em;
+    color: #495057;
+}
+
+
+.status-pending {
+    color: #ffc107;
+    font-weight: bold;
+}
+
+.status-approved {
+    color: #28a745;
+    font-weight: bold;
+}
+
+.status-rejected {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.status-color {
+    color: green;
+}
+
+
+@media (max-width: 768px) {
+    .appointment-table th,
+    .appointment-table td {
+        font-size: 0.9em;
+        padding: 10px;
+    }
+
+    .table-heading {
+        font-size: 1.2em;
+    }
+}
+
+
+.appointment-card {
+    position: fixed;
+    top: 50%;
+    left: 82%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    border-radius: 8px;
+    z-index: 1000;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-body {
+    margin-top: 10px;
+    width: 100%;
+    font-size: 19px;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.approve-btn,
+.reject-btn {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.approve-btn {
+    background-color: green;
+    color: white;
+}
+
+.reject-btn {
+    background-color: red;
+    color: white;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.table-header{
+    font-size: 22px;
+
+}
+.table-body{
+    font-size: 20px;
+   
+}
+h2.table-heading{
+    font-size: 30px;
+}
