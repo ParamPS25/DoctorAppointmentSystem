@@ -27,6 +27,10 @@ const appointmentSchema = new mongoose.Schema({
     notes: {
          type: String 
     },
+    verificationToken: {
+        type: String,
+        default: null
+    }
   }, { timestamps: true });
 
 const Appointment = mongoose.model('Appointment', appointmentSchema);

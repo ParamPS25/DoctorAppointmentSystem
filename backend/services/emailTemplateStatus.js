@@ -7,6 +7,7 @@ const emailTemplate = `
         .container { padding: 20px; max-width: 600px; margin: 0 auto; }
         .header { background-color: {{headerColor}}; color: white; padding: 10px; text-align: center; }
         .details { margin: 20px 0; }
+        .qr-code { text-align: center; margin: 20px 0; }
         .status-badge {
             display: inline-block;
             padding: 5px 10px;
@@ -29,10 +30,19 @@ const emailTemplate = `
             <p><strong>Time:</strong> {{appointmentTime}}</p>
             <p><strong>Appointment ID:</strong> {{appointmentId}}</p>
         </div>
+       
+        {{#if isConfirmed}}
+        <div class="qr-code">
+            <h3>Verification QR Code</h3>
+            <img src="{{qrCodeDataUrl}}" alt="Verification QR Code">
+            <p>Please present this QR code during your visit for verification</p>
+        </div>
+        {{/if}}
+        
         <div class="footer">
             {{#if isConfirmed}}
             <p>Please keep this confirmation for your records.</p>
-            <p>Please arrive 10 minutes before your scheduled time.</p>
+            <p>Present the QR code when you arrive for your appointment.</p>
             {{else}}
             <p>Your appointment has been cancelled. Please contact us if you need to reschedule.</p>
             {{/if}}

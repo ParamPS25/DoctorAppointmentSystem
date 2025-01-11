@@ -4,6 +4,8 @@ const Doctor = require('../models/doctorSchema');
 const Patient = require('../models/patientSchema');
 const Notification = require('../models/notificationSchema');
 const emailTemplate = require('../services/emailTemplateStatus');
+const crypto = require('crypto');
+const QRCode = require('qrcode')
 
 const nodemailer = require('nodemailer');
 const handlebars = require('handlebars');
@@ -37,7 +39,7 @@ async function bookAppointment(req, res, next) {
             recipient : doctorId,
             recipientModel : 'Doctor',
             title : 'New Appointment Request',
-            message : `You have a new appointment request from ${req.user.email} for ${appointmentDate} on ${appointmentTime}`,
+            message : `You have a new appointment request from ${req.user.email} for ${appointmentDate} on ${appointmentTime} time slot`,
             releatedTo : result._id
         }).save();                    // saving the notification 
         
@@ -73,10 +75,34 @@ async function bookAppointment(req, res, next) {
     }
 }
 
+// ********************************************************************************************************************************************
+
+function generateVerificationToken(appointment){
+    const data = `${appointment._id}-${appointment.appointmentDate}-${appointment.appointmentTime}`
+    return crypto.createHash('sha256').update(data).digest('hex');
+}
+
 async function sendAppointmentStatusEmail(appointment,status,doc_fname,doc_lname){
     try{
         const isConfirmed = status === "confirmed"
+        let qrCodeDataUrl = '';
 
+        if(isConfirmed){
+            // Generate verification token and QR code
+            const verificationToken = generateVerificationToken(appointment)
+
+            appointment.verificationToken = verificationToken;
+            await appointment.save();
+
+            // Generate QR code
+            const qrData = JSON.stringify({
+                appointmentId: appointment._id,
+                verificationToken: verificationToken
+            });
+
+            qrCodeDataUrl = await QRCode.toDataURL(qrData);
+        }
+    
         const templateData = {
             status : status,
             doctorName : `${doc_fname} ${doc_lname}`,
@@ -85,7 +111,8 @@ async function sendAppointmentStatusEmail(appointment,status,doc_fname,doc_lname
             appointmentId: appointment._id,
             headerColor: isConfirmed ? '#4CAF50' : '#f44336',
             statusColor: isConfirmed ? '#4CAF50' : '#f44336',
-            isConfirmed: isConfirmed
+            isConfirmed: isConfirmed,
+            qrCodeDataUrl: qrCodeDataUrl
         }
 
         const template = handlebars.compile(emailTemplate);
@@ -201,6 +228,90 @@ async function updateAppointmentStatus(req, res, next) {
     }
 }
 
+// POST : api/book/doctor-scan 
+// post appointmentId and verification-token for 
+
+async function doctorScanQR(req,res,next){
+    try{
+        const {appointmentId, verificationToken} = req.body;
+        const doctorId = req.user._id;
+
+        const appointment = await Appointment.findById(appointmentId)
+        .populate({
+            path: 'doctorId',
+            select: 'fee specialization',
+            populate: {
+                path: 'baseUserId',
+                select: 'firstname lastname email',
+            },
+        })
+        .populate({
+            path: 'patientId',
+            populate: {
+                path: 'baseUserId',
+                select: 'firstname lastname email',
+            },
+        });
+
+        if (!appointment) {
+            return res.status(404).json({
+                success: false,
+                message: "Appointment not found"
+            });
+        }
+
+         // Check if the appointment is confirmed
+         if (appointment.status !== 'confirmed') {
+            return res.status(400).json({
+                success: false,
+                message: "Appointment is not confirmed"
+            });
+        }
+
+        // Verify token
+        if (appointment.verificationToken !== verificationToken) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid verification token"
+            });
+        }
+
+        // Verify if the doctor matches
+        if (appointment.doctorId._id.toString() !== doctorId.toString()) {
+            return res.status(403).json({
+                success: false,
+                message: "You are not authorized to verify this appointment"
+            });
+        }
+
+        // Check if appointment is for today
+        const appointmentDate = new Date(appointment.appointmentDate);
+        const today = new Date();
+        if (appointmentDate.toDateString() !== today.toDateString()) {
+            return res.status(400).json({
+                success: false,
+                message: "Appointment is not scheduled for today"
+            });
+        }
+
+        // Update appointment status to completed
+        appointment.status = 'completed';
+        await appointment.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Appointment marked as completed",
+            appointment
+        });
+
+    }catch(err){
+        return res.status(500).json({
+            success: false,
+            message: "Error verifying and updating appointment status",
+            error: err.message
+        })
+    }
+}
 // GET : api/book/notifications
 // get all the notifications for the logged in user, user can be doctor or patient
 async function getNotifications(req,res,next){
@@ -316,5 +427,6 @@ module.exports = {
     bookAppointment,
     updateAppointmentStatus,
     getNotifications,
-    getAllAppointments
+    getAllAppointments,
+    doctorScanQR
 };
