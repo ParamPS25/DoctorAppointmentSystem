@@ -16,7 +16,7 @@ const Appointment = () => {
 
    <div className='w-[75%] bg-white-700 h-full text-center text-3xl'>
    <AppointmentViewForDoctor/>
-<AppointmentViewForPatient/>
+   <AppointmentViewForPatient/>
 
    </div>
    </div>
