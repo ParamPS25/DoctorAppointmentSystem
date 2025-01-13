@@ -8,6 +8,7 @@
 h1 {
   color: #0077b6;
   margin-bottom: 20px;
+  font-size: 35px; /* Adjusted size for the title */
 }
 
 .search-bar {
@@ -18,7 +19,7 @@ h1 {
 .search-input {
   width: 60%;
   padding: 10px;
-  font-size: 16px;
+  font-size: 19px; /* Reduced font size for input */
   border: 1px solid #ccc;
   border-radius: 5px;
 }
@@ -39,6 +40,7 @@ h1 {
   padding: 20px;
   width: 300px;
   text-align: left;
+  font-size: 18px; /* Reduced font size for overall card content */
 }
 
 .card.blue {
@@ -62,24 +64,27 @@ h1 {
 }
 
 .profile-pic i {
-  font-size: 100px;
+  font-size: 100px; /* Reduced font size for the profile icon */
   color: #0077b6;
 }
 
 h2 {
   color: #333;
   margin-bottom: 10px;
+  font-size: 20px; /* Adjusted size for doctor names */
 }
 
 p {
   color: #555;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  font-size: 18px; /* Uniform smaller size for paragraphs */
 }
 
 .btn {
   display: block;
   width: 100%;
   padding: 10px;
+  font-size: 18px; /* Adjusted size for button text */
   background-color: #007bff;
   color: white;
   border: none;
