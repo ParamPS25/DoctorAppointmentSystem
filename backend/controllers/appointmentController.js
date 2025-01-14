@@ -7,6 +7,7 @@ const emailTemplate = require('../services/emailTemplateStatus');
 const crypto = require('crypto');
 const QRCode = require('qrcode')
 
+const puppeteer = require('puppeteer')
 const nodemailer = require('nodemailer');
 const handlebars = require('handlebars');
 const transporter = require('../services/nodeMailerAuth');
@@ -46,7 +47,7 @@ async function bookAppointment(req, res, next) {
         const populatedResult = await Appointment.findById(result._id)
         .populate({
             path : 'doctorId',
-            select : 'fee specialization',
+            select : 'fees specialization',
             populate : {
                 path : 'baseUserId',
                 select : 'firstname lastname email'
@@ -121,6 +122,13 @@ async function sendAppointmentStatusEmail(appointment,status,doc_fname,doc_lname
         // const patient = await Patient.findById(appointment.patientId).populate('baseUserId');
         // const patientEmail = patient.baseUserId.email;
 
+        // generate html content file -> pdf using puppeteer
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await page.setContent(htmlContent); // Load HTML content into the page
+        const pdfBuffer = await page.pdf({ format: 'A4' }); // Generate PDF
+        await browser.close();
+
         const patientEmail = appointment.patientId.baseUserId.email ;
 
         const mailOptions = {
@@ -129,8 +137,8 @@ async function sendAppointmentStatusEmail(appointment,status,doc_fname,doc_lname
             subject: `Appointment ${status.charAt(0).toUpperCase() + status.slice(1)}`,
             html : htmlContent,
             attachments: [{
-                filename: `appointment-${status}.html`,
-                content: htmlContent
+                filename: `appointment-${status}.pdf`,
+                content: pdfBuffer
             }]
         };
 
@@ -154,7 +162,7 @@ async function updateAppointmentStatus(req, res, next) {
         const appointment = await Appointment.findById(appointmentId)
         .populate({
             path: 'doctorId',
-            select: 'fee specialization',
+            select: 'fees specialization',
             populate: {
                 path: 'baseUserId',
                 select: 'firstname lastname email',
@@ -183,11 +191,11 @@ async function updateAppointmentStatus(req, res, next) {
         //     })
         // }
 
-        // if appointment is already confirmed/cancelled -> to avoid duplicate statuses
-        if ((appointment.status === status)) {
+        // if appointment is already confirmed/cancelled/completed -> to avoid duplicate statuses
+        if (appointment.status === status || appointment.status === 'completed') {
             return res.status(400).json({
-                success: false,
-                message: `Appointment is already ${status}`,
+            success: false,
+            message: `Appointment is already ${appointment.status}`,
             });
         }
 
@@ -234,12 +242,14 @@ async function updateAppointmentStatus(req, res, next) {
 async function doctorScanQR(req,res,next){
     try{
         const {appointmentId, verificationToken} = req.body;
-        const doctorId = req.user._id;
+        // const doctorId = req.user.id; mistake here as will give us BaseUserId 
+        const userId = req.user.id;
+        const doctorId = await Doctor.findOne({baseUserId: userId}).select('_id')
 
         const appointment = await Appointment.findById(appointmentId)
         .populate({
             path: 'doctorId',
-            select: 'fee specialization',
+            select: 'fees specialization',
             populate: {
                 path: 'baseUserId',
                 select: 'firstname lastname email',
@@ -277,22 +287,29 @@ async function doctorScanQR(req,res,next){
         }
 
         // Verify if the doctor matches
-        if (appointment.doctorId._id.toString() !== doctorId.toString()) {
+        if (appointment.doctorId._id.toString() !== doctorId._id.toString()) {
             return res.status(403).json({
                 success: false,
                 message: "You are not authorized to verify this appointment"
             });
         }
 
-        // Check if appointment is for today
-        const appointmentDate = new Date(appointment.appointmentDate);
-        const today = new Date();
-        if (appointmentDate.toDateString() !== today.toDateString()) {
-            return res.status(400).json({
-                success: false,
-                message: "Appointment is not scheduled for today"
-            });
-        }
+         // Check if appointment is for today , time is not strictly checked
+         const appointmentDate = new Date(appointment.appointmentDate);
+         const today = new Date();
+         // setting the time of both to midnight(00:00:00:000) this ensures that only the date part is compared, ignoring the time
+         appointmentDate.setHours(0,0,0,0);
+         today.setHours(0,0,0,0)   
+         // for testing book appointment for today so doc can scan qr and verify for correct date wrt appointment date
+         console.log('Appointment Date:', appointmentDate.toDateString());
+         console.log('Today:', today.toDateString());
+         if (appointmentDate.toDateString() !== today.toDateString()) {
+             return res.status(400).json({
+                 success: false,
+                 message: "Appointment is not scheduled for today"
+             });
+         }
+ 
 
         // Update appointment status to completed
         appointment.status = 'completed';
@@ -363,7 +380,7 @@ async function getAllAppointments(req, res, next) {
             appointments = await Appointment.find({ doctorId: doctor._id })
                 .populate({
                     path: 'doctorId',
-                    select: 'fee specialization',
+                    select: 'fees specialization',
                     populate: {
                         path: 'baseUserId',
                         select: 'firstname lastname email',
@@ -391,7 +408,7 @@ async function getAllAppointments(req, res, next) {
             appointments = await Appointment.find({ patientId: patient._id })
                 .populate({
                     path: 'doctorId',
-                    select: 'fee specialization',
+                    select: 'fees specialization',
                     populate: {
                         path: 'baseUserId',
                         select: 'firstname lastname email',

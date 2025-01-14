@@ -182,9 +182,23 @@ async function getUserProfile(req,res){
 
 }
 
+function getUserRole(req,res,next){
+    if (!req.user.role){
+        return res.status(400).json({
+            success:false,
+            message : "user role not exists"
+        })
+    }
+
+    return res.status(200).json({
+        role : req.user.role,
+    })
+}
+
 module.exports = {
     signup,
     login,
     logout,
-    getUserProfile
+    getUserProfile,
+    getUserRole
 };

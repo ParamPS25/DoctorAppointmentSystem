@@ -4,7 +4,8 @@ const {
     signup, 
     login, 
     logout, 
-    getUserProfile,  
+    getUserProfile,
+    getUserRole  
 } = require('../controllers/authController');
 
 const { protect } = require('../middlewares/auth');
@@ -16,6 +17,7 @@ router.get('/logout', logout);
 
 // Protected routes
 router.get('/me', protect, getUserProfile);
+router.get('/role',protect,getUserRole);
 // router.put('/update-profile', protect, updateProfile);
 // router.put('/change-password', protect, changePassword);
 
