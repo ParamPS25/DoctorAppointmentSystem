@@ -1,0 +1,95 @@
+.details-card {
+    position: fixed;
+    top: 50%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    background: rgb(210, 231, 245);
+    padding: 20px;
+    width: 500px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.details-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+}
+
+.details-card-body {
+    margin-top: 10px;
+    font-size: 20px;
+}
+    
+.details-action-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.details-approve-btn,
+.details-reject-btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.details-approve-btn {
+    background-color: green;
+    color: white;
+}
+
+.details-reject-btn {
+    background-color: red;
+    color: white;
+}
+
+.details-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    font-weight: bolder;
+}
+
+.details-close-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.error-message{
+    color: red;
+}
+
+.status-color {
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .status-color.yellow {
+    background-color: transparent;
+    color: rgb(224, 206, 12);
+  }
+  
+  .status-color.green {
+    background-color: transparent;
+    color: green;
+  }
+  
+  .status-color.red {
+    background-color: transparent;
+    color: red;
+  }
+
+  .status-color.blue{
+    background-color: transparent;
+    color: blue;
+  }
+  
