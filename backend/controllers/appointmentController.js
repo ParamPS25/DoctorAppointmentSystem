@@ -3,11 +3,13 @@ const BaseUser = require('../models/baseUserSchema')
 const Doctor = require('../models/doctorSchema');
 const Patient = require('../models/patientSchema');
 const Notification = require('../models/notificationSchema');
+
 const emailTemplate = require('../services/emailTemplateStatus');
 const crypto = require('crypto');
 const QRCode = require('qrcode')
 
 const puppeteer = require('puppeteer')
+
 const nodemailer = require('nodemailer');
 const handlebars = require('handlebars');
 const transporter = require('../services/nodeMailerAuth');
@@ -80,7 +82,10 @@ async function bookAppointment(req, res, next) {
 
 function generateVerificationToken(appointment){
     const data = `${appointment._id}-${appointment.appointmentDate}-${appointment.appointmentTime}`
-    return crypto.createHash('sha256').update(data).digest('hex');
+    const hash = crypto.createHash('sha256').update(data).digest('hex');
+    console.log(hash);
+    return hash;
+
 }
 
 async function sendAppointmentStatusEmail(appointment,status,doc_fname,doc_lname){
@@ -123,6 +128,7 @@ async function sendAppointmentStatusEmail(appointment,status,doc_fname,doc_lname
         // const patientEmail = patient.baseUserId.email;
 
         // generate html content file -> pdf using puppeteer
+      
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
         await page.setContent(htmlContent); // Load HTML content into the page
@@ -141,7 +147,7 @@ async function sendAppointmentStatusEmail(appointment,status,doc_fname,doc_lname
                 content: pdfBuffer
             }]
         };
-
+        
         // send mail
         await transporter.sendMail(mailOptions);
         return true;
@@ -263,6 +269,10 @@ async function doctorScanQR(req,res,next){
             },
         });
 
+        // console.log(appointment.doctorId._id.toString())
+        // console.log(doctorId.toString())
+        // console.log(appointment.doctorId.toString())
+
         if (!appointment) {
             return res.status(404).json({
                 success: false,
@@ -309,9 +319,8 @@ async function doctorScanQR(req,res,next){
                  message: "Appointment is not scheduled for today"
              });
          }
- 
 
-        // Update appointment status to completed
+      // Update appointment status to completed
         appointment.status = 'completed';
         await appointment.save();
 
