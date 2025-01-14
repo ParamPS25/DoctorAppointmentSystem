@@ -1,114 +1,80 @@
-import React, { useState } from "react";
-import "./AppointmentView.css"; // Importing the CSS file
+  import React, { useState } from "react";
+  // import "./AppointmentView.css";              -- was causing error
+  import "./AppointmentStyles/AppointmentViewForPatient.css"
+  import AppointmentDetails from "./AppointmentDetails";
+  import { format } from 'date-fns';
 
-const AppointmentViewForPatient = () => {
-  // Separate dummy data for patient view
-  const patientAppointments = [
-    {
-      id: 1,
-      patientName: "John Doe",
-      doctorName: "Dr. Smith",
-      doctorSpecialization: "Cardiologist",
-      doctorEmail:"abc@exa.com",
-      appointmentDate:"12/12/2021",
-      appointmentTime:"12:00",
-      fees:"500",
-      status: "Pending",
-      
-      
-    },
-    {
-      id: 2,
-      patientName: "Jane Smith",
-      doctorName: "Dr. Brown",
-      doctorSpecialization: "Dermatologist",
-      doctorEmail:"abc@exa.com",
-      appointmentDate:"12/12/2021",
-      appointmentTime:"12:00",
-     fees:"1000",
-      status: "Pending",
-      
-    },
-  ];
+  const AppointmentViewForPatient = ({ appointments }) => {
+    const [selectedAppointment, setSelectedAppointment] = useState(null);
 
-  // State for selected appointment details (patient's view)
-  const [appointmentData] = useState(patientAppointments);
-  const [selectedAppointment, setSelectedAppointment] = useState(null);
+    const getStatusColor = (status) => {
+      switch (status) {
+        case 'pending':
+          return 'yellow'; // Yellow for pending
+        case 'confirmed':
+          return 'green'; // Green for confirmed
+        case 'cancelled':
+          return 'red'; // Red for cancelled
+        default:
+          return 'blue'; // Default color (if any)
+      }
+    };
+  
 
-  // Handle row click to open detailed info card for the patient
-  const handleRowClick = (appointment) => {
-    setSelectedAppointment(appointment);
-  };
+    const formatDate = (isoString) => {
+          const formattedDate = format(new Date(isoString), 'yyyy-MM-dd');
+          // const formattedTime = format(new Date(isoString), 'HH:mm:ss');
+          
+          return formattedDate ;
+        }
+    const formatDateTime = (isoString) => {
+          const formattedDate = format(new Date(isoString), 'yyyy-MM-dd');
+          const formattedTime = format(new Date(isoString), 'HH:mm:ss');
+          
+          return `${formattedDate} (${formattedTime})` ;
+        }
 
-  // Handle closing the appointment details card
-  const handleCloseCard = () => {
-    setSelectedAppointment(null);
-  };
-
-  return (
-    <div className="appointment-table-container">
-      <h2 className="table-heading">Patient's Appointments</h2>
-      <table className="appointment-table">
-        <thead>
-          <tr className="table-header">
-            <th>Patient Name</th>
-            <th>Doctor Name</th>
-            <th>Doctor Specialization</th>
-            <th>Status</th>
-            
-
-          </tr>
-        </thead>
-        <tbody className="table-body">
-          {appointmentData.map((appointment) => (
-            <tr
-              key={appointment.id}
-              onClick={() => handleRowClick(appointment)}
-              className="appointment-row"
-            >
-              <td>{appointment.patientName}</td>
-              <td>{appointment.doctorName}</td>
-              <td>{appointment.doctorSpecialization}</td>
-              <td className="status-color">{appointment.status}</td>
-              
-              {/* <td>{appointment.fees}</td> */}
+    return (
+      <div className="patient-table-container">
+        <h2 className="patient-table-heading">Patient's Appointments</h2>
+        <table className="patient-appointment-table">
+          <thead>
+            <tr className="patient-table-header">
+              <th>Doctor Name</th>
+              <th>Doctor Specialization</th>
+              <th>Appointment Date</th>
+              <th>Requested At</th>
+              <th>Status</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* Appointment Details Card (Modal) */}
-      {selectedAppointment && (
-        <div className="appointment-card">
-          <div className="card-header">
-            <h3>Appointment Details</h3>
-            <button className="close-btn" onClick={handleCloseCard}>
-              X
-            </button>
-          </div>
-          <div className="card-body">
-            <p><strong>Patient Name:</strong> {selectedAppointment.patientName}</p>
-            <p><strong>Doctor Name:</strong> {selectedAppointment.doctorName}</p>
-            <p><strong>Doctor Specialization:</strong> {selectedAppointment.doctorSpecialization}</p>
-            <p><strong>Date:</strong> {selectedAppointment.appointmentDate}</p>
-            <p><strong>Time:</strong> {selectedAppointment.appointmentTime}</p>
-            <p><strong>Doctor email:</strong>{selectedAppointment.doctorEmail}</p>
-            <p><strong>Fees:</strong> {selectedAppointment.fees}</p>
-            <p><strong>Status:</strong> {selectedAppointment.status}</p>
-            
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const App = () => {
-  return (
-    <div className="app">
-      <AppointmentViewForPatient />
-    </div>
-  );
-};
-
-export default App;
+          </thead>
+          <tbody className="patient-table-body">
+            {appointments.map((appointment) => (
+              <tr
+                key={appointment._id}
+                className="patient-table-row"
+                onClick={() => setSelectedAppointment(appointment)}
+              >
+                <td>{`${appointment.doctorId.baseUserId.firstname} ${appointment.doctorId.baseUserId.lastname}`}</td>
+                <td>{appointment.doctorId.specialization}</td>
+                <td>{formatDate(appointment.appointmentDate)}</td>
+                <td>{formatDateTime(appointment.createdAt)}</td>
+                <td className={`status-color ${getStatusColor(appointment.status)}`}>
+                {appointment.status}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+  
+        {selectedAppointment && (
+          <AppointmentDetails
+            appointment={selectedAppointment}
+            onClose={() => setSelectedAppointment(null)}
+          />
+        )}
+      </div>
+    );
+  };
+  
+  export default AppointmentViewForPatient;
+  

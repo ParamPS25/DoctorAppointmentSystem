@@ -34,9 +34,11 @@ h1 {
 .card {
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
+  /* background-color: #ffffff; */
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg,#e6eef2, #b8dff2, #71dfd0 , #42f1d9 ); /* Gradient background */
+  color: white;
   padding: 20px;
   width: 300px;
   text-align: left;
