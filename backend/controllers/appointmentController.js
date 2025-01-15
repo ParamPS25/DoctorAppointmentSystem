@@ -280,13 +280,13 @@ async function doctorScanQR(req,res,next){
             });
         }
 
-         // Check if the appointment is confirmed
-         if (appointment.status !== 'confirmed') {
-            return res.status(400).json({
-                success: false,
-                message: "Appointment is not confirmed"
-            });
-        }
+        //  // Check if the appointment is confirmed
+        //  if (appointment.status !== 'confirmed') {
+        //     return res.status(400).json({
+        //         success: false,
+        //         message: "Appointment is not confirmed"
+        //     });
+        // }
 
         // Verify token
         if (appointment.verificationToken !== verificationToken) {
