@@ -11,7 +11,7 @@ import FirstPage from './components/FirstPage/FirstPage';
 import SigninInfo from './components/FirstPage/SigninInfo';
 import AppointmentPatientSide from './components/Templets/AppointmentPatientSide';
 import AllPage from './components/FirstPage/AllPage';
-
+import QrScan from './components/Templets/QrScan';
 
 const App = () => {
   return (
@@ -28,6 +28,7 @@ const App = () => {
         <Route path='/Symptoms' element={<Sysmptoms />} />
         <Route path='/Messages' element={<Messages />} />
         <Route path='/Settings' element={<Settings />} />
+        <Route path ='/QrScan' element={<QrScan />} />
       </Routes>
     </div>
   )
