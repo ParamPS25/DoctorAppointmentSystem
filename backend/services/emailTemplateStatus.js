@@ -27,14 +27,14 @@ const emailTemplate = `
             <h3>Appointment Details:</h3>
             <p><strong>Doctor:</strong> {{doctorName}}</p>
             <p><strong>Date:</strong> {{appointmentDate}}</p>
-            <p><strong>Time:</strong> {{appointmentTime}}</p>
+            <p><strong>Time:</strong> {{appointmentTime}} (Time in 24-hour format)</p>
             <p><strong>Appointment ID:</strong> {{appointmentId}}</p>
         </div>
        
         {{#if isConfirmed}}
         <div class="qr-code">
             <h3>Verification QR Code</h3>
-            <img src="{{qrCodeDataUrl}}" alt="Verification QR Code">
+            <img src="{{{qrCodeDataUrl}}}" alt="Verification QR Code">
             <p>Please present this QR code during your visit for verification</p>
         </div>
         {{/if}}

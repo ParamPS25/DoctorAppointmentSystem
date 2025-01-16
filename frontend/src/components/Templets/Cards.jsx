@@ -40,8 +40,6 @@ const Cards = () => {
 
   return (
     <div className="doctors-container">
-      <h1 className='title'>Our Doctors</h1>
-
       <div className="search-bar">
         <input
           type="text"

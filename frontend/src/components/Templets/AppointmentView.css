@@ -1,4 +1,15 @@
 
+
+
+/* ********************************************************************************************************
+Global CSS Conflicts:
+
+Mistake: Shared class names (.table-container, .appointment-table, etc.) in multiple components (AppointmentViewForDoctor, AppointmentViewForPatient, and AppointmentDetails) led to unintended style overrides.
+Fix: Use unique class name prefixes (e.g., doctor-, patient-, details-) to scope styles to their respective components and avoid conflicts.
+
+************************************************************************************************************ */
+
+/* 
 body {
     font-family: Arial;
     margin: 0;
@@ -186,4 +197,4 @@ body {
 }
 h2.table-heading{
     font-size: 30px;
-}
+} */

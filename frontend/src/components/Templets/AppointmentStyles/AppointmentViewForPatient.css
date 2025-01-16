@@ -1,0 +1,83 @@
+.patient-table-container {
+    background-color: #ffffff;
+    padding: 20px;
+    margin-top: 10px;
+    margin-left: 7px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 96%;
+  }
+  
+  .patient-table-heading {
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #343a40;
+  }
+  
+  .patient-appointment-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .patient-table-header {
+    background-color: #007bff;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: left;
+    height: 50px;
+  }
+  
+  .patient-table-header th {
+    text-align: center; /* Centers the text inside the table header */
+  }
+
+  .patient-table-body{
+    font-size: 17px;
+  }
+  .patient-table-body tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .patient-table-row:hover {
+    background-color: #e9ecef;
+  }
+  
+  .patient-table-body td {
+    border-bottom: 1px solid #ddd;
+    padding: 12px 15px;
+  }
+  
+  .patient-table-row {
+    cursor: pointer;
+  }
+
+  .status-color {
+    padding: 5px;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  .status-color.yellow {
+    background-color: transparent;
+    color: rgb(224, 206, 12);
+  }
+  
+  .status-color.green {
+    background-color: transparent;
+    color: green;
+  }
+  
+  .status-color.red {
+    background-color: transparent;
+    color: red;
+  }
+
+  .status-color.blue{
+    background-color: transparent;
+    color: blue;
+  }
+  
+  
