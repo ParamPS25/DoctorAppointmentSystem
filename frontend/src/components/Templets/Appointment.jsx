@@ -27,11 +27,11 @@ import axios from "axios";
 
 const fetchUserRole = async () => {
   try {
-    const response = await axios.get("http://localhost:8080/api/auth/role", {
+    const response = await axios.get("http://localhost:8080/api/auth/me", {
       withCredentials: true, // Include cookies
     });
-    console.log(response.data.role)
-    return response.data.role; // Return the user's role
+    console.log(response.data.data.user.role)
+    return response.data.data.user.role; // Return the user's role
   } catch (err) {
     console.error("Failed to fetch user role:", err);
     return null;

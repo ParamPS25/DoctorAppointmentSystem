@@ -1,85 +1,146 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'; // Corrected import for Link from react-router-dom
+import { Link, useLocation, useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
+import Logout from './Templets/Logout';
 
-const fetchUserRole = async () => {
+const fetchUser = async () => {
   try {
-    const response = await axios.get("http://localhost:8080/api/auth/role", {
-      withCredentials: true, // Include cookies
+    const response = await axios.get("http://localhost:8080/api/auth/me", {
+      withCredentials: true,
     });
-    console.log(response.data.role)
-    return response.data.role; // Return the user's role
+    return response.data.data;
   } catch (err) {
-    console.error("Failed to fetch user role:", err);
+    console.error("Failed to fetch user:", err);
     return null;
   }
-}
+};
 
 const Sidenav = () => {
+  const [userRole, setRole] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [userProfile, setProfile] = useState(null);
+  const [error, setError] = useState(null);
+  const location = useLocation();
+  const navigate = useNavigate(); 
 
-  const [role, setRole] = useState(null);
-  // const [loading, setLoading] = useState(true);
-  
-  useEffect(()=>{
-    const fetchRole = async ()=>{
-      try{
-        const fetchedRole = await fetchUserRole();
-        setRole(fetchedRole);
-      } catch(err){
-        console.error(err);
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const fetchedUser = await fetchUser();
+        if (!fetchedUser) {
+          throw new Error("User data not found");
+        }
+        setRole(fetchedUser.user.role);
+        setProfile(fetchedUser);
+      } catch (err) {
+        setError("Failed to load user data");
+        navigate('/SigninInfo'); // Redirect to login page on error
+      } finally {
+        setLoading(false);
       }
-    }
-    fetchRole()
-  },[])
+    };
+    fetchUserDetails();
+  }, [navigate]);
 
+  if (loading) {
+    return <div className="text-zinc-400 text-center mt-10">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-red-500 text-center mt-10">{error}</div>;
+  }
+
+  const isActive = (path) => location.pathname === path;
 
   return (
-    <div className='fixed w-[25%] h-full text-zinc-400 text-2xl bg-[#212529] border-r-2 border-zinc-700 p-3'>
-      <h1 className='font-bold font-sans text-center text-zinc-200'>
-        <i className="ri-stethoscope-line pr-3 font-normal"></i>
+    <div className="fixed w-[25%] h-full bg-[#212529] text-zinc-300 text-2xl border-r-2 border-zinc-700 p-3">
+      {/* Logo Section */}
+      <div className="text-center text-zinc-200 font-bold text-3xl mb-4">
+        <i className="ri-stethoscope-line pr-3"></i>
         BookMyDoc
-      </h1>
-      <hr className='mt-2 border-0.2 border-zinc-200' />
-      <div className='flex flex-col mt-10'>
-        <Link to="/Appointments" className='p-2 rounded-md font-semibold hover:bg-[#ede5fa] focus:bg-[#ede5fa] focus:text-black hover:text-black duration-300'>
-          <i className="mr-4 ri-calendar-check-line font-normal"></i>
+      </div>
+      <hr className="border-zinc-700 mb-2" />
+
+      {/* Profile Section */}
+      <div className="flex items-center gap-4 p-4 bg-[#1b1e21] rounded-lg mb-6">
+        <div className="w-16 h-16 rounded-full bg-zinc-500 flex items-center justify-center text-white text-3xl font-bold">
+          <i className="ri-user-line"></i> {/* Profile Icon */}
+        </div>
+        <div>
+          <p className="font-semibold text-zinc-200 text-lg">
+            {userProfile.user.firstname} {userProfile.user.lastname}
+          </p>
+          <p className="text-sm text-zinc-400">{userProfile.user.email}</p>
+          <p className="text-sm text-green-500 font-medium">{userRole}</p>
+          {/* Smaller Logout Button */}
+          <p className="text-sm mt-2 font-bold">
+            <Logout />
+          </p>
+        </div>
+      </div>
+
+
+      {/* Navigation Links */}
+      <div className="flex flex-col">
+        <Link
+          to="/Appointments"
+          className={`p-2 rounded-md font-semibold ${
+            isActive('/Appointments') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
+          } duration-300`}
+        >
+          <i className="mr-4 ri-calendar-check-line"></i>
           Appointments
         </Link>
-        <Link to='/Symptoms' className='mt-7 p-2 rounded-md font-semibold focus:bg-[#ede5fa] focus:text-black hover:bg-[#ede5fa] hover:text-black duration-300'>
-          <i className="mr-4 ri-first-aid-kit-line font-normal"></i>
+        <Link
+          to="/Symptoms"
+          className={`mt-7 p-2 rounded-md font-semibold ${
+            isActive('/Symptoms') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
+          } duration-300`}
+        >
+          <i className="mr-4 ri-first-aid-kit-line"></i>
           Symptoms
         </Link>
-        <Link to='/Doctor' className='mt-7 p-2 rounded-md font-semibold focus:bg-[#ede5fa] focus:text-black hover:bg-[#ede5fa] hover:text-black duration-300'>
-          <i className="mr-4 ri-stethoscope-fill font-normal"></i>
+        <Link
+          to="/Doctor"
+          className={`mt-7 p-2 rounded-md font-semibold ${
+            isActive('/Doctor') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
+          } duration-300`}
+        >
+          <i className="mr-4 ri-stethoscope-fill"></i>
           Doctors
         </Link>
-        <Link to='/Messages' className='mt-7 p-2 rounded-md font-semibold focus:bg-[#ede5fa] focus:text-black hover:bg-[#ede5fa] hover:text-black duration-300'>
-          <i className="mr-4 ri-message-2-line font-normal"></i>
+        <Link
+          to="/Messages"
+          className={`mt-7 p-2 rounded-md font-semibold ${
+            isActive('/Messages') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
+          } duration-300`}
+        >
+          <i className="mr-4 ri-message-2-line"></i>
           Notification
         </Link>
-        <Link to='/settings' className='mt-7 p-2 rounded-md font-semibold focus:bg-[#ede5fa] focus:text-black hover:bg-[#ede5fa] hover:text-black duration-300'>
-          <i className="mr-4 ri-settings-4-line font-normal"></i>
+        <Link
+          to="/settings"
+          className={`mt-7 p-2 rounded-md font-semibold ${
+            isActive('/settings') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
+          } duration-300`}
+        >
+          <i className="mr-4 ri-settings-4-line"></i>
           Settings
         </Link>
 
-        {role === "doctor" && (
+        {userRole === "doctor" && (
           <Link
             to="/QrScan"
-            className="mt-7 p-2 rounded-md font-semibold focus:bg-[#ede5fa] focus:text-black hover:bg-[#ede5fa] hover:text-black duration-300"
+            className={`mt-7 p-2 rounded-md font-semibold ${
+              isActive('/QrScan') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
+            } duration-300`}
           >
-            <i className="mr-4 ri-qr-code-line font-normal"></i>
+            <i className="mr-4 ri-qr-code-line"></i>
             QR Scan
           </Link>
         )}
-
-        <div className='mt-52'>
-          <hr className='mt-2 border-0.2 border-zinc-200 mb-5' />
-          <Link className='rounded-md font-semibold bg-[#0077b6] text-white duration-300 p-3 ml-12'>
-            <i className="ri-shield-user-line mr-2 font-normal"></i>
-            Profile
-          </Link>
-        </div>
       </div>
+
     </div>
   );
 };
