@@ -3,7 +3,7 @@ import { Route, Router, Routes } from 'react-router';
 import Home from './components/Home';
 import Appointment from './components/Templets/Appointment';
 import Doctor from './components/Templets/Doctor';
-import Sysmptoms from './components/Templets/Symptoms';
+import Symptoms from './components/Symptomses/Symptoms';
 import Messages from './components/Templets/Messages';
 import Settings from './components/Templets/Settings';
 import Signup from './components/Templets/Signup';
@@ -25,8 +25,8 @@ const App = () => {
         <Route path='/Home' element={<Home />} />
         <Route path='/Appointments' element={<Appointment />} />
         <Route path='/Doctor' element={<Doctor />} />
-        <Route path='/Symptoms' element={<Sysmptoms />} />
-        <Route path='/Messages' element={<Messages />} />
+       <Route path='/Symptoms/*' element={<Symptoms />} />
+         <Route path='/Messages' element={<Messages />} />
         <Route path='/Settings' element={<Settings />} />
       </Routes>
     </div>
