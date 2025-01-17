@@ -119,7 +119,6 @@ const styles = {
     width: "180px",
     height: "180px",
     display: "flex",
-   
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
@@ -128,12 +127,15 @@ const styles = {
     margin: 0,
     color: "#007bff",
     fontSize: "24px",
+    fontWeight: "700", // Bold font for numbers
   },
   statText: {
     margin: "5px 0 0",
     fontSize: "14px",
     color: "#555",
+    fontWeight: "700", // Bold font for description text
   },
 };
+
 
 export default CountOfDoctor;

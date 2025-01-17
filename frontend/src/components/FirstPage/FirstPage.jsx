@@ -1,517 +1,178 @@
-
-
-
-
-// import React from "react";
-// import BookMyDoc from "./BookMyDoc";
-// import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-// import CountOfDoctor from "./CountOfDoctor";
-// const FirstPage = () => {
-//   // Inline styles
-//   const styles = {
-//     app: {
-//       fontFamily: "Arial, sans-serif",
-//       lineHeight: 1.6,
-//       backgroundColor: "#f9f9f9",
-//       margin: 0,
-//     },
-//     navbar: {
-//       display: "flex",
-//       justifyContent: "space-between",
-//       alignItems: "center",
-//       backgroundColor: "#6e8dae",
-//       color: "#fff",
-//       padding: "15px 30px",
-//     },
-//     logo: {
-//       fontSize: "1.8em",
-//       fontWeight: "bold",
-//       color: "#fff",
-//     },
-//     loginBtn: {
-//       backgroundColor: "#007bff",
-//       color: "#fff",
-//       border: "none",
-//       padding: "10px 20px",
-//       borderRadius: "5px",
-//       cursor: "pointer",
-//       fontSize: "1em",
-//     },
-//     hero: {
-//       display: "flex",
-//       alignItems: "center",
-//       justifyContent: "space-between",
-//       padding: "50px 30px",
-//       backgroundColor: "#e3f2fd",
-//       flexWrap: "wrap",
-//     },
-//     heroContent: {
-//       maxWidth: "45%",
-//     },
-//     heroHeading: {
-//       fontSize: "2.8em",
-//       marginBottom: "20px",
-//       color: "#333",
-//     },
-//     heroParagraph: {
-//       marginBottom: "20px",
-//       color: "#555",
-//       fontSize: "1.2em",
-//     },
-//     heroButtons: {
-//       display: "flex",
-//       gap: "20px",
-//       marginTop: "10px",
-//     },
-//     getStartedBtn: {
-//       backgroundColor: "#007bff",
-//       color: "#fff",
-//       border: "none",
-//       padding: "12px 25px",
-//       borderRadius: "5px",
-//       fontSize: "1.1em",
-//       cursor: "pointer",
-//       transition: "background-color 0.3s ease, transform 0.2s ease",
-//     },
-//     learnMoreLink: {
-//       fontSize: "1em",
-//       color: "#007bff",
-//       fontWeight: "bold",
-//     },
-//     heroImage: {
-//       maxWidth: "100%",
-//       height: "auto",
-//       width: "60%",
-//       marginLeft: "600px",
-//       borderRadius: "10px",
-//       boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-//       marginTop: "20px",
-//     },
-//     heroImage3: {
-//       maxWidth: "100%",
-//       height: "auto",
-//       width: "60%",
-
-//       borderRadius: "10px",
-//       boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-//       marginTop: "20px",
-//     },
-
-
-
-
-//     footer: {
-//       backgroundColor: "#6e8dae",
-//       color: "white",
-//       padding: "40px 20px",
-//     },
-//     footerContainer: {
-//       display: "flex",
-//       justifyContent: "space-between",
-//       flexWrap: "wrap",
-//       gap: "20px",
-//       padding: "0 20px",
-//     },
-//     footerSection: {
-//       flex: 1,
-//       minWidth: "250px",
-//     },
-//     footerHeading: {
-//       marginBottom: "15px",
-//       color: "white",
-//     },
-//     footerParagraph: {
-//       color: "#aad1f5",
-//       lineHeight: 1.5,
-//     },
-//     footerLink: {
-//       color: "#aad1f5",
-//       textDecoration: "none",
-//     },
-//     footerBottom: {
-//       textAlign: "center",
-//       marginTop: "20px",
-//       borderTop: "1px solid #aad1f5",
-//       paddingTop: "15px",
-//       fontSize: "0.9em",
-//       color: "#aad1f5",
-//     },
-//   };
-
-//   return (
-//     <div style={styles.app}>
-//       {/* Navbar */}
-//       <nav style={styles.navbar}>
-//         <div style={styles.logo}>BookMyDoc</div>
-//         <Link to="./SigninInfo">
-//           <button style={styles.loginBtn}>Log In</button>
-//         </Link>
-//       </nav>
-
-//       {/* Hero Section */}
-//       <section style={styles.hero}>
-//         <div style={styles.heroContent}>
-//           <h1 style={styles.heroHeading}>Find Your Doctor and Make an Appointment</h1>
-//           <p style={styles.heroParagraph}>
-//             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-//             eiusmod tempor incididunt ut labore et dolore magna aliqua.
-//           </p>
-//           <div style={styles.heroButtons}>
-//             <Link to="/Signup">
-//               <button style={styles.getStartedBtn}>Get Started</button>
-//             </Link>
-//             <a href="#learn-more" style={styles.learnMoreLink}>
-//               Learn More →
-//             </a>
-//           </div>
-//         </div>
-//         <div>
-//           <img
-//             style={styles.heroImage}
-//             src="doctor2.jpg"
-//             alt="Doctor consultation illustration"
-//           />
-//         </div>
-//         <div>
-//           <img
-//             style={styles.heroImage3}
-//             src="doctor3.jpg"
-//             alt="Doctor consultation illustration"
-//           />
-//         </div>
-
-
-
-//       </section>
-
-//       <BookMyDoc />
-
-
-
-//       {/* <div style={styles.container}>
-
-//         <div style={styles.stats}>
-//           <div style={styles.statItem}>
-//             <h1 style={styles.statNumber}>1000+</h1>
-//             <p style={styles.statText}>Satisfied Patients</p>
-//           </div>
-//           <div style={styles.statItem}>
-//             <h1 style={styles.statNumber}>250+</h1>
-//             <p style={styles.statText}>Verified Doctors</p>
-//           </div>
-//           <div style={styles.statItem}>
-//             <h1 style={styles.statNumber}>75+</h1>
-//             <p style={styles.statText}>Specialist Doctors</p>
-//           </div>
-//         </div>
-//       </div> */}
-
-
-// <CountOfDoctor/>
-
-
-
-//       {/* Footer */}
-//       <footer style={styles.footer}>
-//         <div style={styles.footerContainer}>
-//           {/* About Section */}
-//           <div style={styles.footerSection}>
-//             <h3 style={styles.footerHeading}>Doctor Appointment System</h3>
-//             <p style={styles.footerParagraph}>
-//               Your trusted platform for booking appointments with top-rated doctors.
-//               Convenient, secure, and reliable healthcare access at your fingertips.
-//             </p>
-//           </div>
-
-//           {/* Contact Section */}
-//           <div style={styles.footerSection}>
-//             <h4 style={styles.footerHeading}>Contact Us</h4>
-//             <p style={styles.footerParagraph}>
-//               Email: <a href="purv@bookmydoc.com" style={styles.footerLink}>purv@bookmydoc.com</a>
-//             </p>
-//             <p style={styles.footerParagraph}>
-//               Phone: <a href="tel:+1234567890" style={styles.footerLink}>+1 (234) 567-890</a>
-//             </p>
-//             <p style={styles.footerParagraph}>Address: 456 MG Road
-//               Koramangala, Bengaluru
-//               Karnataka - 560095
-//               India</p>
-//           </div>
-//         </div>
-
-//         {/* Footer Bottom Section */}
-//         <div style={styles.footerBottom}>
-//           <p>© 2025 Doctor Appointment System. All rights reserved.</p>
-//         </div>
-//       </footer>
-//     </div>
-//   );
-
-
-
-
-// };
-
-// export default FirstPage;
-
 import React from "react";
+import { Link } from "react-router-dom";
 import BookMyDoc from "./BookMyDoc";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import CountOfDoctor from "./CountOfDoctor";
 
 const FirstPage = () => {
-  // Improved Inline Styles
-  const styles = {
-    app: {
-      fontFamily: "Arial, sans-serif",
-      lineHeight: 1.6,
-      backgroundColor: "#f9f9f9",
-      margin: 0,
-      padding: 0,
-      boxSizing: "border-box",
-    },
-    navbar: {
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      backgroundColor: "#3b5a8e",
-      color: "#fff",
-      padding: "20px 30px",
-      boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
-    },
-    logo: {
-      fontSize: "2em",
-      fontWeight: "bold",
-      color: "#fff",
-      letterSpacing: "1px",
-    },
-    loginBtn: {
-      backgroundColor: "#007bff",
-      color: "#fff",
-      border: "none",
-      padding: "12px 25px",
-      borderRadius: "5px",
-      cursor: "pointer",
-      fontSize: "1em",
-      transition: "background-color 0.3s ease",
-    },
-    loginBtnHover: {
-      backgroundColor: "#0056b3",
-    },
-    // hero: {
-    //   display: "flex",
-    //   alignItems: "center",
-    //   justifyContent: "space-between",
-    //   padding: "80px 30px",
-    //   backgroundColor: "#e3f2fd",
-    //   flexWrap: "wrap",
-    //   gap: "30px",
-    // },
-    // heroContent: {
-    //   maxWidth: "50%",
-    //   paddingRight: "20px",
-    // },
-    // heroHeading: {
-    //   fontSize: "3.5em",
-    //   marginBottom: "20px",
-    //   color: "#333",
-    //   fontWeight: "600",
-    //   lineHeight: "1.2",
-    // },
-    // heroParagraph: {
-    //   marginBottom: "20px",
-    //   color: "#555",
-    //   fontSize: "1.2em",
-    //   lineHeight: "1.6",
-    // },
-    heroButtons: {
-      display: "flex",
-      gap: "20px",
-      marginTop: "20px",
-    },
-    getStartedBtn: {
-      backgroundColor: "#007bff",
-      color: "#fff",
-      border: "none",
-      padding: "15px 30px",
-      borderRadius: "5px",
-      fontSize: "1.1em",
-      cursor: "pointer",
-      transition: "background-color 0.3s ease, transform 0.2s ease",
-    },
-    getStartedBtnHover: {
-      backgroundColor: "#0056b3",
-      transform: "scale(1.05)",
-    },
-    learnMoreLink: {
-      fontSize: "1.1em",
-      color: "#007bff",
-      fontWeight: "bold",
-      textDecoration: "none",
-      transition: "color 0.3s ease",
-    },
-    learnMoreLinkHover: {
-      color: "#0056b3",
-    },
-    
-    hero: {
-      display: "flex", // Aligns content horizontally
-      alignItems: "center",
-      justifyContent: "space-between", // Distribute space between elements
-      padding: "80px 30px",
-      backgroundColor: "#e3f2fd",
-      flexWrap: "wrap", // Allow wrapping on smaller screens
-      gap: "30px", // Space between content
-    },
-    heroContent: {
-      flex: 1, // Take equal space
-      maxWidth: "50%", // Restrict width to 50%
-      paddingRight: "20px",
-
-    },
-    heroImagesContainer: {
-      display: "flex",
-      flexDirection: "column", // Stack images vertically on small screens
-      gap: "20px", // Space between images
-      flex: 1, // Allow the image container to take remaining space
-      maxWidth: "50%",
-    },
-    heroHeading: {
-      fontSize: "36px",
-      color: "black",
-    },
-    learnMoreLink: {
-      display: "flex",
-      marginTop: "20px",
-    },
-
-    heroImage: {
-      maxWidth: "100%",
-      height: "auto",
-      width: "800px",
-      borderRadius: "10px",
-      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-    },
-    heroImage3: {
-      maxWidth: "100%",
-      height: "auto",
-      width: "800px",
-      borderRadius: "10px",
-      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-    },
-    footer: {
-      backgroundColor: "#3b5a8e",
-      color: "white",
-      padding: "40px 20px",
-    },
-    footerContainer: {
-      display: "flex",
-      justifyContent: "space-between",
-      flexWrap: "wrap",
-      gap: "20px",
-    },
-    footerSection: {
-      flex: 1,
-      minWidth: "250px",
-      marginBottom: "20px",
-    },
-    footerHeading: {
-      marginBottom: "15px",
-      color: "white",
-      fontWeight: "600",
-    },
-    footerParagraph: {
-      color: "#aad1f5",
-      lineHeight: 1.6,
-      fontSize: "1.1em",
-    },
-    footerLink: {
-      color: "#aad1f5",
-      textDecoration: "none",
-      transition: "color 0.3s ease",
-    },
-    footerLinkHover: {
-      color: "#fff",
-    },
-    footerBottom: {
-      textAlign: "center",
-      marginTop: "20px",
-      borderTop: "1px solid #aad1f5",
-      paddingTop: "15px",
-      fontSize: "0.9em",
-      color: "#aad1f5",
-    },
-  };
-
   return (
-    <div style={styles.app}>
-      {/* Navbar */}
-      <nav style={styles.navbar}>
-        <div style={styles.logo}>BookMyDoc</div>
-        <Link to="./SigninInfo">
-          <button style={styles.loginBtn}>Log In</button>
-        </Link>
+    <div className="min-h-screen bg-blue-50">
+      {/* Navigation */}
+      <nav className="bg-white shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16 items-center">
+          <Link to="/" className="flex items-center">
+              <img
+                src="/stethoscope.png" 
+                alt="Stethoscope Logo"
+                className="h-10 w-auto mr-3"
+              />
+              <span className="text-2xl font-bold text-blue-700">BookMyDoc</span>
+            </Link>
+
+
+            <Link to="./SigninInfo">
+              <button className="bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 transform hover:scale-105">
+                Log In
+              </button>
+            </Link>
+          </div>
+        </div>
       </nav>
 
       {/* Hero Section */}
-      <section style={styles.hero}>
-        <div style={styles.heroContent}>
-          <h1 style={styles.heroHeading}>Find Your Doctor and Make an Appointment</h1>
-          <p style={styles.heroParagraph}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-          </p>
-          <div style={styles.heroButtons}>
-            <Link to="/Signup">
-              <button style={styles.getStartedBtn}>Get Started</button>
-            </Link>
-            <a href="#learn-more" style={styles.learnMoreLink}>
-              Learn More →
-            </a>
+      <div className="bg-gradient-to-r from-blue-100 to-indigo-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-8">
+              <h1 className="text-4xl md:text-5xl font-bold text-blue-800 leading-tight">
+                Find Your Doctor and Make an Appointment
+              </h1>
+              <p className="text-lg text-blue-700">
+                Experience healthcare simplified. Connect with top medical
+                professionals and schedule appointments with just a few clicks.
+                Your health journey begins here.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link to="/Signup">
+                  <button className="w-full sm:w-auto bg-blue-700 hover:bg-blue-800 text-white font-semibold py-3 px-8 rounded-lg transition-all duration-200 transform hover:scale-105">
+                    Get Started
+                  </button>
+                </Link>
+                <a
+                  href="#learn-more"
+                  className="w-full sm:w-auto inline-flex items-center justify-center text-blue-700 hover:text-blue-800 font-semibold py-3 px-8"
+                >
+                  Learn More
+                  <svg
+                    className="ml-2 w-5 h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9 5l7 7-7 7"
+                    />
+                  </svg>
+                </a>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                <img
+                  src="doctor1.jpg"
+                  alt="Doctor consultation"
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+              </div>
+            </div>
           </div>
         </div>
-        <div>
-          <img
-            style={styles.heroImage}
-            src="doctor1.jpg"
-            alt="Doctor consultation illustration"
-          />
-        </div>
-        
-      </section>
+      </div>
 
       <BookMyDoc />
-
       <CountOfDoctor />
 
       {/* Footer */}
-      <footer style={styles.footer}>
-        <div style={styles.footerContainer}>
-          {/* About Section */}
-          <div style={styles.footerSection}>
-            <h3 style={styles.footerHeading}>Doctor Appointment System</h3>
-            <p style={styles.footerParagraph}>
-              Your trusted platform for booking appointments with top-rated doctors. Convenient, secure, and reliable healthcare access at your fingertips.
+      <footer className="bg-blue-800 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold">Doctor Appointment System</h3>
+              <p className="text-blue-200 leading-relaxed">
+                Your trusted platform for booking appointments with top-rated
+                doctors. Convenient, secure, and reliable healthcare access at
+                your fingertips.
+              </p>
+            </div>
+            <div className="space-y-6">
+              <h4 className="text-xl font-semibold">Contact Us</h4>
+              <div className="space-y-4 text-blue-200">
+                <p className="flex items-center text-white">
+                  <svg
+                    className="w-5 h-5 mr-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                    />
+                  </svg>
+                  <a
+                    href="mailto:purv@bookmydoc.com"
+                    className="text-white transition-colors"
+                  >
+                    purv@bookmydoc.com
+                  </a>
+                </p>
+                <p className="flex items-center text-white">
+                  <svg
+                    className="w-5 h-5 mr-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                    />
+                  </svg>
+                  <a
+                    href="tel:+1234567890"
+                    className="text-white transition-colors"
+                  >
+                    +1 (234) 567-890
+                  </a>
+                </p>
+                <p className="flex items-center text-white">
+                  <svg
+                    className="w-5 h-5 mr-3"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                  456 MG Road, Koramangala, Bengaluru, Karnataka - 560095, India
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="mt-12 pt-8 border-t border-blue-700 text-center text-blue-200">
+            <p className="text-white">
+              © 2025 Doctor Appointment System. All rights reserved.
             </p>
           </div>
-
-          {/* Contact Section */}
-          <div style={styles.footerSection}>
-            <h4 style={styles.footerHeading}>Contact Us</h4>
-            <p style={styles.footerParagraph}>
-              Email: <a href="mailto:purv@bookmydoc.com" style={styles.footerLink}>purv@bookmydoc.com</a>
-            </p>
-            <p style={styles.footerParagraph}>
-              Phone: <a href="tel:+1234567890" style={styles.footerLink}>+1 (234) 567-890</a>
-            </p>
-            <p style={styles.footerParagraph}>
-              Address: 456 MG Road, Koramangala, Bengaluru, Karnataka - 560095, India
-            </p>
-          </div>
-        </div>
-
-        {/* Footer Bottom Section */}
-        <div style={styles.footerBottom}>
-          <p>© 2025 Doctor Appointment System. All rights reserved.</p>
         </div>
       </footer>
     </div>

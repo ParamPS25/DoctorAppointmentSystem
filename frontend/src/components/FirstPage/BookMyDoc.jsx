@@ -4,30 +4,30 @@ import "./BookMyDoc.css"; // Import a custom CSS file for styling
 const BookMyDoc = () => {
   const features = [
     {
-      title: "SIMPLIFIES SCHEDULING",
+      title: "Book Appointments Effortlessly",
       description:
-        "With BOOKMYDOC, scheduling occurs in one well-organised platform so the endless back-and-forth communication can be avoided and a streamlined communication is guaranteed. Manage multiple locations or employees, only show your clients the calendar you want them to see, and block out any dates you will be taking off from work. Manage Clinic effortlessly with our powerful interface for phone-in, walk-in and online requests.",
-      icon: "🌍", 
-    },
-    {
-      title: "POWERFUL.PERSONAL.",
-      description:
-        "BOOKMYDOC offers a wide selection of online solutions that simplify the process of scheduling appointments (clinic and eConsultation) that doesn't require registration. Send automatic and manual reminders, see who is missing at first sight. No switching between calendar and BOOKMYDOC. Avoid booking conflicts. Automatically sync appointments and procedure scheduling on our powerful interface access on mobile.",
+        "With BookMyDoc, users can book appointments online with just a few clicks. Choose your preferred doctor, date, and time for a seamless healthcare experience. Avoid long waiting times and ensure your slot is reserved in advance.",
       icon: "📅",
     },
     {
-      title: "BOOKMYDOC QMM-TOKEN",
+      title: "Symptom-Based Disease Prediction",
       description:
-        "Improve outpatient (OP) flow at Hospitals & clinics with BOOKMYDOC's QMM (Queue Management Module). Seamless queue management that works with online appointments, clinic phone-in appointments & walk-in appointments. SMS notification and reminder to maintain the patient flow in consultation with Unique Token ID. Intimating patients by SMS and email reminders to avoid missing booked confirmed appointments effortlessly.",
-      icon: "📨",
+        "Enter or select 3-5 symptoms, and our advanced AI system analyzes them to predict possible diseases. Additionally, get focused predictions for conditions like diabetes and stroke to take timely actions and prepare for consultations.",
+      icon: "🤖",
+    },
+    {
+      title: "Doctor Verification & Confirmation",
+      description:
+        "Once your appointment is booked, the doctor reviews your request and confirms or rejects it. On confirmation, you’ll receive an email with a QR code that ensures a secure and streamlined check-in during your appointment.",
+      icon: "✅",
     },
   ];
 
   return (
     <div className="bookmeet-container">
-      <h2 className="section-title">WHY CHOOSE BookMyDoc</h2>
+      <h2 className="section-title">Why Choose BookMyDoc</h2>
       <p className="section-subtitle">
-        Online Appointment, Phone-in Appointment, Walk-in Appointment with Token
+        Your One-Stop Solution for Online Appointments and Health Insights
       </p>
       <div className="features-grid">
         {features.map((feature, index) => (

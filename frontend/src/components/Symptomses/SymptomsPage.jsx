@@ -9,12 +9,12 @@ const SymptomsPage = () => {
     height: "150px",
     width: "1000px",
     margin: "20px",
-    border: "2px solid #007BFF",
+    border: "2px solidrgb(11, 62, 116)",
     borderRadius: "8px",
-    backgroundColor: "#E9ECEF",
-    fontSize: "18px",
+    background: "linear-gradient(135deg,rgb(161, 183, 228),rgb(107, 219, 219),rgb(67, 234, 234),rgb(16, 107, 225))",
+    fontSize: "23px",
     fontWeight: "bold",
-    color: "#007BFF",
+    color: "rgb(22, 12, 62)",
     cursor: "pointer",
     textDecoration: "none",
   };
@@ -23,9 +23,10 @@ const SymptomsPage = () => {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    flexDirection: "column",  // Arrange in one column
+    flexDirection: "column",  
     height: "100vh",
-    backgroundColor: "#f8f9fa",
+    width:"100%",
+    backgroundColor: "rgb(200, 239, 221)",
   };
 
   return (
@@ -34,7 +35,7 @@ const SymptomsPage = () => {
         Predict Disease Using Symptoms
       </Link>
       <Link to="./Predict_diabetes" style={boxStyle}>
-        Predict Diabetes (For womens)
+        Predict Diabetes (For women)
       </Link>
       <Link to="./Predict_stroke" style={boxStyle}>
         Predict Stroke

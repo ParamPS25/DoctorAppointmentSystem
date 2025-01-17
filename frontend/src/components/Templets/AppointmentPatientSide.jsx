@@ -84,10 +84,12 @@ const AppointmentPatientSide = () => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: '65vh',
-        width: '32vw',
-        backgroundColor: '#f5f5f5',
-        marginLeft: '550px',
+        // backgroundColor: '#f5f5f5',
+        // marginLeft: '550px',
+        // marginTop : '5cm',
+        width: '100%',
+        height:'100%',
+        backgroundColor: "rgb(200, 239, 221)",
       }}
     >
       <div
@@ -95,17 +97,19 @@ const AppointmentPatientSide = () => {
           maxWidth: '400px',
           width: '100%',
           padding: '20px',
-          backgroundColor: '#ffffff',
-          borderRadius: '8px',
-          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+          // backgroundColor: '#ffffff',
+          borderRadius: '16px',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.5)',
+          marginBottom : '30px',
+          background : 'linear-gradient(135deg,#e6eef2, #b8dff2, #71dfd0 , #42f1d9 )'
         }}
       >
-        <h2 style={{ textAlign: 'center', color: '#333' }}>Book an Appointment</h2>
+        <h1 style={{ textAlign: 'center', color: '#333',fontWeight: 'bolder',padding:'20px',fontSize:'25px' }}>Book an Appointment</h1>
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '15px' }}>
             <label
               htmlFor="appointmentDate"
-              style={{ display: 'block', marginBottom: '5px', color: '#555' }}
+              style={{ display: 'block', marginBottom: '5px', color: '#555' ,fontWeight: 'bold',fontSize:'18px' }}
             >
               Appointment Date:
             </label>
@@ -127,7 +131,7 @@ const AppointmentPatientSide = () => {
           <div style={{ marginBottom: '15px' }}>
             <label
               htmlFor="appointmentTime"
-              style={{ display: 'block', marginBottom: '5px', color: '#555' }}
+              style={{ display: 'block', marginBottom: '5px', color: '#555',fontWeight: 'bold',fontSize:'18px' }}
             >
               Appointment Time:
             </label>
@@ -147,7 +151,7 @@ const AppointmentPatientSide = () => {
             />
           </div>
           <div style={{ marginBottom: '15px' }}>
-            <label htmlFor="notes" style={{ display: 'block', marginBottom: '5px', color: '#555' }}>
+            <label htmlFor="notes" style={{ display: 'block', marginBottom: '5px', color: '#555',fontWeight: 'bold',fontSize:'18px' }}>
               Notes:
             </label>
             <textarea
