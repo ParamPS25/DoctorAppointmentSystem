@@ -1,5 +1,8 @@
-import Doctor from '../models/doctorSchema.js';
-import BaseUser from '../models/baseUserSchema.js';
+// import Doctor from '../models/doctorSchema.js';
+// import BaseUser from '../models/baseUserSchema.js';
+
+const Doctor = require('../models/doctorSchema.js');
+const BaseUser = require('../models/baseUserSchema.js');
 
 // implement pagination,filtering and sorting later
 async function getAllDoctors(req, res) {
@@ -31,7 +34,7 @@ async function getDoctorById(req, res) {
 }
 
 
-export {
+module.exports = {
     getAllDoctors,
     getDoctorById,
 };

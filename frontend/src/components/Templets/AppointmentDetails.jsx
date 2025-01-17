@@ -3,33 +3,33 @@ import "./AppointmentStyles/AppointmentDetails.css";
 import { format } from "date-fns";
 
 const AppointmentDetails = ({ appointment, onClose, onAction }) => {
-  const [loading, setLoading] = useState(false);
+  const [loadingAction, setLoadingAction] = useState(null); // Track which action is loading
   const [error, setError] = useState(null); // State for error messages
 
   const handleAction = async (id, action) => {
-    setLoading(true);
+    setLoadingAction(action); // Set the current loading action
     setError(null); // Reset error state
     try {
       await onAction(id, action);
     } catch (err) {
-      setError("Failed to update status. Please try again."); // Show error message
+      setError("Failed to update status. Please try again.");
     } finally {
-      setLoading(false);
+      setLoadingAction(null); // Reset loading state
     }
   };
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'pending':
-        return 'yellow'; // Yellow for pending
-      case 'confirmed':
-        return 'green'; // Green for confirmed
-      case 'cancelled':
-        return 'red'; // Red for cancelled
+      case "pending":
+        return "yellow"; // Yellow for pending
+      case "confirmed":
+        return "green"; // Green for confirmed
+      case "cancelled":
+        return "red"; // Red for cancelled
       default:
-        return 'blue'; // Default color
+        return "blue"; // Default color
     }
-  }
+  };
 
   const formatDate = (isoString) => {
     const formattedDate = format(new Date(isoString), "yyyy-MM-dd");
@@ -40,7 +40,7 @@ const AppointmentDetails = ({ appointment, onClose, onAction }) => {
     <div className="details-card">
       <div className="details-card-header">
         <h3>Appointment Details</h3>
-        <button className="details-close-btn" onClick={onClose} disabled={loading}>
+        <button className="details-close-btn" onClick={onClose} disabled={loadingAction !== null}>
           X
         </button>
       </div>
@@ -51,7 +51,7 @@ const AppointmentDetails = ({ appointment, onClose, onAction }) => {
           {`${appointment.patientId.baseUserId.firstname} ${appointment.patientId.baseUserId.lastname}`}
         </p>
         <p>
-          <strong>Doctor name:</strong>{" "} 
+          <strong>Doctor name:</strong>{" "}
           {`Dr ${appointment.doctorId.baseUserId.firstname} ${appointment.doctorId.baseUserId.lastname}`}
         </p>
         <p><strong>Date:</strong> {formatDate(appointment.appointmentDate)}</p>
@@ -61,9 +61,9 @@ const AppointmentDetails = ({ appointment, onClose, onAction }) => {
           {appointment.patientId.baseUserId.email || appointment.doctorId.baseUserId.email}
         </p>
         <p><strong>Fees:</strong> {appointment.doctorId.fees} Rs</p>
-        <p><strong>notes:</strong> {appointment.notes}</p>
+        <p><strong>Notes:</strong> {appointment.notes}</p>
         <p className={`status-color ${getStatusColor(appointment.status)}`}>
-            <strong>Status:</strong> {appointment.status}
+          <strong>Status:</strong> {appointment.status}
         </p>
 
         {error && <p className="error-message">{error}</p>}
@@ -74,17 +74,17 @@ const AppointmentDetails = ({ appointment, onClose, onAction }) => {
             <button
               onClick={() => handleAction(appointment._id, "confirmed")}
               className="details-approve-btn"
-              disabled={loading}
+              disabled={loadingAction === "confirmed"}
             >
-              {loading ? "Approving..." : "Approve"}
+              {loadingAction === "confirmed" ? "Approving..." : "Approve"}
             </button>
 
             <button
               onClick={() => handleAction(appointment._id, "cancelled")}
               className="details-reject-btn"
-              disabled={loading}
+              disabled={loadingAction === "cancelled"}
             >
-              {loading ? "Rejecting..." : "Reject"}
+              {loadingAction === "cancelled" ? "Rejecting..." : "Reject"}
             </button>
           </div>
         )}
