@@ -34,7 +34,8 @@ class ModelTrainer:
             params = {
                 "AdaBoost": {
                     "n_estimators": [60],
-                    "algorithm": ["SAMME"]
+                    # "algorithm": ["SAMME"]
+                    # No need to specify 'algorithm' as 'SAMME' is the default and it's deprecated
                 }
             }
 
