@@ -91,7 +91,8 @@ const Sidenav = () => {
           <i className="mr-4 ri-calendar-check-line"></i>
           Appointments
         </Link>
-        <Link
+
+        {userRole === "patient" && (<Link
           to="/Symptoms"
           className={`mt-7 p-2 rounded-md font-semibold ${
             isActive('/Symptoms') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
@@ -99,8 +100,9 @@ const Sidenav = () => {
         >
           <i className="mr-4 ri-first-aid-kit-line"></i>
           Symptoms
-        </Link>
-        <Link
+        </Link>)}
+
+        {userRole === "patient" && (<Link
           to="/Doctor"
           className={`mt-7 p-2 rounded-md font-semibold ${
             isActive('/Doctor') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
@@ -108,7 +110,8 @@ const Sidenav = () => {
         >
           <i className="mr-4 ri-stethoscope-fill"></i>
           Doctors
-        </Link>
+        </Link>)}
+
         <Link
           to="/Messages"
           className={`mt-7 p-2 rounded-md font-semibold ${

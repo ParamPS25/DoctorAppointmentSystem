@@ -51,7 +51,12 @@ const Signup = () => {
       }
 
       console.log('Signup successful');
-      navigate('/AllPage'); // Redirect to AllPage on success
+
+      if(data.user.role === "doctor"){
+        navigate('/AllPage/Appointments');
+      } else{
+        navigate('/AllPage/Doctor');
+      }
     } catch (error) {
       setErrors({ submit: error.message });
     }

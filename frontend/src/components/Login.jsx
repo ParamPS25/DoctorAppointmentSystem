@@ -22,7 +22,12 @@ const Login = () => {
 
       if (response.ok && result.success) {
         // Navigate to AllPage on successful login
-        navigate('/AllPage/Doctor');
+        if(result.user.role === "doctor"){
+          navigate('/AllPage/Appointments');
+        } else{
+          console.log(result.user.role)
+          navigate('/AllPage/Doctor');
+        }
       } else {
         // Show error message if login fails
         setErrorMessage(result.message || 'Invalid email or password.');
