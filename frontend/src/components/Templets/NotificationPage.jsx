@@ -7,11 +7,20 @@ const NotificationPage = () => {
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true); // To manage loading state
   const [error, setError] = useState(null); // To manage errors
+  const [page, setPage] = useState(1); // Current page
+  const [totalPages, setTotalPages] = useState(0); // Total pages from the API
+
+  const handlePageChange = (newPage) => {
+    if (newPage > 0 && newPage <= totalPages) {
+      setPage(newPage);
+    }
+  };
 
   // Function to fetch notifications from the API
-  const fetchNotifications = async () => {
+  const fetchNotifications = async (currentPage) => {
     try {
-      const response = await fetch("http://localhost:8080/api/book/notifications", {
+      setLoading(true); 
+      const response = await fetch(`http://localhost:8080/api/book/notifications?page=${currentPage}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -24,18 +33,20 @@ const NotificationPage = () => {
       }
 
       const data = await response.json();
-      setNotifications(data.notifications); // Assuming the response contains an array of notifications
+      setNotifications(data.notifications || []); //the response contains an array of notifications
+      setTotalPages(data.totalPages || 0) 
       setLoading(false); // Set loading to false once data is fetched
+
     } catch (err) {
       setError(err.message);
       setLoading(false);
     }
   };
 
-  // Fetch notifications when the component mounts
+  // Fetch notifications when the component mounts or when the page changes
   useEffect(() => {
-    fetchNotifications();
-  }, []);
+    fetchNotifications(page);
+  }, [page]);
 
   const formatDate = (isoString) => {
     const formattedDate = format(new Date(isoString), 'yyyy-MM-dd');
@@ -53,6 +64,7 @@ const NotificationPage = () => {
       ) : error ? (
         <p>Error: {error}</p> // Show error message if there's an issue with fetching data
       ) : notifications.length > 0 ? (
+        <>
         <table className="notification-table">
           <thead>
             <tr>
@@ -74,6 +86,27 @@ const NotificationPage = () => {
             ))}
           </tbody>
         </table>
+
+        <div className="pagination-controls">
+        <button
+          className="pagination-button"
+          onClick={() => handlePageChange(page - 1)}
+          disabled={page === 1} // Disable "Previous" on the first page
+        >
+          Previous
+        </button>
+        <span className="pagination-info">
+          Page {page} of {totalPages}
+        </span>
+        <button
+          className="pagination-button"
+          onClick={() => handlePageChange(page + 1)}
+          disabled={page === totalPages} // Disable "Next" on the last page
+        >
+          Next
+        </button>
+      </div>
+      </>
       ) : (
         <p>No notifications available.</p>
       )}

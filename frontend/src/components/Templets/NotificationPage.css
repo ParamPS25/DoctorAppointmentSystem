@@ -43,3 +43,31 @@
 .notification-table tr:hover {
     background-color: #e9e9e9;
 }
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .pagination-button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    margin: 0 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 16px;
+  }
+  
+  .pagination-button:disabled {
+    background-color: #d6d6d6;
+    cursor: not-allowed;
+  }
+  
+  .pagination-info {
+    font-size: 16px;
+  }
+  

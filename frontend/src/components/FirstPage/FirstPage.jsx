@@ -1,25 +1,29 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Link } from "react-router-dom";
 import BookMyDoc from "./BookMyDoc";
 import CountOfDoctor from "./CountOfDoctor";
 
 const FirstPage = () => {
+  const bookMyDocRef = useRef(null); // Create a ref for the BookMyDoc component
+
+  const handleScrollToBookMyDoc = () => {
+    bookMyDocRef.current.scrollIntoView({ behavior: "smooth" }); // Smooth scroll to the component
+  };
+
   return (
     <div className="min-h-screen bg-blue-50">
       {/* Navigation */}
-      <nav className="bg-white shadow-lg">
+      <nav className="bg-white shadow-lg fixed top-0 w-full z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-          <Link to="/" className="flex items-center">
+            <Link to="/" className="flex items-center">
               <img
-                src="/stethoscope.png" 
+                src="/stethoscope.png"
                 alt="Stethoscope Logo"
                 className="h-10 w-auto mr-3"
               />
               <span className="text-2xl font-bold text-blue-700">BookMyDoc</span>
             </Link>
-
-
             <Link to="./SigninInfo">
               <button className="bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-200 transform hover:scale-105">
                 Log In
@@ -30,7 +34,7 @@ const FirstPage = () => {
       </nav>
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-100 to-indigo-100">
+      <div className="bg-gradient-to-r from-blue-100 to-indigo-100 pt-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-8">
@@ -48,8 +52,8 @@ const FirstPage = () => {
                     Get Started
                   </button>
                 </Link>
-                <a
-                  href="#learn-more"
+                <button
+                  onClick={handleScrollToBookMyDoc} // Scroll on click
                   className="w-full sm:w-auto inline-flex items-center justify-center text-blue-700 hover:text-blue-800 font-semibold py-3 px-8"
                 >
                   Learn More
@@ -66,7 +70,7 @@ const FirstPage = () => {
                       d="M9 5l7 7-7 7"
                     />
                   </svg>
-                </a>
+                </button>
               </div>
             </div>
             <div className="relative">
@@ -83,7 +87,11 @@ const FirstPage = () => {
         </div>
       </div>
 
-      <BookMyDoc />
+      {/* BookMyDoc Section */}
+      <div ref={bookMyDocRef}>
+        <BookMyDoc />
+      </div>
+
       <CountOfDoctor />
 
       {/* Footer */}
@@ -170,7 +178,7 @@ const FirstPage = () => {
           </div>
           <div className="mt-12 pt-8 border-t border-blue-700 text-center text-blue-200">
             <p className="text-white">
-              © 2025 Doctor Appointment System. All rights reserved.
+              © 2025 BookMyDoc . All rights reserved.
             </p>
           </div>
         </div>

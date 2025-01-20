@@ -345,6 +345,8 @@ async function getNotifications(req,res,next){
         const userId = req.user.id;
         const userRole = req.user.role;
 
+        let recipient, recipientModel;
+
         if(userRole === 'doctor'){
             const doctor = await Doctor.findOne({baseUserId : userId}).select('_id');
             recipient = doctor._id;
@@ -355,16 +357,33 @@ async function getNotifications(req,res,next){
             recipientModel = 'Patient';
         }
 
+        // pagination
+        const page = parseInt(req.query.page) || 1; 
+        const limit = 7;
+        const skip = (page-1) * limit;
+
         // finding the notifications with respect to the recipient
         const notifications = await Notification.find({
             recipient,
             recipientModel
-        }).sort({createdAt : -1});
+        })
+        .sort({createdAt : -1})  // Newest notifications first
+        .skip(skip)              // Skip the previous notifications
+        .limit(limit);           // Limit to the specified number
+
+        // Total count for notifications
+        const totalNotifications = await Notification.countDocuments({
+            recipient,
+            recipientModel
+        })
 
         res.status(200).json({
             success : true,
+            page,
+            totalPages : Math.ceil(totalNotifications / limit),
             notifications    
         })
+        
     }catch(err){
         res.status(500).json({
             success : false,

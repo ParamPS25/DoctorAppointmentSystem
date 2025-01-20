@@ -35,9 +35,10 @@
   }
   
   .feature-icon {
-    font-size: 2.5rem;
+    font-size: 2.3rem;
     color: #3498db;
     margin-bottom: 1rem;
+    text-align: center;
   }
   
   .feature-title {
