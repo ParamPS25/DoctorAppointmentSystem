@@ -420,7 +420,8 @@ async function getAllAppointments(req, res, next) {
                         path: 'baseUserId',
                         select: 'firstname lastname email',
                     },
-                });
+                })
+                .sort({createdAt : -1});
         } else {
             // If the user is not a doctor, check if they are a patient
             const patient = await Patient.findOne({ baseUserId: userId }).select('_id');
@@ -449,7 +450,8 @@ async function getAllAppointments(req, res, next) {
                         path: 'baseUserId',
                         select: 'firstname lastname email',
                     },
-                });
+                })
+                .sort({createdAt : -1});
         }
 
         // Send response

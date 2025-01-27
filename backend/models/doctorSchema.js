@@ -15,8 +15,20 @@ const doctorSchema = new mongoose.Schema({
     fees: { 
         type: Number 
     },
-    rating: { 
-        type: Number 
+    totalRatings: { 
+        type: Number, 
+        default: 0 // Keeps a sum of all ratings received 
+    },
+    ratingCount: { 
+        type: Number, 
+        default: 0 // Tracks the number of ratings 
+    },
+    averageRating: { 
+        type: Number, 
+        default: 0 // Stores the average rating for easy access 
+    },
+    location: { 
+        type: String 
     },
     // availability: [
     //     {

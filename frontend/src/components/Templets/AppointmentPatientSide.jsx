@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams,useLocation, useNavigate } from 'react-router-dom';
 
 const AppointmentPatientSide = () => {
   const { doctorId } = useParams(); // Extract doctorId from URL parameters
   const navigate = useNavigate(); // Initialize useNavigate hook for page navigation
+  const { state: doctor } = useLocation();
   const [formData, setFormData] = useState({
     appointmentDate: '',
     appointmentTime: '',
@@ -105,6 +106,17 @@ const AppointmentPatientSide = () => {
         }}
       >
         <h1 style={{ textAlign: 'center', color: '#333',fontWeight: 'bolder',padding:'20px',fontSize:'25px' }}>Book an Appointment</h1>
+
+        {doctor && (
+        <div style={{ marginBottom: '20px', padding: '15px', border: '1px solid grey',borderRadius: '20px'}} >
+          <h2><strong> Dr. {doctor.baseUserId.firstname} {doctor.baseUserId.lastname} </strong></h2>
+          <p><strong>Specialization:</strong> {doctor.specialization}</p>
+          <p><strong>Experience:</strong> {doctor.experience} years</p>
+          <p><strong>Fees:</strong> {doctor.fees} Rs</p>
+          <p><strong>phoneNumber:</strong>{doctor.baseUserId.phoneNumber}</p>
+        </div>
+      )}
+
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '15px' }}>
             <label
