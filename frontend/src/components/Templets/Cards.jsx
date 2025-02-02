@@ -43,8 +43,14 @@ const Cards = () => {
 
   // Function to render star ratings
   const renderStars = (rating) => {
+    // Ensure rating is a number and between 0 and 5
+    // const validRating = Math.min(Math.max(parseFloat(rating), 0), 5);
+    
+    const validRating = (rating % 5)  // modulous 5 as rating is out of 5
+    console.log(validRating)
+
     const totalStars = 5;
-    const brightStars = Math.floor(rating);
+    const brightStars = Math.floor(validRating);
     const dullStars = totalStars - brightStars;
 
     return (
