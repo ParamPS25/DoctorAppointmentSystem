@@ -202,7 +202,7 @@ const Predict_stroke = () => {
       </form>
       {prediction !== null && (
         <div style={styles.prediction}>
-          Prediction Result: {prediction === 1 ? "High risk of stroke" : "Low risk of stroke"}
+          Prediction Result: {prediction === "Stroke" ? "Positive" : "Negative"}
         </div>
       )}
     </div>

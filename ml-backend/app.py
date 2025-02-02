@@ -10,7 +10,7 @@ from src.diseases_and_symptoms.predict_pipeline import PredictPipeline as Diseas
 app = Flask(__name__)
 CORS(app, resources={
     r"/*": {
-        "origins": ["http://localhost:3000"],
+        "origins": ["http://localhost:5173"],
         "methods": ["POST", "OPTIONS"],
         "allow_headers": ["Content-Type"]
     }
