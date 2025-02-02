@@ -8,14 +8,7 @@ from src.diabetes.predict_pipeline import PredictPipeline as DiabetesPredictPipe
 from src.diseases_and_symptoms.predict_pipeline import PredictPipeline as DiseasePredictPipeline
 
 app = Flask(__name__)
-CORS(app, resources={
-    r"/*": {
-        "origins": ["http://localhost:5173"],
-        "methods": ["POST", "OPTIONS"],
-        "allow_headers": ["Content-Type"]
-    }
-})
-
+CORS(app)
 
 # Route for predicting stroke
 @app.route('/predict-stroke', methods=['POST'])
@@ -32,7 +25,7 @@ def predict_stroke():
         for field in required_fields:
             if field not in data:
                 return jsonify({"error": f"Missing field: {field}"}), 400
-
+        
         custom_data = StrokeCustomData(**data)
         input_df = custom_data.get_data_as_data_frame()
         pipe = StrokePredictPipeline()
@@ -40,7 +33,11 @@ def predict_stroke():
 
         return jsonify({"prediction": "Stroke" if preds[0] == 1 else "No Stroke"})
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        app.logger.error(f"Error in /predict-stroke: {str(e)}")
+        return jsonify({"error": "Internal Server Error"}), 500
+
+    # except Exception as e:
+    #     return jsonify({"error": str(e)}), 500
 
 # Route for predicting diabetes
 @app.route('/predict-diabetes', methods=['POST'])

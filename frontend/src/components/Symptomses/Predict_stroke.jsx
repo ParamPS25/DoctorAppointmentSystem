@@ -8,7 +8,7 @@ const Predict_stroke = () => {
     heart_disease: "",
     ever_married: "",
     work_type: "",
-    residence_type: "",
+    Residence_type: "",
     avg_glucose_level: "",
     bmi: "",
     smoking_status: "",
@@ -23,8 +23,8 @@ const Predict_stroke = () => {
     hypertension: ["Yes", "No"],
     heart_disease: ["Yes", "No"],
     ever_married: ["Yes", "No"],
-    work_type: ["Private", "Self-employed", "Government", "Children", "Never worked"],
-    residence_type: ["Urban", "Rural"],
+    work_type: ["Private", "Self-employed", "Government", "children", "Never worked"],
+    Residence_type: ["Urban", "Rural"],
     smoking_status: ["formerly smoked", "never smoked", "smokes", "Unknown"],
   };
 
@@ -60,6 +60,24 @@ const Predict_stroke = () => {
     setErrors({ ...errors, [name]: validateField(name, value) });
   };
 
+  const prepareFormData = (data) => {
+    const prepared = { ...data };
+    
+    // Convert Yes/No to 1/0 for hypertension and heart_disease
+    if (prepared.hypertension === "Yes") prepared.hypertension = "1";
+    if (prepared.hypertension === "No") prepared.hypertension = "0";
+    
+    if (prepared.heart_disease === "Yes") prepared.heart_disease = "1";
+    if (prepared.heart_disease === "No") prepared.heart_disease = "0";
+
+    // Convert string numbers to actual numbers
+    prepared.age = parseFloat(prepared.age);
+    prepared.bmi = parseFloat(prepared.bmi);
+    prepared.avg_glucose_level = parseFloat(prepared.avg_glucose_level);
+
+    return prepared;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = {};
@@ -75,12 +93,15 @@ const Predict_stroke = () => {
 
     setLoading(true);
     try {
+      // Prepare the data before sending
+      const preparedData = prepareFormData(formData);
+
       const response = await fetch('http://localhost:5000/predict-stroke', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(preparedData),
       });
 
       if (!response.ok) {
@@ -157,26 +178,17 @@ const Predict_stroke = () => {
         <h2>Stroke Prediction</h2>
       </div>
       <form onSubmit={handleSubmit} style={styles.form}>
-        {/*Object.keys(formData), it returns an array of all the property names (keys) 
-          Then, the .map() function iterates over each key to create form fields
-          <div key={key}>  -> unique "key" prop for list items*/}
-        {Object.keys(formData).map((key) => (               
-            <div key={key}>                      
+        {Object.keys(formData).map((key) => (
+          <div key={key}>
             <label style={styles.label}>{key.replace(/_/g, " ").toUpperCase()}:</label>
-              {/* checks if there are predefined options for the field (like gender: ["Male", "Female"]) and 
-                renders either a select dropdown or a text input accordingly. 
-                If key is "gender", then fieldOptions[key] returns ["Male", "Female"] → render <select>
-                If key is "age", then fieldOptions[key] is undefined → render <input>
-                key.replace(/_/g, " ") -> This replaces all underscores (_) in a string with spaces ,If key is "work_type" => becomes "work type"*/}
             {fieldOptions[key] ? (
               <select
-                name={key}                  // field name
-                value={formData[key]}       // current value from state
-                onChange={handleChange}     // handle value changes
+                name={key}
+                value={formData[key]}
+                onChange={handleChange}
                 style={styles.inputSelect}
               >
-                <option value="">Select {key.replace(/_/g, " ")}</option>   
-
+                <option value="">Select {key.replace(/_/g, " ")}</option>
                 {fieldOptions[key].map((option) => (
                   <option key={option} value={option}>
                     {option}
