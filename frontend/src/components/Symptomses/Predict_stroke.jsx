@@ -13,24 +13,44 @@ const Predict_stroke = () => {
     bmi: "",
     smoking_status: "",
   });
-
   const [errors, setErrors] = useState({});
-  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [prediction, setPrediction] = useState(null);
+
+  // Field options for select inputs
+  const fieldOptions = {
+    gender: ["Male", "Female"],
+    hypertension: ["Yes", "No"],
+    heart_disease: ["Yes", "No"],
+    ever_married: ["Yes", "No"],
+    work_type: ["Private", "Self-employed", "Government", "Children", "Never worked"],
+    residence_type: ["Urban", "Rural"],
+    smoking_status: ["formerly smoked", "never smoked", "smokes", "Unknown"],
+  };
 
   const validateField = (name, value) => {
     let error = "";
     if (!value) {
       error = "This field is required.";
-        } else if (["age", "bmi", "avg_glucose_level"].includes(name)) {
-  const floatValue = parseFloat(value);
-  if (isNaN(floatValue) || floatValue <= 0) {
-    error = "Please enter a positive number.";
-  } else {
-    // Setting the formData to ensure the value is stored as a string representation of the float
-    setFormData({ ...formData, [name]: floatValue.toString() });
-  }
-}
-
+    } else {
+      switch (name) {
+        case "age":
+          if (isNaN(value) || parseFloat(value) <= 0 || parseFloat(value) > 120) {
+            error = "Please enter a valid age between 1 and 120.";
+          }
+          break;
+        case "bmi":
+          if (isNaN(value) || parseFloat(value) < 10 || parseFloat(value) > 50) {
+            error = "Please enter a valid BMI between 10 and 50.";
+          }
+          break;
+        case "avg_glucose_level":
+          if (isNaN(value) || parseFloat(value) < 50 || parseFloat(value) > 400) {
+            error = "Please enter a valid glucose level between 50 and 400.";
+          }
+          break;
+      }
+    }
     return error;
   };
 
@@ -40,9 +60,8 @@ const Predict_stroke = () => {
     setErrors({ ...errors, [name]: validateField(name, value) });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
     const newErrors = {};
     Object.keys(formData).forEach((field) => {
       const error = validateField(field, formData[field]);
@@ -51,38 +70,44 @@ const Predict_stroke = () => {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      setFormSubmitted(false);
-    } else {
-      setFormSubmitted(true);
-      console.log("Form submitted successfully!", formData);
-      alert("Form submitted successfully!");
-      setFormData({
-        gender: "",
-        age: "",
-        hypertension: "",
-        heart_disease: "",
-        ever_married: "",
-        work_type: "",
-        residence_type: "",
-        avg_glucose_level: "",
-        bmi: "",
-        smoking_status: "",
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch('http://localhost:5000/predict-stroke', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
-      setErrors({});
+
+      if (!response.ok) {
+        throw new Error('Prediction failed');
+      }
+
+      const data = await response.json();
+      setPrediction(data.prediction);
+    } catch (error) {
+      console.error('Error:', error);
+      alert('Failed to get prediction. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
   const styles = {
     form: {
       width: "700px",
-    maxWidth: "600px",
-    margin: "20px 270px",
-    padding: "40px",
-    borderRadius: "10px",
-    background: "linear-gradient(135deg, #f3f4f6, #d1e0e0)",
-    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)",
-    fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
-},
+      maxWidth: "600px",
+      margin: "20px auto",
+      padding: "40px",
+      borderRadius: "10px",
+      background: "linear-gradient(135deg, #f3f4f6, #d1e0e0)",
+      boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)",
+      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+    },
     label: {
       marginTop: "10px",
       fontWeight: "600",
@@ -97,219 +122,87 @@ const Predict_stroke = () => {
       borderRadius: "8px",
       border: "1px solid #ddd",
       fontSize: "16px",
-      backgroundColor: "#f1f1f1",
-      transition: "border-color 0.3s ease, background-color 0.3s ease",
+      backgroundColor: "#fff",
     },
     error: {
       color: "#e74c3c",
       fontSize: "14px",
       marginTop: "-8px",
+      marginBottom: "10px",
     },
     button: {
-      width:"100%",
+      width: "100%",
       padding: "12px 20px",
-      backgroundColor: "#72B7B2",
+      backgroundColor: loading ? "#93c5c1" : "#72B7B2",
       color: "#fff",
       border: "none",
       borderRadius: "8px",
-      cursor: "pointer",
+      cursor: loading ? "not-allowed" : "pointer",
       marginTop: "20px",
-      
       fontSize: "16px",
-      transition: "background-color 0.3s ease",
-
     },
-    buttonHover: {
-      backgroundColor: "#4caf50",
-    },
-    successCard: {
+    prediction: {
       marginTop: "20px",
-      padding: "20px",
-      backgroundColor: "#ffffff",
+      padding: "15px",
       borderRadius: "8px",
-      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+      backgroundColor: "#fff",
       textAlign: "center",
-      color: "#28a745",
-      fontSize: "18px",
-    },
-    planCard: {
-      backgroundColor:"yellow",
-      padding: "20px",
-      marginTop: "20px",
-      borderRadius: "10px",
-      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-      textAlign: "center",
-      color: "#333",
-      fontSize: "16px",
-    },
-    planHeader: {
       fontWeight: "bold",
-      fontSize: "20px",
-    },
-    planContent: {
-      fontSize: "16px",
-      marginTop: "10px",
     },
   };
 
   return (
     <div>
-       <div style={{ textAlign: "center", color: "#333", fontSize: "26px", marginBottom: "20px",marginLeft:"20px"}}><h2>stroke prediction</h2></div>
+      <div style={{ textAlign: "center", color: "#333", fontSize: "26px", marginBottom: "20px" }}>
+        <h2>Stroke Prediction</h2>
+      </div>
       <form onSubmit={handleSubmit} style={styles.form}>
-        {/* Gender */}
+        {/*Object.keys(formData), it returns an array of all the property names (keys) 
+          Then, the .map() function iterates over each key to create form fields
+          <div key={key}>  -> unique "key" prop for list items*/}
+        {Object.keys(formData).map((key) => (               
+            <div key={key}>                      
+            <label style={styles.label}>{key.replace(/_/g, " ").toUpperCase()}:</label>
+              {/* checks if there are predefined options for the field (like gender: ["Male", "Female"]) and 
+                renders either a select dropdown or a text input accordingly. 
+                If key is "gender", then fieldOptions[key] returns ["Male", "Female"] → render <select>
+                If key is "age", then fieldOptions[key] is undefined → render <input>
+                key.replace(/_/g, " ") -> This replaces all underscores (_) in a string with spaces ,If key is "work_type" => becomes "work type"*/}
+            {fieldOptions[key] ? (
+              <select
+                name={key}                  // field name
+                value={formData[key]}       // current value from state
+                onChange={handleChange}     // handle value changes
+                style={styles.inputSelect}
+              >
+                <option value="">Select {key.replace(/_/g, " ")}</option>   
 
-       
-        <label style={styles.label}>Gender:</label>
-        <select
-          name="gender"
-          value={formData.gender}
-          onChange={handleChange}
-          style={styles.inputSelect}
-        >
-          <option value="">Select</option>
-          <option value="Male">Male</option>
-          <option value="Female">Female</option>
-          <option value="Other">Other</option>
-        </select>
-        {errors.gender && <div style={styles.error}>{errors.gender}</div>}
-
-        {/* Age */}
-        <label style={styles.label}>Age:</label>
-        <input
-          type="text"
-          name="age"
-          value={formData.age}
-          onChange={handleChange}
-          style={styles.inputSelect}
-        />
-        {errors.age && <div style={styles.error}>{errors.age}</div>}
-
-        {/* Hypertension */}
-        <label style={styles.label}>Hypertension:</label>
-        <select
-          name="hypertension"
-          value={formData.hypertension}
-          onChange={handleChange}
-          style={styles.inputSelect}
-        >
-          <option value="">Select</option>
-          <option value="0">No</option>
-          <option value="1">Yes</option>
-        </select>
-        {errors.hypertension && <div style={styles.error}>{errors.hypertension}</div>}
-
-        {/* Heart Disease */}
-        <label style={styles.label}>Heart Disease:</label>
-        <select
-          name="heart_disease"
-          value={formData.heart_disease}
-          onChange={handleChange}
-          style={styles.inputSelect}
-        >
-          <option value="">Select</option>
-          <option value="0">No</option>
-          <option value="1">Yes</option>
-        </select>
-        {errors.heart_disease && <div style={styles.error}>{errors.heart_disease}</div>}
-
-        {/* Ever Married */}
-        <label style={styles.label}>Ever Married:</label>
-        <select
-          name="ever_married"
-          value={formData.ever_married}
-          onChange={handleChange}
-          style={styles.inputSelect}
-        >
-          <option value="">Select</option>
-          <option value="No">No</option>
-          <option value="Yes">Yes</option>
-        </select>
-        {errors.ever_married && <div style={styles.error}>{errors.ever_married}</div>}
-
-        {/* Work Type */}
-        <label style={styles.label}>Work Type:</label>
-        <select
-          name="work_type"
-          value={formData.work_type}
-          onChange={handleChange}
-          style={styles.inputSelect}
-        >
-          <option value="">Select</option>
-          <option value="children">Children</option>
-          <option value="Govt_job">Govt Job</option>
-          <option value="Never_worked">Never Worked</option>
-          <option value="Private">Private</option>
-          <option value="Self-employed">Self-employed</option>
-        </select>
-        {errors.work_type && <div style={styles.error}>{errors.work_type}</div>}
-
-        {/* Residence Type */}
-        <label style={styles.label}>Residence Type:</label>
-        <select
-          name="residence_type"
-          value={formData.residence_type}
-          onChange={handleChange}
-          style={styles.inputSelect}
-        >
-          <option value="">Select</option>
-          <option value="Rural">Rural</option>
-          <option value="Urban">Urban</option>
-        </select>
-        {errors.residence_type && <div style={styles.error}>{errors.residence_type}</div>}
-
-        {/* Avg Glucose Level */}
-        <label style={styles.label}>Avg Glucose Level:</label>
-        <input
-          type="text"
-          name="avg_glucose_level"
-          value={formData.avg_glucose_level}
-          onChange={handleChange}
-          style={styles.inputSelect}
-        />
-        {errors.avg_glucose_level && <div style={styles.error}>{errors.avg_glucose_level}</div>}
-
-        {/* BMI */}
-        <label style={styles.label}>BMI:</label>
-        <input
-          type="text"
-          name="bmi"
-          value={formData.bmi}
-          onChange={handleChange}
-          style={styles.inputSelect}
-        />
-        {errors.bmi && <div style={styles.error}>{errors.bmi}</div>}
-
-        {/* Smoking Status */}
-        <label style={styles.label}>Smoking Status:</label>
-        <select
-          name="smoking_status"
-          value={formData.smoking_status}
-          onChange={handleChange}
-          style={styles.inputSelect}
-        >
-          <option value="">Select</option>
-          <option value="formerly smoked">Formerly Smoked</option>
-          <option value="never smoked">Never Smoked</option>
-          <option value="smokes">Smokes</option>
-          <option value="Unknown">Unknown</option>
-        </select>
-        {errors.smoking_status && <div style={styles.error}>{errors.smoking_status}</div>}
-
-        <button type="submit" style={styles.button}>
-          Submit
+                {fieldOptions[key].map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                type="text"
+                name={key}
+                value={formData[key]}
+                onChange={handleChange}
+                style={styles.inputSelect}
+                placeholder={`Enter ${key.replace(/_/g, " ")}`}
+              />
+            )}
+            {errors[key] && <div style={styles.error}>{errors[key]}</div>}
+          </div>
+        ))}
+        <button type="submit" style={styles.button} disabled={loading}>
+          {loading ? "Processing..." : "Submit"}
         </button>
       </form>
-
-      {/* Success Message Card */}
-      {formSubmitted && (
-        <div style={styles.planCard}>
-          <div style={styles.planHeader}>Congratulations!</div>
-          <div style={styles.planContent}>
-            Your form has been submitted successfully. We will analyze your data and provide insights.
-          <h1>hello</h1>
-          
-          </div>
+      {prediction !== null && (
+        <div style={styles.prediction}>
+          Prediction Result: {prediction === 1 ? "High risk of stroke" : "Low risk of stroke"}
         </div>
       )}
     </div>
@@ -317,6 +210,3 @@ const Predict_stroke = () => {
 };
 
 export default Predict_stroke;
-
-
-

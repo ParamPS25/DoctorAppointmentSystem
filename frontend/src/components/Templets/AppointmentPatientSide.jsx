@@ -113,7 +113,7 @@ const AppointmentPatientSide = () => {
           <p><strong>Specialization:</strong> {doctor.specialization}</p>
           <p><strong>Experience:</strong> {doctor.experience} years</p>
           <p><strong>Fees:</strong> {doctor.fees} Rs</p>
-          <p><strong>phoneNumber:</strong>{doctor.baseUserId.phoneNumber}</p>
+          <p><strong>Mobile No. :</strong>{doctor.baseUserId.phoneNumber}</p>
         </div>
       )}
 

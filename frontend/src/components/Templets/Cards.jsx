@@ -48,7 +48,7 @@ const Cards = () => {
     const dullStars = totalStars - brightStars;
 
     return (
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div>
         {[...Array(brightStars)].map((_, index) => (
           <span key={index} style={{ color: '#FFD700', fontSize: '40px' }}>★</span>
         ))}

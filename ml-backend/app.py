@@ -8,7 +8,14 @@ from src.diabetes.predict_pipeline import PredictPipeline as DiabetesPredictPipe
 from src.diseases_and_symptoms.predict_pipeline import PredictPipeline as DiseasePredictPipeline
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for cross-origin requests
+CORS(app, resources={
+    r"/*": {
+        "origins": ["http://localhost:3000"],
+        "methods": ["POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"]
+    }
+})
+
 
 # Route for predicting stroke
 @app.route('/predict-stroke', methods=['POST'])
