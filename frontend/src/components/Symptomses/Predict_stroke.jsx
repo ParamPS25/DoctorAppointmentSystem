@@ -172,12 +172,23 @@ const Predict_stroke = () => {
     },
   };
 
+  const resultCardStyle = {
+    backgroundColor: prediction === 1 ? "#ffe6e6" : "#e6ffe6",
+    padding: "20px",
+    marginTop: "20px",
+    borderRadius: "10px",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    textAlign: "center",
+    color: "#333",
+    fontSize: "16px",
+  };
+
   return (
     <div>
+      <form onSubmit={handleSubmit} style={styles.form}>
       <div style={{ textAlign: "center", color: "#333", fontSize: "26px", marginBottom: "20px" }}>
         <h2>Stroke Prediction</h2>
       </div>
-      <form onSubmit={handleSubmit} style={styles.form}>
         {Object.keys(formData).map((key) => (
           <div key={key}>
             <label style={styles.label}>{key.replace(/_/g, " ").toUpperCase()}:</label>
@@ -212,9 +223,24 @@ const Predict_stroke = () => {
           {loading ? "Processing..." : "Submit"}
         </button>
       </form>
-      {prediction !== null && (
+      {/* {prediction !== null && (
         <div style={styles.prediction}>
           Prediction Result: {prediction === "Stroke" ? "Positive" : "Negative"}
+        </div>
+
+      )} */}
+
+        {prediction !== null && (
+        <div style={resultCardStyle}>
+          <h3 style={{ marginBottom: "10px", fontSize: "18px" }}>
+            Prediction Result: {prediction === 1 ? "Positive" : "Negative"}
+          </h3>
+          <p style={{ fontSize: "14px", color: "#666" }}>
+            {prediction === 1 
+              ? "The system predicts a higher risk of stroke. Please consult with a healthcare professional."
+              : "The system predicts a lower risk of stroke. However, always maintain a healthy lifestyle."
+            }
+          </p>
         </div>
       )}
     </div>

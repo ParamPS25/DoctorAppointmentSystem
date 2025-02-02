@@ -1,50 +1,61 @@
-
 import React, { useState } from "react";
+// import { Alert, AlertDescription } from "@/components/ui/alert";
 
-const Predict_diabetes = () => {
+const PredictDiabetes = () => {
   const [formData, setFormData] = useState({
-    pregnancies: "",
-    glucose: "",
-    bloodPressure: "",
-    skinThickness: "",
-    insulin: "",
-    bmi: "",
-    diabetesPedigreeFunction: "",
-    age: "",
+    Pregnancies: "",
+    Glucose: "",
+    BloodPressure: "",
+    SkinThickness: "",
+    Insulin: "",
+    BMI: "",
+    DiabetesPedigreeFunction: "",
+    Age: "",
   });
 
   const [errors, setErrors] = useState({});
-  const [formSubmitted, setFormSubmitted] = useState(false); // Added state to track form submission
-  const [showCard, setShowCard] = useState(false); // Control visibility of the card
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  const [isLoading, setIsLoading] = useState(false);
+  const [prediction, setPrediction] = useState(null);
+  const [apiError, setApiError] = useState(null);
 
   const validateField = (name, value) => {
     let error = "";
     if (!value) {
       error = "This field is required";
-    } else if (["pregnancies", "glucose", "bloodPressure", "skinThickness", "insulin", "age"].includes(name)) {
+    } else if (["Pregnancies", "Glucose", "BloodPressure", "SkinThickness", "Insulin", "Age"].includes(name)) {
       const intValue = parseInt(value, 10);
-      if (isNaN(intValue) || intValue <= 0 || value.includes(".")) {
-        error = "Please enter a positive integer";
+      if (isNaN(intValue) || intValue < 0 || value.includes(".")) {
+        error = "Please enter a non-negative integer";
       }
-    } else if (["bmi", "diabetesPedigreeFunction"].includes(name)) {
+    } else if (["BMI", "DiabetesPedigreeFunction"].includes(name)) {
       const floatValue = parseFloat(value);
-      if (isNaN(floatValue) || floatValue <= 0) {
-        error = "Please enter a positive number";
+      if (isNaN(floatValue) || floatValue < 0) {
+        error = "Please enter a non-negative number";
       }
     }
     return error;
   };
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setApiError(null);
+    setPrediction(null);
+
     const newErrors = {};
     Object.keys(formData).forEach((field) => {
       const error = validateField(field, formData[field]);
@@ -53,29 +64,46 @@ const Predict_diabetes = () => {
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
-      setFormSubmitted(false); // Reset formSubmitted state to false if there are errors
-    } else {
-      setFormSubmitted(true);
-      console.log("Form submitted successfully!", formData);
-      alert("Form submitted successfully!");
+      return;
+    }
 
-      // Show success card on successful form submission
-      setShowCard(true);
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:5000/predict-diabetes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setPrediction(data.prediction[0]);
 
       setFormData({
-        pregnancies: "",
-        glucose: "",
-        bloodPressure: "",
-        skinThickness: "",
-        insulin: "",
-        bmi: "",
-        diabetesPedigreeFunction: "",
-        age: "",
+        Pregnancies: "",
+        Glucose: "",
+        BloodPressure: "",
+        SkinThickness: "",
+        Insulin: "",
+        BMI: "",
+        DiabetesPedigreeFunction: "",
+        Age: "",
       });
-      setErrors({});
+    } catch (error) {
+      setApiError("Failed to get prediction. Please try again later.");
+      console.error("Error:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  // Styles from your original code
   const formStyle = {
     width: "700px",
     maxWidth: "600px",
@@ -114,17 +142,17 @@ const Predict_diabetes = () => {
   const buttonStyle = {
     width: "100%",
     padding: "14px",
-    backgroundColor: "#72B7B2",
+    backgroundColor: isLoading ? "#B3C6D8" : "#72B7B2",
     color: "#fff",
     border: "none",
     borderRadius: "8px",
-    cursor: "pointer",
+    cursor: isLoading ? "not-allowed" : "pointer",
     fontSize: "16px",
     marginTop: "20px",
   };
 
-  const cardStyle = {
-    backgroundColor: "yellow",
+  const resultCardStyle = {
+    backgroundColor: prediction === 1 ? "#ffe6e6" : "#e6ffe6",
     padding: "20px",
     marginTop: "20px",
     borderRadius: "10px",
@@ -136,40 +164,55 @@ const Predict_diabetes = () => {
 
   return (
     <div>
-      <h2 style={{ textAlign: "center", color: "#333", fontSize: "26px", marginBottom: "20px", marginLeft: "20px" }}>
-        Doctor Appointment Symptoms Form
-      </h2>
       <form onSubmit={handleSubmit} style={formStyle}>
+        <h2 style={{ textAlign: "center", color: "#333", fontSize: "26px", marginBottom: "20px", marginLeft: "20px" }}>
+          Diabetes Prediction Form
+        </h2>
         {Object.keys(formData).map((field) => (
           <div key={field}>
             <label style={labelStyle}>
-              {field.charAt(0).toUpperCase() + field.slice(1)}
+              {field.replace(/([A-Z])/g, ' $1').trim()}
             </label>
             <input
               type="text"
               name={field}
               value={formData[field]}
               onChange={handleChange}
-              style={inputStyle}
+              style={{
+                ...inputStyle,
+                border: errors[field] ? "2px solid #e74c3c" : "2px solid #B3C6D8",
+              }}
             />
             {errors[field] && <span style={errorStyle}>{errors[field]}</span>}
           </div>
         ))}
-        <button type="submit" style={buttonStyle}>
-          Submit
+        
+        <button type="submit" style={buttonStyle} disabled={isLoading}>
+          {isLoading ? "Predicting..." : "Predict"}
         </button>
       </form>
 
-      {showCard && (
-        <div style={cardStyle}>
-          <h3>Form Submitted Successfully!</h3>
-          <p>You can add any result or message here from the backend.</p>
+      {apiError && (
+        <div style={{ ...resultCardStyle, backgroundColor: "#ffe6e6" }}>
+          <p>{apiError}</p>
+        </div>
+      )}
+
+      {prediction !== null && (
+        <div style={resultCardStyle}>
+          <h3 style={{ marginBottom: "10px", fontSize: "18px" }}>
+            Prediction Result: {prediction === 1 ? "Positive" : "Negative"}
+          </h3>
+          <p style={{ fontSize: "14px", color: "#666" }}>
+            {prediction === 1 
+              ? "The system predicts a higher risk of diabetes. Please consult with a healthcare professional."
+              : "The system predicts a lower risk of diabetes. However, always maintain a healthy lifestyle."
+            }
+          </p>
         </div>
       )}
     </div>
   );
 };
 
-export default Predict_diabetes;
-
-
+export default PredictDiabetes;
