@@ -42,28 +42,30 @@ const Cards = () => {
   }, [searchTerm, doctors]);
 
   // Function to render star ratings
-  const renderStars = (rating) => {
-    // Ensure rating is a number and between 0 and 5
-    // const validRating = Math.min(Math.max(parseFloat(rating), 0), 5);
+  const renderStars = (rating, ratingCount) => {
+      const validRating = rating % 5; // Rating is out of 5
+      const totalStars = 5;
+      const brightStars = Math.floor(validRating);
+      const dullStars = totalStars - brightStars;
     
-    const validRating = (rating % 5)  // modulous 5 as rating is out of 5
-    console.log(validRating)
-
-    const totalStars = 5;
-    const brightStars = Math.floor(validRating);
-    const dullStars = totalStars - brightStars;
-
-    return (
-      <div>
-        {[...Array(brightStars)].map((_, index) => (
-          <span key={index} style={{ color: '#FFD700', fontSize: '40px' }}>★</span>
-        ))}
-        {[...Array(dullStars)].map((_, index) => (
-          <span key={index} style={{ color: '#D3D3D3', fontSize: '40px' }}>★</span>
-        ))}
-      </div>
-    );
+      return (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div>
+            {/* creates an empty array with a length equal to brightStars , spread operator (...) is used to convert the empty slots into undefined values.
+                This makes the array iterable, turning [empty × 3] into [undefined, undefined, undefined] -> because .map() doesn't work on empty slots but does work on undefined values.
+                The _ is a throwaway variable since we don’t need the actual value as its undefined (just the index).*/}
+            {[...Array(brightStars)].map((_, index) => (
+              <span key={index} style={{ color: '#FFD700', fontSize: '34px' }}>★</span>
+            ))}
+            {[...Array(dullStars)].map((_, index) => (
+              <span key={index} style={{ color: '#D3D3D3', fontSize: '34px' }}>★</span>
+            ))}
+          </div>
+          <span style={{ fontSize: '17px', fontWeight: 'bold' }}>{`(${ratingCount})`}</span>
+        </div>
+      );
   };
+  
 
   return (
     <div className="doctors-container">
@@ -109,7 +111,7 @@ const Cards = () => {
                 <strong>Location:</strong> {doctor.location || 'N/A'}
               </p>
               <p>
-                <strong>{renderStars(doctor.averageRating || 0)}</strong> 
+                <strong>{renderStars(doctor.averageRating || 0 , doctor.ratingCount || 0)}</strong> 
               </p>
 
               <Link
