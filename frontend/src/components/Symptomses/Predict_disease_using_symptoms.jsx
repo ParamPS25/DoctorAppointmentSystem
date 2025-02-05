@@ -438,7 +438,7 @@ export default function DiseaseSelector() {
     <div className="disease-selector">
       <div className="card">
         <div className="card-header">
-          <h2>Disease Selection</h2>
+          <h2>Select your Symptoms(3-5) </h2>
         </div>
         <div className="card-content">
           <input
@@ -477,13 +477,15 @@ export default function DiseaseSelector() {
       </div>
       <style jsx>{`
         .disease-selector { padding: 1rem; max-width: 600px; margin: auto; }
-        .card { background: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); overflow: hidden; }
-        .card-header { padding: 1.5rem; border-bottom: 1px solid #ddd; background: #f8f9fa; }
+        .card { background: "linear-gradient(135deg,rgb(161, 183, 228),rgb(107, 219, 219),rgb(67, 234, 234),rgb(16, 107, 225))",
+                border-radius:30px ; box-shadow: 0 4px 8px rgba(0,0,0,0.1); overflow: hidden; width: 100%;margin-left: 10px; }
+        .card-header { padding: 1.5rem; border-bottom: 1px solid #ddd; background: #f8f9fa;}
+        .card-header h2 { display: flex; justify-content: space-between; align-items: center; }
         .card-content { padding: 1.5rem; }
         .search-input { width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem;color: black; }
         .selected-diseases { display: flex; flex-wrap: wrap; gap: 0.5rem; min-height: 3rem; margin-bottom: 1rem; }
         .disease-badge { background: #d1ecf1; padding: 0.5rem; border-radius: 15px; font-size: 0.9rem; cursor: pointer; }
-        .disease-list { height: 300px; overflow-y: auto; border: 1px solid #ddd; padding: 0.5rem; }
+        .disease-list { height: 300px; overflow-y: auto; border: 1.5px solid black; padding: 0.5rem; }
         .disease-item { color : black; padding: 0.5rem; cursor: pointer; border-radius: 5px; }
         .disease-item:hover { background: #f1f1f1; }
         .selected { background: #007bff; color: white; }
