@@ -3,7 +3,7 @@ const router = require('express').Router();
 const {protect} = require('../middlewares/auth');
 const {isPatient,appointmentValidation,isDoctor } = require('../middlewares/appointmentMiddleware');
 
-const {bookAppointment,updateAppointmentStatus,getNotifications,getAllAppointments,doctorScanQR} = require('../controllers/appointmentController');
+const {bookAppointment,updateAppointmentStatus,getNotifications,getAllAppointments,doctorScanQR,getCalendarAppointments} = require('../controllers/appointmentController');
 
 // Place specific routes first
 router.post('/doctor-scan', protect, isDoctor, doctorScanQR);
@@ -23,6 +23,7 @@ router.get('/notifications', protect, getNotifications);
 
 // soln :- Express matches routes in the order they are defined, so /doctor-scan will no longer conflict with /:doctorId on placing  /doctor-scan above /:doctorId in the router:
 
-// !! email notification for appointment status 
+// route for fetching appointments in calendar format
+router.get('/calendar-appointments', protect, isDoctor, getCalendarAppointments);
 
 module.exports = router;
