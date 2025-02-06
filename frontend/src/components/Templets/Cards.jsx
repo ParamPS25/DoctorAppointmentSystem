@@ -7,6 +7,7 @@ const Cards = () => {
   const [doctors, setDoctors] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredDoctors, setFilteredDoctors] = useState([]);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -26,20 +27,31 @@ const Cards = () => {
     fetchDoctors();
   }, []);
 
+  // Debounce search term -> optimizes UI performance, reduces unnecessary computations and re-renders
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 500); // Wait 500ms before updating debounced value
+
+    return () => {
+      clearTimeout(handler); // Clear timeout if user types again
+    };
+  }, [searchTerm]);
+
   // Search filtering based on name (firstname - lastname), specialization, and location
   useEffect(() => {
     const results = doctors.filter((doctor) => {
       return (
         `${doctor.baseUserId.firstname} ${doctor.baseUserId.lastname}`
           .toLowerCase()
-          .includes(searchTerm.toLowerCase()) ||
-        doctor.specialization.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (doctor.location && doctor.location.toLowerCase().includes(searchTerm.toLowerCase()))
+          .includes(debouncedSearchTerm.toLowerCase()) ||
+        doctor.specialization.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+        (doctor.location && doctor.location.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
       );
     });
 
     setFilteredDoctors(results);
-  }, [searchTerm, doctors]);
+  }, [debouncedSearchTerm, doctors]);
 
   // Function to render star ratings
   const renderStars = (rating, ratingCount) => {
