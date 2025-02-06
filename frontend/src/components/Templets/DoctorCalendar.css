@@ -1,0 +1,24 @@
+  .pending {
+    background-color: yellow;
+  }
+  
+  .confirmed {
+    background-color: green;
+  }
+  
+  .completed {
+    background-color: blue;
+  }
+  
+  .cancelled {
+    background-color: red;
+  }
+  
+  .react-calendar__tile {
+    cursor: pointer;
+  }
+  
+  .react-calendar__tile:hover {
+    opacity: 0.8;
+  }
+  

@@ -469,11 +469,63 @@ async function getAllAppointments(req, res, next) {
     }
 }
 
+// GET : api/book/calendar-appointments?year=2025&month=2
+async function getCalendarAppointments(req, res) {
+    try {
+        const userId = req.user.id;
+        const { year, month } = req.query;
+
+        if (!year || !month) {
+            return res.status(400).json({ success: false, message: "Year and month are required" });
+        }
+
+        // Ensure the user is a doctor
+        const doctor = await Doctor.findOne({ baseUserId: userId }).select('_id');
+        if (!doctor) {
+            return res.status(403).json({ success: false, message: "Access denied" });
+        }
+
+        // Get first and last day of the month
+        const startOfMonth = new Date(year, month - 1, 1);
+        const endOfMonth = new Date(year, month, 0);
+
+        // Fetch only appointments for the doctor in the given month
+        const appointments = await Appointment.find({
+            doctorId: doctor._id,
+            appointmentDate: { $gte: startOfMonth, $lte: endOfMonth }
+        }).select("appointmentDate status");
+
+        // Group appointments by date & status for easy front-end mapping
+        const calendarData = {};
+        appointments.forEach(({ appointmentDate, status }) => {
+            const day = new Date(appointmentDate).getDate();
+            if (!calendarData[day]) {
+                calendarData[day] = [];
+            }
+            calendarData[day].push(status);
+        });
+
+        res.status(200).json({
+            success: true,
+            calendarData,
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            success: false,
+            message: "Failed to get calendar appointments",
+            error: err.message,
+        });
+    }
+}
+
 
 module.exports = {
     bookAppointment,
     updateAppointmentStatus,
     getNotifications,
     getAllAppointments,
-    doctorScanQR
+    doctorScanQR,
+    getCalendarAppointments
 };

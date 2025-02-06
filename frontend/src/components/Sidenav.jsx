@@ -121,15 +121,18 @@ const Sidenav = () => {
           <i className="mr-4 ri-message-2-line"></i>
           Notification
         </Link>
-        <Link
-          to="/settings"
-          className={`mt-7 p-2 rounded-md font-semibold ${
-            isActive('/settings') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
-          } duration-300`}
-        >
-          <i className="mr-4 ri-settings-4-line"></i>
-          Settings
-        </Link>
+
+        {userRole === "doctor" && ( 
+          <Link
+            to="/calendar"
+            className={`mt-7 p-2 rounded-md font-semibold ${
+              isActive('/settings') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
+            } duration-300`}
+          >
+            <i className="mr-4 ri-settings-4-line"></i>
+            Calender
+          </Link>
+        )}
 
         {userRole === "doctor" && (
           <Link
