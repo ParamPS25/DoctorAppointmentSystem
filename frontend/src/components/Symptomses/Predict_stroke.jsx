@@ -122,7 +122,7 @@ const Predict_stroke = () => {
     form: {
       width: "700px",
       maxWidth: "600px",
-      margin: "20px auto",
+      margin: "20px 630px",
       padding: "40px",
       borderRadius: "10px",
       background: "linear-gradient(135deg, #f3f4f6, #d1e0e0)",
