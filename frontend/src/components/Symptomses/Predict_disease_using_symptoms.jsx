@@ -110,12 +110,12 @@ export default function DiseaseSelector() {
         .card-content { padding: 1.5rem; }
         .search-input { width: 100%; padding: 0.75rem; border: 1px solid #ccc; border-radius: 5px; font-size: 1rem;color: black; }
         .selected-diseases { display: flex; flex-wrap: wrap; gap: 0.5rem; min-height: 3rem; margin-bottom: 1rem; }
-        .disease-badge { background: #d1ecf1; padding: 0.5rem; border-radius: 15px; font-size: 0.9rem; cursor: pointer; }
+        .disease-badge { background:blue;color:black; padding: 0.5rem; border-radius: 15px; font-size: 0.9rem; cursor: pointer; }
         .disease-list { height: 300px; overflow-y: auto; border: 1.5px solid black; padding: 0.5rem; }
         .disease-item { color : black; padding: 0.5rem; cursor: pointer; border-radius: 5px; }
         .disease-item:hover { background: #f1f1f1; }
-        .selected { background: #007bff; color: white; }
-        .submit-button { width: 100%; padding: 0.75rem; background: #007bff; color: white; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; }
+        .selected { background: #007bff; color: white; }  
+        .submit-button { width: 100%; padding: 0.75rem; background: blue; color: white; border: none; border-radius: 5px; font-size: 1rem; cursor: pointer; }
         .submit-button:disabled { background: #ccc; cursor: not-allowed; }
         .alert { padding: 0.75rem; border-radius: 5px; margin-bottom: 1rem; }
         .alert.error { background: #f8d7da; color: #721c24; }

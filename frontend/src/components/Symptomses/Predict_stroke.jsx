@@ -125,7 +125,8 @@ const Predict_stroke = () => {
       margin: "20px 630px",
       padding: "40px",
       borderRadius: "10px",
-      background: "linear-gradient(135deg, #f3f4f6, #d1e0e0)",
+      background: "linear-gradient(135deg,rgb(161, 183, 228),rgb(107, 219, 219),rgb(67, 234, 234),rgb(16, 107, 225))",
+       // background: "linear-gradient(135deg, #f3f4f6, #d1e0e0)",
       boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)",
       fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
     },
@@ -154,7 +155,7 @@ const Predict_stroke = () => {
     button: {
       width: "100%",
       padding: "12px 20px",
-      backgroundColor: loading ? "#93c5c1" : "#72B7B2",
+      backgroundColor: loading ? "#93c5c1" : "blue",
       color: "#fff",
       border: "none",
       borderRadius: "8px",

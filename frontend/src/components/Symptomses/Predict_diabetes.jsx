@@ -110,7 +110,7 @@ const PredictDiabetes = () => {
     margin: "20px 270px",
     padding: "40px",
     borderRadius: "10px",
-    background: "linear-gradient(135deg, #f3f4f6, #d1e0e0)",
+    background: "linear-gradient(135deg,rgb(161, 183, 228),rgb(107, 219, 219),rgb(67, 234, 234),rgb(16, 107, 225))",
     boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)",
     fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
   };
@@ -142,7 +142,7 @@ const PredictDiabetes = () => {
   const buttonStyle = {
     width: "100%",
     padding: "14px",
-    backgroundColor: isLoading ? "#B3C6D8" : "#72B7B2",
+    backgroundColor: isLoading ? "#B3C6D8" : "blue",
     color: "#fff",
     border: "none",
     borderRadius: "8px",
