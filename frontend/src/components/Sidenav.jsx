@@ -121,6 +121,17 @@ const Sidenav = () => {
           <i className="mr-4 ri-message-2-line"></i>
           Notification
         </Link>
+        
+        {userRole === "patient" &&(
+        <Link
+          to="/Profile"
+          className={`mt-7 p-2 rounded-md font-semibold ${
+            isActive('/Profile') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
+          } duration-300`}
+        >
+          <i className="mr-4 ri-message-2-line"></i>
+          Profile
+        </Link>)}
 
         {userRole === "doctor" && ( 
           <Link
@@ -143,6 +154,17 @@ const Sidenav = () => {
           >
             <i className="mr-4 ri-qr-code-line"></i>
             QR Scan
+          </Link>
+        )}
+        {userRole === "doctor" && (
+          <Link
+            to="/ProfileOfDoctor"
+            className={`mt-7 p-2 rounded-md font-semibold ${
+              isActive('/ProfileOfDoctor') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
+            } duration-300`}
+          >
+            <i className="mr-4 ri-qr-code-line"></i>
+            profile
           </Link>
         )}
       </div>
