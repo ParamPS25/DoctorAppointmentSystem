@@ -12,6 +12,8 @@ import AppointmentPatientSide from './components/Templets/AppointmentPatientSide
 import AllPage from './components/FirstPage/AllPage';
 import QrScan from './components/Templets/QrScan';
 import DoctorCalendar from './components/Templets/DoctorCalendar';
+import Profile from './components/Profile';
+import ProfileOfDoctor from './components/ProfileOfDoctor';
 
 const App = () => {
   return (
@@ -29,6 +31,8 @@ const App = () => {
         <Route path='/Messages' element={<Messages />} />
         <Route path='/calendar' element={<DoctorCalendar />} />
         <Route path ='/QrScan' element={<QrScan />} />
+        <Route path='/Profile' element={<Profile/>} />
+        <Route path='/ProfileOfDoctor' element={<ProfileOfDoctor/>} />
       </Routes>
     </div>
   )
