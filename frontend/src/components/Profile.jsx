@@ -1,39 +1,88 @@
-import React from 'react'
-import Sidenav from './Sidenav'
-const Profile = () => {
-  const patient = {
-    firstName: "John",
-    lastName: "Doe",
-    age: "35",
-    email: "johndoe@example.com",
-    contact: "+1 234 567 890",
-    address: "123 Main St, Springfield, USA",
-    medicalConditions: ["Diabetes", "Hypertension"],
-    image: "doctor1.jpg", // Replace with actual image URL
-  };
+import { React, useState, useEffect } from "react";
+import Sidenav from "./Sidenav";
+import axios from "axios";
+
+const PatientProfile = () => {
+  const [patient, setPatient] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchPatient = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/auth/me", {
+          withCredentials: true,
+        });
+
+        if (response.data && response.data.data && response.data.data.user && response.data.data.profile) {
+          setPatient(response.data.data);
+        } else {
+          setError("Invalid data structure received from the server.");
+        }
+
+      } catch (err) {
+        console.error("Failed to fetch patient:", err);
+        setError("Failed to load patient data.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPatient();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
+
+  if (!patient) {
+    return <div>Patient data not available.</div>;
+  }
 
   return (
-    <div className='w-screen h-full flex'>
-      <div className='w-[25%] h-full'>
-        <Sidenav/>
+    <div style={styles.profileContainer}>
+      <div style={styles.sidebar}>
+        <Sidenav />
       </div>
-      <div style={styles.container}>
-        <div style={styles.imageContainer}>
-          <img src={patient.image} alt={`${patient.firstName} ${patient.lastName}`} style={styles.image} />
-        </div>
-        <div style={styles.profileDetails}>
-          <h2 style={styles.profileTitle}>PATIENT PROFILE</h2>
-          <h3 style={styles.patientName}>{`${patient.firstName} ${patient.lastName}`}</h3>
-          <p style={styles.text}><strong>Age:</strong> {patient.age}</p>
-          <p style={styles.text}><strong>Email:</strong> {patient.email}</p>
-          <p style={styles.text}><strong>Contact:</strong> {patient.contact}</p>
-          <h4 style={styles.sectionTitle}>ADDRESS</h4>
-          <p style={styles.text}>{patient.address}</p>
-          <h4 style={styles.sectionTitle}>MEDICAL CONDITIONS</h4>
-          <div style={styles.conditions}>
-            {patient.medicalConditions.map((condition, index) => (
-              <span key={index} style={styles.conditionTag}>{condition}</span>
-            ))}
+
+      <div style={styles.mainContent}>
+        <div style={styles.profileCard}>
+          <div style={styles.profileHeader}>
+            <div style={styles.imageContainer}>
+              <img src="/doctor3.jpg" alt={patient.user.firstname} style={styles.image} />
+            </div>
+          </div>
+
+          <div style={styles.profileDetails}>
+            <div style={styles.nameSection}>
+              <h2 style={styles.patientName}>{`${patient.user.firstname} ${patient.user.lastname}`}</h2>
+              <p style={styles.age}> Age : {patient.user.age}</p>
+            </div>
+
+            <div style={styles.infoGrid}>
+              <div style={styles.infoItem}>
+                <span style={styles.label}>Gender:</span>
+                <span>{patient.user.gender}</span>
+              </div>
+              <div style={styles.infoItem}>
+                <span style={styles.label}>Contact:</span>
+                <span>{patient.user.phoneNumber}</span>
+              </div>
+              <div style={styles.infoItem}>
+                <span style={styles.label}>Email:</span>
+                <span>{patient.user.email}</span>
+              </div>
+            </div>
+
+            <div style={styles.section}>
+              <h3 style={styles.sectionTitle}>Medical History</h3>
+              <p>{patient.profile.medicalHistory || "No medical history recorded."}</p>
+            </div>
+
           </div>
         </div>
       </div>
@@ -42,57 +91,88 @@ const Profile = () => {
 };
 
 const styles = {
-  container: {
+  profileContainer: {
     display: "flex",
-    width: "50%",
-    height:"70%",
-    margin: "auto",
-    backgroundColor: "lightgray",
-    borderRadius: "10px",
-    padding: "20px",
-    color: "#fff",
-    fontFamily: "Arial, sans-serif",
+    width: "100vw",
+    height: "100vh",
+    backgroundColor: "#f4f4f4",
+  },
+  sidebar: {
+    width: "25%",
+    backgroundColor: "white",
+    boxShadow: "2px 0 10px rgba(0, 0, 0, 0.1)",
+  },
+  mainContent: {
+    flex: 1,
+    padding: "32px",
+    overflowY: "auto",
+  },
+  profileCard: {
+    maxWidth: "1000px",
+    margin: "0 auto",
+    backgroundColor: "white",
+    borderRadius: "12px",
+    padding: "32px",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+  },
+  profileHeader: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    marginBottom: "32px",
+  },
+  imageContainer: {
+    position: "relative",
+    marginBottom: "16px",
   },
   image: {
-    width: "150px", 
+    width: "150px",
     height: "150px",
-    borderRadius: "50%",  
+    borderRadius: "50%",
+    border: "4px solid #3b82f6",
     objectFit: "cover",
-    border: "5px solid #2c3e50", 
   },
   profileDetails: {
-    flex: 2,
-    paddingLeft: "20px",
+    flex: 1,
   },
-  profileTitle: {
-    fontSize: "18px",
-    fontWeight: "bold",
-    color: "#f39c12",
+  nameSection: {
+    marginBottom: "24px",
   },
   patientName: {
-    fontSize: "24px",
+    fontSize: "32px",
     fontWeight: "bold",
+    color: "#1f2937",
+    marginBottom: "8px",
+  },
+  age: {
+    fontSize: "18px",
+    color: "#4b5563",
+    marginBottom: "4px",
+  },
+  infoGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+    gap: "16px",
+    marginBottom: "32px",
+  },
+  infoItem: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "4px",
+  },
+  label: {
+    fontWeight: "bold",
+    color: "#4b5563",
+  },
+  section: {
+    marginBottom: "24px",
   },
   sectionTitle: {
-    fontSize: "16px",
+    fontSize: "20px",
     fontWeight: "bold",
-    marginTop: "15px",
-    color: "#f39c12",
-  },
-  text: {
-    fontSize: "14px",
-    marginBottom: "10px",
-  },
-  conditions: {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "10px",
-  },
-  conditionTag: {
-    backgroundColor: "#16a085",
-    padding: "5px 10px",
-    borderRadius: "5px",
-    fontSize: "14px",
+    color: "#1f2937",
+    marginBottom: "16px",
   },
 };
-export default Profile
+
+export default PatientProfile;
