@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom'; 
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Logout from './Templets/Logout';
 
@@ -21,7 +21,7 @@ const Sidenav = () => {
   const [userProfile, setProfile] = useState(null);
   const [error, setError] = useState(null);
   const location = useLocation();
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -34,13 +34,21 @@ const Sidenav = () => {
         setProfile(fetchedUser);
       } catch (err) {
         setError("Failed to load user data");
-        navigate('/SigninInfo'); // Redirect to login page on error
+        navigate('/SigninInfo');
       } finally {
         setLoading(false);
       }
     };
     fetchUserDetails();
   }, [navigate]);
+
+  const handleProfileClick = () => {
+    if (userRole === "patient") {
+      navigate('/Profile');
+    } else if (userRole === "doctor") {
+      navigate('/ProfileOfDoctor');
+    }
+  };
 
   if (loading) {
     return <div className="text-zinc-400 text-center mt-10">Loading...</div>;
@@ -64,21 +72,27 @@ const Sidenav = () => {
       {/* Profile Section */}
       <div className="flex items-center gap-4 p-4 bg-[#1b1e21] rounded-lg mb-6">
         <div className="w-16 h-16 rounded-full bg-zinc-500 flex items-center justify-center text-white text-3xl font-bold">
-          <i className="ri-user-line"></i> {/* Profile Icon */}
+          <i className="ri-user-line cursor-pointer" onClick={handleProfileClick}></i>
         </div>
         <div>
           <p className="font-semibold text-zinc-200 text-lg">
-            {userProfile.user.firstname} {userProfile.user.lastname}
+            {userProfile && userProfile.user && userProfile.user.firstname && userProfile.user.lastname ? (
+              `${userProfile.user.firstname} ${userProfile.user.lastname}`
+            ) : (
+              "User Name" // Or a placeholder
+            )}
           </p>
-          <p className="text-sm text-zinc-400">{userProfile.user.email}</p>
-          <p className="text-sm text-green-500 font-medium">{userRole}</p>
-          {/* Smaller Logout Button */}
+          <p className="text-sm text-zinc-400">
+            {userProfile && userProfile.user && userProfile.user.email ? userProfile.user.email : "user@example.com"}
+          </p>
+          <p className="text-sm text-green-500 font-medium">
+             {userProfile && userProfile.user && userProfile.user.role ? userProfile.user.role : "Role"}
+          </p>
           <p className="text-sm mt-2 font-bold">
             <Logout />
           </p>
         </div>
       </div>
-
 
       {/* Navigation Links */}
       <div className="flex flex-col">
@@ -92,25 +106,29 @@ const Sidenav = () => {
           Appointments
         </Link>
 
-        {userRole === "patient" && (<Link
-          to="/Symptoms"
-          className={`mt-7 p-2 rounded-md font-semibold ${
-            isActive('/Symptoms') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
-          } duration-300`}
-        >
-          <i className="mr-4 ri-first-aid-kit-line"></i>
-          Symptoms
-        </Link>)}
+        {userRole === "patient" && (
+          <Link
+            to="/Symptoms"
+            className={`mt-7 p-2 rounded-md font-semibold ${
+              isActive('/Symptoms') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
+            } duration-300`}
+          >
+            <i className="mr-4 ri-first-aid-kit-line"></i>
+            Symptoms
+          </Link>
+        )}
 
-        {userRole === "patient" && (<Link
-          to="/Doctor"
-          className={`mt-7 p-2 rounded-md font-semibold ${
-            isActive('/Doctor') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
-          } duration-300`}
-        >
-          <i className="mr-4 ri-stethoscope-fill"></i>
-          Doctors
-        </Link>)}
+        {userRole === "patient" && (
+          <Link
+            to="/Doctor"
+            className={`mt-7 p-2 rounded-md font-semibold ${
+              isActive('/Doctor') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
+            } duration-300`}
+          >
+            <i className="mr-4 ri-stethoscope-fill"></i>
+            Doctors
+          </Link>
+        )}
 
         <Link
           to="/Messages"
@@ -121,23 +139,12 @@ const Sidenav = () => {
           <i className="mr-4 ri-message-2-line"></i>
           Notification
         </Link>
-        
-        {userRole === "patient" &&(
-        <Link
-          to="/Profile"
-          className={`mt-7 p-2 rounded-md font-semibold ${
-            isActive('/Profile') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
-          } duration-300`}
-        >
-          <i className="mr-4 ri-message-2-line"></i>
-          Profile
-        </Link>)}
 
-        {userRole === "doctor" && ( 
+        {userRole === "doctor" && (
           <Link
             to="/calendar"
             className={`mt-7 p-2 rounded-md font-semibold ${
-              isActive('/settings') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
+              isActive('/calendar') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
             } duration-300`}
           >
             <i className="mr-4 ri-settings-4-line"></i>
@@ -156,19 +163,7 @@ const Sidenav = () => {
             QR Scan
           </Link>
         )}
-        {userRole === "doctor" && (
-          <Link
-            to="/ProfileOfDoctor"
-            className={`mt-7 p-2 rounded-md font-semibold ${
-              isActive('/ProfileOfDoctor') ? 'bg-[#ede5fa] text-black' : 'hover:bg-[#ede5fa] hover:text-black'
-            } duration-300`}
-          >
-            <i className="mr-4 ri-qr-code-line"></i>
-            profile
-          </Link>
-        )}
       </div>
-
     </div>
   );
 };
