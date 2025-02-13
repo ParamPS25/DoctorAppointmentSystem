@@ -28,7 +28,10 @@ const doctorSchema = new mongoose.Schema({
         default: 0 // Stores the average rating for easy access 
     },
     location: { 
-        type: String 
+        buildingInfo: { type: String },
+        streetName: { type: String },
+        cityName: { type: String },
+        stateName: { type: String },
     },
     // availability: [
     //     {

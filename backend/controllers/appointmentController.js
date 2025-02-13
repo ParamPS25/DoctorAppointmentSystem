@@ -359,7 +359,7 @@ async function getNotifications(req,res,next){
 
         // pagination
         const page = parseInt(req.query.page) || 1; 
-        const limit = 7;
+        const limit = 5;
         const skip = (page-1) * limit;
 
         // finding the notifications with respect to the recipient
