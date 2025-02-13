@@ -45,8 +45,8 @@ const Cards = () => {
         `${doctor.baseUserId.firstname} ${doctor.baseUserId.lastname}`
           .toLowerCase()
           .includes(debouncedSearchTerm.toLowerCase()) ||
-        doctor.specialization.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
-        (doctor.location && doctor.location.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
+        doctor.specialization.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) 
+        // || (doctor.location && doctor.location.toLowerCase().includes(debouncedSearchTerm.toLowerCase()))
       );
     });
 
@@ -119,9 +119,21 @@ const Cards = () => {
               <p>
                 <strong>Gender:</strong> {doctor.baseUserId.gender}
               </p>
-              <p>
-                <strong>Location:</strong> {doctor.location || 'N/A'}
+
+              <p style={styles.locationInfo}>
+                <strong>Location: </strong>
+                {doctor?.location ? (
+                    <>
+                    {doctor.location.buildingInfo}, 
+                    {doctor.location.streetName}, 
+                    {doctor.location.cityName}, 
+                    {doctor.location.stateName}.
+                    </>
+                ) : (
+                  <p>Location not specified</p>
+                )}
               </p>
+
               <p>
                 <strong>{renderStars(doctor.averageRating || 0 , doctor.ratingCount || 0)}</strong> 
               </p>
@@ -140,6 +152,14 @@ const Cards = () => {
       </div>
     </div>
   );
+};
+
+const styles = {
+  locationInfo: {
+    // marginTop: '10px',
+    // padding: '2px',
+    backgroundColor: 'transparent',
+  }
 };
 
 export default Cards;

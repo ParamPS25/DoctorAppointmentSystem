@@ -79,10 +79,64 @@ async function rateDoctor(req, res) {
     }
   }
   
-
+  async function AddDoctorLocation(req, res) {
+    try {
+      const docId = req.params.doctorId;
+      const { location } = req.body;
+  
+      // console.log('Updating location for doctor:', docId);
+      // console.log('Request body:', req.body);
+  
+      // Validate the location object
+      if (!location || 
+          typeof location !== 'object' ||  
+          !location.buildingInfo ||
+          !location.streetName ||
+          !location.cityName ||
+          !location.stateName) {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid location, please provide all the fields of location"
+        });
+      }
+  
+      const doctor = await Doctor.findById(docId).exec();
+      // console.log('Doctor found:', doctor);
+  
+      if (!doctor) {
+        return res.status(404).json({
+          success: false,
+          message: "Doctor not found"
+        });
+      }
+  
+      // Update the location
+      doctor.location = location;
+      const updatedDoctor = await doctor.save();
+      // console.log('Doctor location updated:', updatedDoctor);
+  
+      return res.status(200).json({
+        success: true,
+        message: "Location updated successfully",
+        data: {
+          location: updatedDoctor.location
+        }
+      });
+  
+    } catch (err) {
+      // console.error('Error in AddDoctorLocation:', err); 
+      return res.status(500).json({
+        success: false,
+        message: "Failed to update location",
+        error: err.message
+      });
+    }
+  }
+  
 
 module.exports = {
     getAllDoctors,
     getDoctorById,
-    rateDoctor
+    rateDoctor,
+    AddDoctorLocation
 };

@@ -6,6 +6,14 @@ const ProfileOfDoctor = () => {
   const [doctor, setDoctor] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isEditingLocation, setIsEditingLocation] = useState(false);
+  const [newLocation, setNewLocation] = useState({
+    buildingInfo: "",
+    streetName: "",
+    cityName: "",
+    stateName: "",
+  });
+  const [locationError, setLocationError] = useState(null);
 
   useEffect(() => {
     const fetchDoctor = async () => {
@@ -31,6 +39,61 @@ const ProfileOfDoctor = () => {
     fetchDoctor();
   }, []);
 
+  const handleEditLocation = () => {
+    console.log("Edit location button clicked!");  // Debug log
+    setIsEditingLocation(true);
+    if (doctor && doctor.profile && doctor.profile.location) {  // Pre-fill if location exists
+      setNewLocation(doctor.profile.location);
+    }
+    // Initialize with empty values if no location exists
+    else {
+      setNewLocation({
+        buildingInfo: "",
+        streetName: "",
+        cityName: "",
+        stateName: "",
+      });
+    };
+  }
+
+  const handleLocationInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewLocation({...newLocation, [name]: value}); // Update the newLocation object , spread the existing values and update the changed value
+    setLocationError(null); // Clear any prev error message
+  };
+
+  const handleSaveLocation = async () => {
+    try {
+      if (!newLocation.buildingInfo || !newLocation.streetName || !newLocation.cityName || !newLocation.stateName) {
+        setLocationError("Please fill in all location fields.");
+        return;
+      }
+
+      const docId = doctor.profile._id;
+      const response = await axios.patch(`http://localhost:8080/api/doctors/location/${docId}`, 
+        { location: newLocation }, // Wrap the location data in an object
+        {
+          withCredentials: true,
+        });
+
+      if (response.data && response.data.message) {
+        setDoctor({
+          ...doctor, 
+          profile: {
+            ...doctor.profile, 
+            location: newLocation
+          }}); // Update the doctor object with the new location
+
+        setIsEditingLocation(false);  // Exit edit mode 
+      } else {
+        setLocationError("Failed to update location. Please try again.");
+      }
+    } catch (err) {
+      console.error("Failed to update location:", err);
+      setLocationError("Failed to update location. Please try again.");
+    }
+  };
+  
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -87,6 +150,71 @@ const ProfileOfDoctor = () => {
               <div style={styles.specialties}>
                 <span style={styles.specialtyTag}>{doctor.profile.specialization}</span>
               </div>
+            </div>
+
+           <div style={styles.section}>
+            <h3 style={styles.sectionTitle}>Location</h3>
+            {isEditingLocation ? (
+              <div>
+                <input
+                  type="text"
+                  name="buildingInfo"
+                  placeholder="Building Info"
+                  value={newLocation.buildingInfo}
+                  onChange={handleLocationInputChange}
+                  style={styles.input}
+                />
+                <input
+                  type="text"
+                  name="streetName"
+                  placeholder="Street Name"
+                  value={newLocation.streetName}
+                  onChange={handleLocationInputChange}
+                  style={styles.input}
+                />
+                <input
+                  type="text"
+                  name="cityName"
+                  placeholder="City Name"
+                  value={newLocation.cityName}
+                  onChange={handleLocationInputChange}
+                  style={styles.input}
+                />
+                <input
+                  type="text"
+                  name="stateName"
+                  placeholder="State Name"
+                  value={newLocation.stateName}
+                  onChange={handleLocationInputChange}
+                  style={styles.input}
+                />
+                {locationError && <p style={styles.error}>{locationError}</p>}
+                <button style={styles.saveButton} onClick={handleSaveLocation}>
+                  Save Location
+                </button>
+                <button style={styles.cancelButton} onClick={() => setIsEditingLocation(false)}>
+                  Cancel
+                </button>
+              </div>
+            ) : (
+              <div>
+                {doctor.profile.location ? (
+                  <>
+                    <p>
+                      {doctor.profile.location.buildingInfo}, {doctor.profile.location.streetName},{" "}
+                      {doctor.profile.location.cityName}, {doctor.profile.location.stateName}
+                    </p>
+                    <button style={styles.editButton} onClick={handleEditLocation}>
+                      Edit Location
+                    </button>
+                  </>
+                ) : (
+                  <button style={styles.editButton} onClick={handleEditLocation}>
+                    Add Location
+                  </button>
+                )}
+              </div>
+            )}
             </div>
           </div>
         </div>
@@ -205,6 +333,58 @@ const styles = {
     fontSize: "14px",
     fontWeight: "500",
   },
+  editButton: {
+    backgroundColor: "#4CAF50", // Green
+    border: "none",
+    color: "white",
+    padding: "8px 16px",
+    textAlign: "center",
+    textDecoration: "none",
+    display: "inline-block",
+    fontSize: "16px",
+    margin: "4px 2px",
+    cursor: "pointer",
+    borderRadius: "5px",
+  },
+  saveButton: {
+    backgroundColor: "#007bff", // Blue
+    border: "none",
+    color: "white",
+    padding: "8px 16px",
+    textAlign: "center",
+    textDecoration: "none",
+    display: "inline-block",
+    fontSize: "16px",
+    margin: "4px 2px",
+    cursor: "pointer",
+    borderRadius: "5px",
+  },
+  cancelButton: {
+    backgroundColor: "#dc3545", // Red
+    border: "none",
+    color: "white",
+    padding: "8px 16px",
+    textAlign: "center",
+    textDecoration: "none",
+    display: "inline-block",
+    fontSize: "16px",
+    margin: "4px 2px",
+    cursor: "pointer",
+    borderRadius: "5px",
+  },
+  input: {
+    width: "100%",
+    padding: "10px",
+    margin: "8px 0",
+    boxSizing: "border-box",
+    border: "1px solid #ccc",
+    borderRadius: "4px",
+  },
+  error: {
+    color: "red",
+    marginTop: "5px",
+  },
+
   achievements: {
     display: "flex",
     flexDirection: "column",
