@@ -8,6 +8,7 @@ const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const doctorRoutes = require('./routes/doctorRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
+const patientRoutes = require('./routes/patientRoutes');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(cors({
     app.use('/api/auth', authRoutes);
     app.use('/api/doctors', doctorRoutes);
     app.use('/api/book', appointmentRoutes);
+    app.use('/api/patient', patientRoutes);
 
 // Connect to MongoDB
 connect(process.env.MONGO_URI)
