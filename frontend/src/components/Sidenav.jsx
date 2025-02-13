@@ -8,6 +8,9 @@ const fetchUser = async () => {
     const response = await axios.get("http://localhost:8080/api/auth/me", {
       withCredentials: true,
     });
+    if( response.status === 401 ) {
+      navigate('/SigninInfo');
+    }
     return response.data.data;
   } catch (err) {
     console.error("Failed to fetch user:", err);
