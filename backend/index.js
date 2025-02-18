@@ -18,13 +18,19 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
-    // origin: process.env.FRONTEND_URL, // Allow only the specified frontend URL
-    // origin: '*', // Allow any origin
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000', 
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // Allow specific HTTP methods
-    allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
-    credentials: true // Allow credentials (cookies, authorization headers, etc.)
+    origin: function (origin, callback) {
+      // Allow all requests from Vercel deployments
+      if (!origin || origin.endsWith(".vercel.app")) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
 }));
+  
 
 // Routes
     app.use('/api/auth', authRoutes);
