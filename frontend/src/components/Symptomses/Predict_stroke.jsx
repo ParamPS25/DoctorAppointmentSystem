@@ -96,7 +96,8 @@ const Predict_stroke = () => {
       // Prepare the data before sending
       const preparedData = prepareFormData(formData);
 
-      const response = await fetch('http://localhost:5000/predict-stroke', {
+      const ML_ENV = import.meta.env.VITE_ML_DOC_API;
+      const response = await fetch( ML_ENV+'/predict-stroke', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

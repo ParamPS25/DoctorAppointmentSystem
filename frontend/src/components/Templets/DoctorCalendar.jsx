@@ -15,8 +15,9 @@ const DoctorCalendar = () => {
     const month = date.getMonth() + 1; // 0-based to 1-based month
     
     try {
+      const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
       const response = await fetch(
-        `http://localhost:8080/api/book/calendar-appointments?year=${year}&month=${month}`,
+        NODE_ENV+`/api/book/calendar-appointments?year=${year}&month=${month}`,
         {
           method: 'GET',
           headers: {

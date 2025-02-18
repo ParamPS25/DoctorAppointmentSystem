@@ -12,7 +12,8 @@ const Cards = () => {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const response = await axios.get('http://localhost:8080/api/doctors/', {
+        const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
+        const response = await axios.get(NODE_ENV+'/api/doctors/', {
           withCredentials: true,
         });
         if (response.data.message === 'success') {

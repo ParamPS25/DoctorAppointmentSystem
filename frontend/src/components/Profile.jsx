@@ -15,7 +15,8 @@ const PatientProfile = () => {
   useEffect(() => {
     const fetchPatient = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/auth/me", {
+        const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
+        const response = await axios.get(NODE_ENV+"/api/auth/me", {
           withCredentials: true,
         },);
 
@@ -100,9 +101,9 @@ const PatientProfile = () => {
         email: editedPatient.user.email,
         medicalHistory: editedPatient.profile.medicalHistory,
       };
-
+      const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
       const response = await axios.patch(
-        `http://localhost:8080/api/patient/update/${patient.profile._id}`,
+        NODE_ENV+`/api/patient/update/${patient.profile._id}`,
         // editedPatient,
         dataToUpdate, // Send only the data that needs to be updated
         { 

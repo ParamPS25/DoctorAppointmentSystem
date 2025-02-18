@@ -70,7 +70,8 @@ const PredictDiabetes = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:5000/predict-diabetes', {
+      const ML_ENV = import.meta.env.VITE_ML_DOC_API;
+      const response = await fetch(ML_ENV+'/predict-diabetes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

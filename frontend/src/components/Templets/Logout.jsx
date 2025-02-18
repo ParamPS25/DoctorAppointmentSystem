@@ -7,7 +7,8 @@ const Logout = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.get('http://localhost:8080/api/auth/logout', 
+      const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
+      await axios.get(NODE_ENV+'/api/auth/logout', 
       { 
         withCredentials: true 
       });

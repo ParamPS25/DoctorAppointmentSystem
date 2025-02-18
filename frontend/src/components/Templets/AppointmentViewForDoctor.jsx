@@ -10,8 +10,9 @@ const AppointmentViewForDoctor = ({ appointments }) => {
 
   const handleAction = async (id, action) => {
     try {
+      const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
       await axios.patch(
-        `http://localhost:8080/api/book/status/${id}`,
+        NODE_ENV + `/api/book/status/${id}`,
         { status: action },
         {
           withCredentials: true,

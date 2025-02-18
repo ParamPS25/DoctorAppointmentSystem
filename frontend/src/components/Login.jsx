@@ -9,7 +9,8 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     try {
-      const response = await fetch('http://localhost:8080/api/auth/login', {
+      const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
+      const response = await fetch(NODE_ENV+'/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

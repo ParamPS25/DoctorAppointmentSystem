@@ -18,7 +18,8 @@ const ProfileOfDoctor = () => {
   useEffect(() => {
     const fetchDoctor = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/api/auth/me", {
+        const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
+        const response = await axios.get(NODE_ENV+"/api/auth/me", {
           withCredentials: true,
         });
 
@@ -70,7 +71,8 @@ const ProfileOfDoctor = () => {
       }
 
       const docId = doctor.profile._id;
-      const response = await axios.patch(`http://localhost:8080/api/doctors/location/${docId}`, 
+      const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
+      const response = await axios.patch(NODE_ENV+`/api/doctors/location/${docId}`, 
         { location: newLocation }, // Wrap the location data in an object
         {
           withCredentials: true,

@@ -20,7 +20,8 @@ const NotificationPage = () => {
   const fetchNotifications = async (currentPage) => {
     try {
       setLoading(true); 
-      const response = await fetch(`http://localhost:8080/api/book/notifications?page=${currentPage}`, {
+      const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
+      const response = await fetch(NODE_ENV+`/api/book/notifications?page=${currentPage}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

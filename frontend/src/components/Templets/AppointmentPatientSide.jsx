@@ -127,7 +127,8 @@ const AppointmentPatientSide = () => {
     const appointmentData = { ...formData, doctorId };
 
     try {
-      const response = await fetch(`http://localhost:8080/api/book/${doctorId}`, {
+      const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
+      const response = await fetch(NODE_ENV+`/api/book/${doctorId}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

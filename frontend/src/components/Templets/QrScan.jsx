@@ -15,8 +15,9 @@ const QrScan = () => {
         const qrData = JSON.parse(data.text);
         setResult(JSON.stringify(qrData, null, 2)); // Pretty print the scanned data
 
+        const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
         const response = await axios.post(
-          'http://localhost:8080/api/book/doctor-scan',
+          NODE_ENV+'/api/book/doctor-scan',
           qrData,
           {
             withCredentials: true,

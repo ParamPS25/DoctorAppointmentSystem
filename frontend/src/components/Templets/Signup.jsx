@@ -31,7 +31,8 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8080/api/auth/signup', {
+      const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
+      const response = await fetch(NODE_ENV+'/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

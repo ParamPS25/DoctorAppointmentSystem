@@ -27,7 +27,8 @@ import axios from "axios";
 
 const fetchUserRole = async () => {
   try {
-    const response = await axios.get("http://localhost:8080/api/auth/me", {
+    const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
+    const response = await axios.get(NODE_ENV+"/api/auth/me", {
       withCredentials: true, // Include cookies
     });
     console.log(response.data.data.user.role)
