@@ -57,18 +57,26 @@ generateTokens = async (user) => {
 exports.sendToken = async (user, statusCode, res) => {
     const { accessToken, refreshToken } = await generateTokens(user);
 
+    // Set CORS Headers for Cookies
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
     const accessTokenOptions = {
         expires: new Date(Date.now() + 15 * 60 * 1000), //expiration is set to 15 minutes from the current time.
         httpOnly: true,                                 //option makes the cookie inaccessible to JavaScript running on the client-side
-        secure: process.env.NODE_ENV === 'production', // Only secure cookies in production
-        sameSite: 'strict'
+        // secure: process.env.NODE_ENV === 'production', // Only secure cookies in production
+        secure: true,                                   //option ensures that the cookie is sent only over HTTPS
+        sameSite: 'None'
     };
 
     const refreshTokenOptions = {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Only secure cookies in production
-        sameSite: 'strict'
+        // secure: process.env.NODE_ENV === 'production', // Only secure cookies in production
+        secure: true,                                   //option ensures that the cookie is sent only over HTTPS
+        sameSite: 'None'
     };
 
     // Send user info without sensitive data
