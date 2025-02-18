@@ -172,7 +172,7 @@ cython_debug/
 .pypirc
 
 # Ingore artifacts folder
-artifacts/
+artifacts_dataset/
 
 # Ignore egg-info folder
 doc_ml_backen.egg-info/

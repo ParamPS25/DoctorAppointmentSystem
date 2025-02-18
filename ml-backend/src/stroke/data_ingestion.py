@@ -16,8 +16,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../../.
 
 @dataclass
 class DataIngestionConfig:
-    train_data_path: str = os.path.join('artifacts',"stroke_train.csv")
-    test_data_path: str = os.path.join('artifacts',"stroke_test.csv")
+    train_data_path: str = os.path.join('artifacts_dataset',"stroke_train.csv")
+    test_data_path: str = os.path.join('artifacts_dataset',"stroke_test.csv")
 
 
 class DataIngestion:
