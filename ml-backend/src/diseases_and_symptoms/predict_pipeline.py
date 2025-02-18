@@ -29,7 +29,7 @@ class PredictPipeline:
             # Paths to artifacts
             model_path = os.path.join("artifacts", "Diseases_and_Symptoms_model.pkl")
             preprocessor_path = os.path.join("artifacts", "diseases_and_symptoms_preprocessor.pkl")
-            symptoms_path = os.path.join("notebooks", "datasets", "symptoms.csv")
+            symptoms_path = os.path.join("artifacts", "symptoms.csv")
 
             # Load model and label encoder
             model = load_object(model_path)
