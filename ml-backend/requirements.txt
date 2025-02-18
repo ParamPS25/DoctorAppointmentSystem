@@ -8,4 +8,5 @@ dill
 flask
 flask_cors
 imbalanced-learn
+gunicorn
 # -e .
