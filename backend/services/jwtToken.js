@@ -54,7 +54,7 @@ generateTokens = async (user) => {
 };
 
 
-exports.sendToken = async (user, statusCode,req,res) => {
+exports.sendToken = async (user, statusCode,res) => {
     const { accessToken, refreshToken } = await generateTokens(user);
 
     // Set CORS Headers for Cookies
