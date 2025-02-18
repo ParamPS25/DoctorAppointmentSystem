@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors({
     // origin: process.env.FRONTEND_URL, // Allow only the specified frontend URL
     // origin: '*', // Allow any origin
-    origin: 'http://localhost:5173',
+    origin: process.env.FRONTEND_URL,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], // Allow specific HTTP methods
     allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
     credentials: true // Allow credentials (cookies, authorization headers, etc.)
