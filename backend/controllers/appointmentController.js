@@ -131,14 +131,14 @@ async function sendAppointmentStatusEmail(appointment,status,doc_fname,doc_lname
       
         // const browser = await puppeteer.launch();
         // Puppeteer PDF Generation (with Chromium path)
-        const browser = await puppeteer.launch({
-            executablePath: '/usr/bin/chromium-browser', // Path to Chromium on Render
-        });
+        // const browser = await puppeteer.launch({
+        //     executablePath: '/usr/bin/chromium-browser', // Path to Chromium on Render
+        // });
 
-        const page = await browser.newPage();
-        await page.setContent(htmlContent); // Load HTML content into the page
-        const pdfBuffer = await page.pdf({ format: 'A4' }); // Generate PDF
-        await browser.close();
+        // const page = await browser.newPage();
+        // await page.setContent(htmlContent); // Load HTML content into the page
+        // const pdfBuffer = await page.pdf({ format: 'A4' }); // Generate PDF
+        // await browser.close();
 
         const patientEmail = appointment.patientId.baseUserId.email ;
 
@@ -147,9 +147,13 @@ async function sendAppointmentStatusEmail(appointment,status,doc_fname,doc_lname
             to :    patientEmail,
             subject: `Appointment ${status.charAt(0).toUpperCase() + status.slice(1)}`,
             html : htmlContent,
+            // attachments: [{
+            //     filename: `appointment-${status}.pdf`,
+            //     content: pdfBuffer
+            // }]
             attachments: [{
-                filename: `appointment-${status}.pdf`,
-                content: pdfBuffer
+                filename: `appointment-${status}.html`,
+                content: htmlContent
             }]
         };
         
