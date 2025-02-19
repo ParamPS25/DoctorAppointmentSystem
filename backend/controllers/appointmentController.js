@@ -129,7 +129,12 @@ async function sendAppointmentStatusEmail(appointment,status,doc_fname,doc_lname
 
         // generate html content file -> pdf using puppeteer
       
-        const browser = await puppeteer.launch();
+        // const browser = await puppeteer.launch();
+        // Puppeteer PDF Generation (with Chromium path)
+        const browser = await puppeteer.launch({
+            executablePath: '/usr/bin/chromium-browser', // Path to Chromium on Render
+        });
+
         const page = await browser.newPage();
         await page.setContent(htmlContent); // Load HTML content into the page
         const pdfBuffer = await page.pdf({ format: 'A4' }); // Generate PDF

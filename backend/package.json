@@ -26,6 +26,7 @@
     "mongoose": "^8.9.2",
     "nodemailer": "^6.9.16",
     "puppeteer": "^24.0.0",
+    "puppeteer-core": "^24.2.1",
     "qrcode": "^1.5.4"
   },
   "devDependencies": {
