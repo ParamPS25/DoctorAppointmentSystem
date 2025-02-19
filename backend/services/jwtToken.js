@@ -64,7 +64,7 @@ exports.sendToken = async (user, statusCode,res) => {
     // res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
     const accessTokenOptions = {
-        expires: new Date(Date.now() + 15 * 60 * 1000), //expiration is set to 15 minutes from the current time.
+        expires: new Date(Date.now() + 50 * 60 * 1000), //expiration is set to 50 minutes from the current time.
         httpOnly: true,                                 //option makes the cookie inaccessible to JavaScript running on the client-side
         // secure: process.env.NODE_ENV === 'production', // Only secure cookies in production
         secure: true,                                   //option ensures that the cookie is sent only over HTTPS

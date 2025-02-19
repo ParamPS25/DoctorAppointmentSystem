@@ -55,7 +55,8 @@ const Appointment = ()=>{
             setRole(fetchedRole);
 
             if(fetchedRole){
-                const response = await axios.get("http://localhost:8080/api/book/all-appointments",{
+                const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
+                const response = await axios.get(NODE_ENV+"/api/book/all-appointments",{
                   withCredentials : true, // include cookies
                 })
                 // console.log("Fetched Appointments:", response.data); // Debug log
