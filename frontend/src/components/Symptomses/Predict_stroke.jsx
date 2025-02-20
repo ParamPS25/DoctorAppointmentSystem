@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 const Predict_stroke = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +16,14 @@ const Predict_stroke = () => {
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [prediction, setPrediction] = useState(null);
+
+  const resultRef = useRef(null); // Create a ref for the result div
+
+  useEffect(() => {
+    if(prediction !== null) {
+      resultRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [prediction]);   // Scroll to the result div when prediction is available
 
   // Field options for select inputs
   const fieldOptions = {
@@ -233,7 +241,7 @@ const Predict_stroke = () => {
       )} */}
 
         {prediction !== null && (
-        <div style={resultCardStyle}>
+        <div ref={resultRef} style={resultCardStyle}>              
           <h3 style={{ marginBottom: "10px", fontSize: "18px" }}>
             Prediction Result: {prediction === 1 ? "Positive" : "Negative"}
           </h3>

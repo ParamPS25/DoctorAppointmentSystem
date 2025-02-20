@@ -8,6 +8,19 @@ export default function DiseaseSelector() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [prediction, setPrediction] = useState(null);
+
+  const resultRef = useRef(null);
+  const formRef = useRef(null);
+
+  useEffect(() => {
+    if (prediction) { // Scroll only if prediction is set
+      if (resultRef.current) {
+        resultRef.current.scrollIntoView({ behavior: 'smooth' });
+      } else if (formRef.current) {
+        formRef.current.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [prediction]);
   
   const filteredDiseases = useMemo(() => {
     return diseases.filter(disease => disease.toLowerCase().includes(query.toLowerCase()));
@@ -58,7 +71,7 @@ export default function DiseaseSelector() {
 
   return (
     <div className="disease-selector">
-      <div className="card">
+      <div ref={formRef} className="card">
         <div className="card-header">
           <h2>Select your Symptoms(3-5) </h2>
         </div>
@@ -97,7 +110,11 @@ export default function DiseaseSelector() {
           <button onClick={handleSubmit} disabled={selectedDiseases.length < 3} className="submit-button">
             Submit Selection ({selectedDiseases.length}/5)
           </button>
-          {prediction && <div className="prediction-result">Predicted Condition: {prediction}</div>}
+          {prediction && (
+            <div ref={resultRef} className="prediction-result"> {/* resultRef*/}
+              Predicted Condition: {prediction}
+            </div>
+          )}
         </div>
       </div>
       <style jsx>{`
@@ -121,7 +138,7 @@ export default function DiseaseSelector() {
         .alert { padding: 0.75rem; border-radius: 5px; margin-bottom: 1rem; }
         .alert.error { background: #f8d7da; color: #721c24; }
         .alert.success { background: #d4edda; color: #155724; }
-        .prediction-result { margin-top: 1rem; padding: 1rem; background: #e2f0d9; border-radius: 5px; }
+        .prediction-result { margin-top: 1rem; padding: 1rem; background:rgb(90, 146, 237); border-radius: 5px; }
       `}</style>
     </div>
   );

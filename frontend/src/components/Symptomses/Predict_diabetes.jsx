@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect,useRef } from "react";
 // import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const PredictDiabetes = () => {
@@ -17,6 +17,20 @@ const PredictDiabetes = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [prediction, setPrediction] = useState(null);
   const [apiError, setApiError] = useState(null);
+
+  const resultRef = useRef(null);
+  const formRef = useRef(null); // Ref for the form
+
+  useEffect(() => {
+    if (prediction !== null || apiError) {                           // Scroll if prediction or error
+      if (resultRef.current) {                                      // if result (prediction) is available, scroll to result 
+        resultRef.current.scrollIntoView({ behavior: 'smooth' });
+      } else if (formRef.current) {
+        formRef.current.scrollIntoView({ behavior: 'smooth' });    // Scroll to form if no result yet.
+      }
+    }
+  }, [prediction, apiError]); 
+
 
   const validateField = (name, value) => {
     let error = "";
@@ -165,7 +179,7 @@ const PredictDiabetes = () => {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} style={formStyle}>
+      <form ref={formRef} onSubmit={handleSubmit} style={formStyle}>
         <h2 style={{ textAlign: "center", color: "#333", fontSize: "26px", marginBottom: "20px", marginLeft: "20px" }}>
           Diabetes Prediction Form
         </h2>
@@ -194,13 +208,13 @@ const PredictDiabetes = () => {
       </form>
 
       {apiError && (
-        <div style={{ ...resultCardStyle, backgroundColor: "#ffe6e6" }}>
+        <div ref={resultRef} style={{ ...resultCardStyle, backgroundColor: "#ffe6e6" }}>
           <p>{apiError}</p>
         </div>
       )}
 
       {prediction !== null && (
-        <div style={resultCardStyle}>
+        <div ref={resultRef} style={resultCardStyle}>
           <h3 style={{ marginBottom: "10px", fontSize: "18px" }}>
             Prediction Result: {prediction === 1 ? "Positive" : "Negative"}
           </h3>
