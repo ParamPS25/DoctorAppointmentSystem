@@ -78,14 +78,16 @@ const Appointment = ()=>{
 
 
       return (
-          <div className="w-screen h-screen bg-zinc-300 flex">
-          {/* Sidenav is independent of loading state */}
-          <div className="w-[25%]">
-            <Sidenav />
-          </div>
+        //   <div className="w-screen h-screen bg-zinc-300 flex">
+        //   {/* Sidenav is independent of loading state */}
+        //   <div className="w-[25%]">
+        //     <Sidenav />
+        //   </div>
 
-          {/* Main content area */}
-          <div className="w-[75%] bg-white-700 h-full text-center">
+        //   {/* Main content area */}
+          
+        // </div>
+        <div className="bg-white-700 h-full text-center">
             {loading ? (
               // Show loading state in the main content area only
               <div>Loading Appointments...</div>
@@ -96,7 +98,6 @@ const Appointment = ()=>{
               </>
             )}
           </div>
-        </div>
     );
     
   }

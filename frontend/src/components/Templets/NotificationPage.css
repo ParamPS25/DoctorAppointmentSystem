@@ -1,12 +1,12 @@
 .notification-container {
-    padding: auto;
-    margin-left: 180px;
+    padding: 10px;
+    margin-left: 90px;  
     /* padding-left: 100px; */
     font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
+    /* background-color: #f9f9f9; */
     overflow: auto;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
 
 }
 

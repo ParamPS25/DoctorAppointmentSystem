@@ -10,9 +10,10 @@ import Sidenav from '../../components/Sidenav'; // Adjust the path as necessary
 
 const Symptoms = () => {
   return (
-    <><div className='w-[25%] h-full'>
+    <>
+    {/* <div className='w-[25%] h-full'>
     <Sidenav/>
-  </div>
+    </div> */}
       <Routes>
         <Route path="/" element={<SymptomsPage />} />
         <Route path="/Predict_diabetes" element={<Predict_diabetes />} />

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Calendar from 'react-calendar';
 import "react-calendar/dist/Calendar.css";
-import Sidenav from '../Sidenav'; // Import the side nav component
-import './DoctorCalendar.css'; // Custom styles for DoctorCalendar
+import './DoctorCalendar.css';
 
 const DoctorCalendar = () => {
   const [appointments, setAppointments] = useState({});
@@ -17,7 +16,7 @@ const DoctorCalendar = () => {
     try {
       const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
       const response = await fetch(
-        NODE_ENV+`/api/book/calendar-appointments?year=${year}&month=${month}`,
+        `${NODE_ENV}/api/book/calendar-appointments?year=${year}&month=${month}`,
         {
           method: 'GET',
           headers: {
@@ -74,37 +73,32 @@ const DoctorCalendar = () => {
   };
 
   return (
-    <div className="w-screen h-full flex">
-      <div className="w-1/4 h-full">
-        <Sidenav />
-      </div>
-      <div className="w-3/4 p-4">
-        <div className="bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold mb-4">Doctor's Calendar</h2>
-          <Calendar 
-            onChange={setCalendarDate}
-            value={calendarDate}
-            onActiveStartDateChange={({ activeStartDate }) => handleMonthChange(activeStartDate)}
-            tileClassName={getTileClassName}
-            className="w-full h-full"
-          />
-          <div className="mt-4 flex gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-yellow-200 rounded"></div>
-              <span>Pending</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-green-200 rounded"></div>
-              <span>Confirmed</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-blue-200 rounded"></div>
-              <span>Completed</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-red-200 rounded"></div>
-              <span>Cancelled</span>
-            </div>
+    <div className="h-full w-full p-4">
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-2xl font-bold mb-4">Doctor's Calendar</h2>
+        <Calendar 
+          onChange={setCalendarDate}
+          value={calendarDate}
+          onActiveStartDateChange={({ activeStartDate }) => handleMonthChange(activeStartDate)}
+          tileClassName={getTileClassName}
+          className="w-full h-full"
+        />
+        <div className="mt-4 flex gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-yellow-200 rounded"></div>
+            <span>Pending</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-green-200 rounded"></div>
+            <span>Confirmed</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-blue-200 rounded"></div>
+            <span>Completed</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-red-200 rounded"></div>
+            <span>Cancelled</span>
           </div>
         </div>
       </div>

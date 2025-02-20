@@ -153,9 +153,9 @@ const PatientProfile = () => {
 
   return (
     <div style={styles.profileContainer}>
-      <div style={styles.sidebar}>
+      {/* <div style={styles.sidebar}>
         <Sidenav />
-      </div>
+      </div> */}
 
       <div style={styles.mainContent}>
         <div style={styles.profileCard}>
@@ -305,8 +305,8 @@ const PatientProfile = () => {
 const styles = {
   profileContainer: {
     display: "flex",
-    width: "100vw",
-    height: "100vh",
+    width: "100%",
+    height: "100%",
     backgroundColor: "#f4f4f4",
   },
   sidebar: {

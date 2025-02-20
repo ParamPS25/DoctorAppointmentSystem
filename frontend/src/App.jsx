@@ -14,25 +14,28 @@ import QrScan from './components/Templets/QrScan';
 import DoctorCalendar from './components/Templets/DoctorCalendar';
 import Profile from './components/Profile';
 import ProfileOfDoctor from './components/ProfileOfDoctor';
+import MainLayout from './MainLayout';
 
 const App = () => {
   return (
     <div className='w-screen h-screen flex'>
       <Routes>
+        <Route element={<MainLayout />}> {/* using MainLayout for these routes */}
+            <Route path='/AllPage/*' element={<AllPage />} />
+            {/* <Route path='/Home' element={<Home />} /> */}
+            <Route path='/Appointments' element={<Appointment />} />
+            <Route path='/Doctor' element={<Doctor />} />
+            <Route path='/Symptoms/*' element={<Symptoms />} />
+            <Route path='/Messages' element={<Messages />} />
+            <Route path='/calendar' element={<DoctorCalendar />} />
+            <Route path ='/QrScan' element={<QrScan />} />
+            <Route path='/Profile' element={<Profile/>} />
+            <Route path='/ProfileOfDoctor' element={<ProfileOfDoctor/>} />
+        </Route>
         <Route path='/' element={<FirstPage />} />
         <Route path='/Signup' element={<Signup />} />
         <Route path='/SigninInfo' element={<SigninInfo />} />
         <Route path="/AppointmentPatientSide/:doctorId" element={<AppointmentPatientSide />} />
-        <Route path='/AllPage/*' element={<AllPage />} />
-        <Route path='/Home' element={<Home />} />
-        <Route path='/Appointments' element={<Appointment />} />
-        <Route path='/Doctor' element={<Doctor />} />
-        <Route path='/Symptoms/*' element={<Symptoms />} />
-        <Route path='/Messages' element={<Messages />} />
-        <Route path='/calendar' element={<DoctorCalendar />} />
-        <Route path ='/QrScan' element={<QrScan />} />
-        <Route path='/Profile' element={<Profile/>} />
-        <Route path='/ProfileOfDoctor' element={<ProfileOfDoctor/>} />
       </Routes>
     </div>
   )

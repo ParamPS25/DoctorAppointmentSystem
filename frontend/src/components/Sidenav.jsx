@@ -3,21 +3,21 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Logout from './Templets/Logout';
 
-const fetchUser = async () => {
-  try {
-    const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
-    const response = await axios.get(NODE_ENV+"/api/auth/me", {
-      withCredentials: true,
-    });
-    if( response.status === 401 ) {
-      navigate('/SigninInfo');
-    }
-    return response.data.data;
-  } catch (err) {
-    console.error("Failed to fetch user:", err);
-    return null;
-  }
-};
+// const fetchUser = async () => {
+//   try {
+//     const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
+//     const response = await axios.get(NODE_ENV+"/api/auth/me", {
+//       withCredentials: true,
+//     });
+//     if( response.status === 401 ) {
+//       navigate('/SigninInfo');
+//     }
+//     return response.data.data;
+//   } catch (err) {
+//     console.error("Failed to fetch user:", err);
+//     return null;
+//   }
+// };
 
 const Sidenav = () => {
   const [userRole, setRole] = useState(null);
@@ -28,23 +28,34 @@ const Sidenav = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const fetchedUser = await fetchUser();
-        if (!fetchedUser) {
-          throw new Error("User data not found");
-        }
-        setRole(fetchedUser.user.role);
-        setProfile(fetchedUser);
-      } catch (err) {
-        setError("Failed to load user data");
-        navigate('/SigninInfo');
-      } finally {
-        setLoading(false);
+        const fetchUser = async () => {
+          try {
+            const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
+            const response = await axios.get(NODE_ENV+"/api/auth/me", {
+              withCredentials: true,
+            });
+            if( response.status === 401 ) {
+              navigate('/SigninInfo');
+              return;
+            }
+            setRole(response.data.data.user.role);
+            setProfile(response.data.data);
+            setError(null)
+          } catch (err) {
+            console.error("Failed to fetch user:", err);
+            return null;
+          }finally{
+            setLoading(false)
+          }
+        };
+        
+        if(!userProfile || !userRole){
+          fetchUser();                  //only fetch if user data is not already present
+        }else{
+          setLoading(false);
       }
-    };
-    fetchUserDetails();
-  }, [navigate]);
+  }, [navigate,userRole,userProfile]);
+
 
   const handleProfileClick = () => {
     if (userRole === "patient") {
