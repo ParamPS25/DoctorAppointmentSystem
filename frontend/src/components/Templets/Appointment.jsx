@@ -4,6 +4,8 @@ import Sidenav from '../../components/Sidenav'
 import AppointmentViewForDoctor from './AppointmentViewForDoctor'
 import AppointmentViewForPatient from './AppointmentViewForPatient'
 import axios from "axios";
+import LoadingSpinner from '../../reusables/LoadinSpinner'
+
 
 // import jwtDecode from "jwt-decode";
 // import Cookies from "js-cookie";
@@ -90,7 +92,8 @@ const Appointment = ()=>{
         <div className="bg-white-700 h-full text-center">
             {loading ? (
               // Show loading state in the main content area only
-              <div>Loading Appointments...</div>
+                <LoadingSpinner/>
+              // <div>Loading Appointments...</div>
             ) : (
               <>
                 {role === "doctor" && <AppointmentViewForDoctor appointments={appointments} />}

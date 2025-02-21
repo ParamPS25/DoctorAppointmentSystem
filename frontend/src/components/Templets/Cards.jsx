@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Cards.css';
 import { Link } from 'react-router-dom';
+import LoadingSpinner from '../../reusables/LoadinSpinner';
 
 const Cards = () => {
   const [doctors, setDoctors] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(true); 
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -22,6 +24,8 @@ const Cards = () => {
         }
       } catch (error) {
         console.error('Error fetching doctors:', error);
+      } finally{
+        setIsLoading(false);
       }
     };
 
@@ -92,65 +96,69 @@ const Cards = () => {
         />
       </div>
 
-      <div className="cards">
-        {filteredDoctors.length > 0 ? (
-          filteredDoctors.map((doctor, index) => (
-            <div key={index} className={`card ${doctor.color}`}>
-              <div className="profile-pic">
-                <i className="ri-account-circle-fill"></i>
+      {isLoading ? (
+        <LoadingSpinner /> // Show spinner while loading
+      ) : (
+        <div className="cards">
+          {filteredDoctors.length > 0 ? (
+            filteredDoctors.map((doctor, index) => (
+              <div key={index} className={`card ${doctor.color}`}>
+                <div className="profile-pic">
+                  <i className="ri-account-circle-fill"></i>
+                </div>
+                <h2>
+                  Dr. {doctor.baseUserId.firstname} {doctor.baseUserId.lastname}
+                </h2>
+                <p>
+                  <strong>Specialization:</strong> {doctor.specialization}
+                </p>
+                <p>
+                  <strong>Experience:</strong> {doctor.experience} years
+                </p>
+                <p>
+                  <strong>Fees per consultation:</strong> {doctor.fees} Rs
+                </p>
+                <p>
+                  <strong>Phone:</strong> {doctor.baseUserId.phoneNumber || 'N/A'}
+                </p>
+                <p>
+                  <strong>Age:</strong> {doctor.baseUserId.age}
+                </p>
+                <p>
+                  <strong>Gender:</strong> {doctor.baseUserId.gender}
+                </p>
+
+                <p style={styles.locationInfo}>
+                  <strong>Location: </strong>
+                  {doctor?.location ? (
+                      <>
+                      {doctor.location.buildingInfo}, 
+                      {doctor.location.streetName}, 
+                      {doctor.location.cityName}, 
+                      {doctor.location.stateName}.
+                      </>
+                  ) : (
+                    <p>Location not specified</p>
+                  )}
+                </p>
+
+                <p>
+                  <strong>{renderStars(doctor.averageRating || 0 , doctor.ratingCount || 0)}</strong> 
+                </p>
+
+                <Link
+                  to={`/AppointmentPatientSide/${doctor._id}`}
+                  state={doctor} // Pass doctor details as state
+                >
+                  <button className="btn">Book Appointment</button>
+                </Link>
               </div>
-              <h2>
-                Dr. {doctor.baseUserId.firstname} {doctor.baseUserId.lastname}
-              </h2>
-              <p>
-                <strong>Specialization:</strong> {doctor.specialization}
-              </p>
-              <p>
-                <strong>Experience:</strong> {doctor.experience} years
-              </p>
-              <p>
-                <strong>Fees per consultation:</strong> {doctor.fees} Rs
-              </p>
-              <p>
-                <strong>Phone:</strong> {doctor.baseUserId.phoneNumber || 'N/A'}
-              </p>
-              <p>
-                <strong>Age:</strong> {doctor.baseUserId.age}
-              </p>
-              <p>
-                <strong>Gender:</strong> {doctor.baseUserId.gender}
-              </p>
-
-              <p style={styles.locationInfo}>
-                <strong>Location: </strong>
-                {doctor?.location ? (
-                    <>
-                    {doctor.location.buildingInfo}, 
-                    {doctor.location.streetName}, 
-                    {doctor.location.cityName}, 
-                    {doctor.location.stateName}.
-                    </>
-                ) : (
-                  <p>Location not specified</p>
-                )}
-              </p>
-
-              <p>
-                <strong>{renderStars(doctor.averageRating || 0 , doctor.ratingCount || 0)}</strong> 
-              </p>
-
-              <Link
-                to={`/AppointmentPatientSide/${doctor._id}`}
-                state={doctor} // Pass doctor details as state
-              >
-                <button className="btn">Book Appointment</button>
-              </Link>
-            </div>
-          ))
-        ) : (
-          <p>No doctors available</p>
+            ))
+          ) : (
+            <p>No doctors available</p>
         )}
       </div>
+      )}
     </div>
   );
 };

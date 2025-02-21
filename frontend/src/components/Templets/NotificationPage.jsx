@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import "./NotificationPage.css";
 import { format } from 'date-fns';
+import LoadingSpinner from "../../reusables/LoadinSpinner";
 
 const NotificationPage = () => {
   const [notifications, setNotifications] = useState([]);
@@ -61,7 +62,8 @@ const NotificationPage = () => {
       <h1 className="notification-title">Notifications</h1>
       
       {loading ? (
-        <p>Loading...</p> // Show loading message while fetching data
+        // <p>Loading...</p> // Show loading message while fetching data
+        <LoadingSpinner/>
       ) : error ? (
         <p>Error: {error}</p> // Show error message if there's an issue with fetching data
       ) : notifications.length > 0 ? (
