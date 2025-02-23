@@ -1,5 +1,6 @@
 import React, { useState,useEffect,useRef } from "react";
 // import { Alert, AlertDescription } from "@/components/ui/alert";
+import LoadingSpinner from "../../reusables/LoadinSpinner";
 
 const PredictDiabetes = () => {
   const [formData, setFormData] = useState({
@@ -82,7 +83,7 @@ const PredictDiabetes = () => {
     }
 
     setIsLoading(true);
-
+  
     try {
       const ML_ENV = import.meta.env.VITE_ML_DOC_API;
       const response = await fetch(ML_ENV+'/predict-diabetes', {
@@ -197,13 +198,21 @@ const PredictDiabetes = () => {
                 ...inputStyle,
                 border: errors[field] ? "2px solid #e74c3c" : "2px solid #B3C6D8",
               }}
+              disabled={isLoading}
             />
             {errors[field] && <span style={errorStyle}>{errors[field]}</span>}
           </div>
         ))}
         
         <button type="submit" style={buttonStyle} disabled={isLoading}>
-          {isLoading ? "Predicting..." : "Predict"}
+          {isLoading ? (
+                <>
+                  <LoadingSpinner />
+                  <span>Analyzing Data...</span>
+                </>
+              ) : (
+                "Predict"
+              )}
         </button>
       </form>
 

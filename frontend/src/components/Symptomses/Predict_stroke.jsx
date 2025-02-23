@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import LoadingSpinner from "../../reusables/LoadinSpinner";
 
 const Predict_stroke = () => {
   const [formData, setFormData] = useState({
@@ -100,6 +101,8 @@ const Predict_stroke = () => {
     }
 
     setLoading(true);
+    setPrediction(null);
+
     try {
       // Prepare the data before sending
       const preparedData = prepareFormData(formData);
@@ -131,7 +134,7 @@ const Predict_stroke = () => {
     form: {
       width: "700px",
       maxWidth: "600px",
-      margin: "20px 630px",
+      margin: "20px auto",
       padding: "40px",
       borderRadius: "10px",
       background: "linear-gradient(135deg,rgb(161, 183, 228),rgb(107, 219, 219),rgb(67, 234, 234),rgb(16, 107, 225))",
@@ -208,6 +211,7 @@ const Predict_stroke = () => {
                 value={formData[key]}
                 onChange={handleChange}
                 style={styles.inputSelect}
+                disabled={loading}
               >
                 <option value="">Select {key.replace(/_/g, " ")}</option>
                 {fieldOptions[key].map((option) => (
@@ -224,13 +228,21 @@ const Predict_stroke = () => {
                 onChange={handleChange}
                 style={styles.inputSelect}
                 placeholder={`Enter ${key.replace(/_/g, " ")}`}
+                disabled={loading}
               />
             )}
             {errors[key] && <div style={styles.error}>{errors[key]}</div>}
           </div>
         ))}
         <button type="submit" style={styles.button} disabled={loading}>
-          {loading ? "Processing..." : "Submit"}
+          {loading ? (
+              <>
+                <LoadingSpinner />
+                <span>Analyzing Data...</span>
+              </>
+            ) : (
+              "Predict"
+            )}
         </button>
       </form>
       {/* {prediction !== null && (
