@@ -86,8 +86,31 @@ BookMyDoc is a web-based doctor appointment system designed to streamline medica
 
 ---
 
-## Installation & Setup
+## Installation & Setup (run locally)
 
+1. Set up Environment variables <br>
+
+   <h4>Frontend (.env)</h4> 
+   Create a .env file in the frontend directory with the following variables: 
+   
+      ```bash
+     VITE_ML_DOC_API = http://localhost:5000
+     VITE_NODE_DOC_API = http://localhost:8080
+     ```
+   <h4> Backend (.env)</h4>
+   Create a .env file in the backend directory with the following variables: 
+   
+      ```bash
+     MONGO_URI = mongodb+srv://username:password@your-cluster.mongodb.net/your-database
+     PORT = 8080
+     JWT_ACCESS_SECRET = your_jwt_access_secret_key
+     JWT_REFRESH_SECRET = your_jwt_refresh_secret_key
+     JWT_EXPIRES_IN = 1h
+     COOKIE_EXPIRES_IN = 24
+     MAIL_PASS = your_email_app_password
+     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true
+      ```
+   
 1. Clone the repository:
    ```bash
    git clone https://github.com/ParamPS25/DoctorAppointmentSystem.git
