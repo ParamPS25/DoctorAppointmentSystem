@@ -3,6 +3,8 @@ const BaseUser = require('../models/baseUserSchema')
 const Doctor = require('../models/doctorSchema');
 const Patient = require('../models/patientSchema');
 const Notification = require('../models/notificationSchema');
+const Review = require('../models/reviewSchema');
+const bcrypt = require('bcryptjs');
 
 const emailTemplate = require('../services/emailTemplateStatus');
 const crypto = require('crypto');
@@ -251,6 +253,49 @@ async function updateAppointmentStatus(req, res, next) {
     }
 }
 
+async function sendReviewEmail(appointment) {
+    try {
+        // Generate unique review token
+        const reviewToken = crypto.randomBytes(32).toString('hex');
+
+        // Create a review entry with default rating of 0
+        const review = new Review({
+            appointmentId: appointment._id,
+            doctorId: appointment.doctorId._id,
+            patientId: appointment.patientId._id,
+            reviewToken: reviewToken,
+            reviewStatus: 'pending',
+            rating: 0  // Explicitly set default rating
+        });
+        await review.save();
+
+        // Construct review link (replace with your actual frontend review page URL)
+        const reviewLink = `http://localhost:5173/review/${reviewToken}`;              // after change to bookmydoc.com
+
+        // Email template (you'll want to create a proper HTML template)
+        const htmlContent = `
+            <h2>Rate Your Doctor</h2>
+            <p>Thank you for your appointment with Dr. ${appointment.doctorId.baseUserId.firstname} ${appointment.doctorId.baseUserId.lastname}</p>
+            <p>Please take a moment to rate your experience:</p>
+            <a href="${reviewLink}">Submit Review</a>
+        `;
+
+        const mailOptions = {
+            from: 'bhavsarparam1940@gmail.com',
+            to: appointment.patientId.baseUserId.email,
+            subject: 'Rate Your Recent Appointment',
+            html: htmlContent
+        };
+
+        await transporter.sendMail(mailOptions);
+        return true;
+        
+    } catch(err) {
+        console.error('Error sending review email:', err);
+        throw err;
+    }
+}
+
 // POST : api/book/doctor-scan 
 // post appointmentId and verification-token for 
 
@@ -333,9 +378,12 @@ async function doctorScanQR(req,res,next){
         appointment.status = 'completed';
         await appointment.save();
 
+        // Send  review email to patient after appointment is completed
+        await sendReviewEmail(appointment);
+
         return res.status(200).json({
             success: true,
-            message: "Appointment marked as completed",
+            message: "Appointment marked as completed and review email sent",
             appointment
         });
 

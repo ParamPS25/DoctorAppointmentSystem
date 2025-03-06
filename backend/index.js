@@ -9,6 +9,7 @@ const authRoutes = require('./routes/authRoutes');
 const doctorRoutes = require('./routes/doctorRoutes');
 const appointmentRoutes = require('./routes/appointmentRoutes');
 const patientRoutes = require('./routes/patientRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use(cors({
         callback(new Error("Not allowed by CORS"));
       }
     },
+    // origin : 'http://localhost:5173',
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"]
@@ -37,6 +39,7 @@ app.use(cors({
     app.use('/api/doctors', doctorRoutes);
     app.use('/api/book', appointmentRoutes);
     app.use('/api/patient', patientRoutes);
+    app.use('/api/review', reviewRoutes);
 
 // Connect to MongoDB
 connect(process.env.MONGO_URI)

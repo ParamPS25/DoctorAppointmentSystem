@@ -66,17 +66,19 @@ exports.sendToken = async (user, statusCode,res) => {
     const accessTokenOptions = {
         expires: new Date(Date.now() + 50 * 60 * 1000), //expiration is set to 50 minutes from the current time.
         httpOnly: true,                                 //option makes the cookie inaccessible to JavaScript running on the client-side
-        // secure: process.env.NODE_ENV === 'production', // Only secure cookies in production
-        secure: true,                                   //option ensures that the cookie is sent only over HTTPS
-        sameSite: 'None'
+        secure: process.env.NODE_ENV === 'production', // Only secure cookies in production
+        // secure: true,                                   //option ensures that the cookie is sent only over HTTPS
+        // sameSite: 'None'
+        sameSite : 'Strict'
     };
 
     const refreshTokenOptions = {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         httpOnly: true,
-        // secure: process.env.NODE_ENV === 'production', // Only secure cookies in production
-        secure: true,                                   //option ensures that the cookie is sent only over HTTPS
-        sameSite: 'None'
+        secure: process.env.NODE_ENV === 'production', // Only secure cookies in production
+        // secure: true,                                   //option ensures that the cookie is sent only over HTTPS
+        // sameSite: 'None'
+        sameSite : 'Strict'
     };
 
     // Send user info without sensitive data
