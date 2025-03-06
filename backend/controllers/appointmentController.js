@@ -257,6 +257,7 @@ async function sendReviewEmail(appointment) {
     try {
         // Generate unique review token
         const reviewToken = crypto.randomBytes(32).toString('hex');
+        // console.log('Review Token:', reviewToken);
 
         // Create a review entry with default rating of 0
         const review = new Review({
@@ -269,10 +270,10 @@ async function sendReviewEmail(appointment) {
         });
         await review.save();
 
-        // Construct review link (replace with your actual frontend review page URL)
-        const reviewLink = `http://localhost:5173/review/${reviewToken}`;              // after change to bookmydoc.com
+        const reviewLink = `https://bookmydoc-five.vercel.app/review/${reviewToken}`;      // localhost -> for local testing        
+        //console.log('Review Link:', reviewLink);
 
-        // Email template (you'll want to create a proper HTML template)
+        // Email template 
         const htmlContent = `
             <h2>Rate Your Doctor</h2>
             <p>Thank you for your appointment with Dr. ${appointment.doctorId.baseUserId.firstname} ${appointment.doctorId.baseUserId.lastname}</p>
