@@ -184,6 +184,3 @@ const Sidenav = () => {
 };
 
 export default Sidenav;
-
-
-// implement protected routes !! 

@@ -12,7 +12,7 @@ router.get('/:id', getDoctorById);
 
 router.patch('/location/:doctorId', AddDoctorLocation);
 
-// router.patch('/rate/:doctorId', rateDoctor);
+router.patch('/rate/:doctorId', rateDoctor);
 
 
 // router.put('/:id', updateDoctor);

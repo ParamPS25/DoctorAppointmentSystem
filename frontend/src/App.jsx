@@ -15,7 +15,6 @@ import DoctorCalendar from './components/Templets/DoctorCalendar';
 import Profile from './components/Profile';
 import ProfileOfDoctor from './components/ProfileOfDoctor';
 import MainLayout from './MainLayout';
-import DoctorReviewForm from './components/Templets/DoctorReviewForm';
 
 const App = () => {
   return (
@@ -37,7 +36,6 @@ const App = () => {
         <Route path='/Signup' element={<Signup />} />
         <Route path='/SigninInfo' element={<SigninInfo />} />
         <Route path="/AppointmentPatientSide/:doctorId" element={<AppointmentPatientSide />} />
-        <Route path="/review/:reviewToken" element={<DoctorReviewForm />} />
       </Routes>
     </div>
   )

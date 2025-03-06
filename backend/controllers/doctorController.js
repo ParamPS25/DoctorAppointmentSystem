@@ -33,51 +33,51 @@ async function getDoctorById(req, res) {
     }
 }
 
-// async function rateDoctor(req, res) {
-//     try {
-//       const docId = req.params.doctorId;
-//       const { rating } = req.body;
+async function rateDoctor(req, res) {
+    try {
+      const docId = req.params.doctorId;
+      const { rating } = req.body;
   
-//       // Validate the rating value
-//       if (!rating || rating < 1 || rating > 5) {
-//         return res.status(400).json({
-//           message: 'Invalid rating. Please provide a value between 1 and 5.',
-//         });
-//       }
+      // Validate the rating value
+      if (!rating || rating < 1 || rating > 5) {
+        return res.status(400).json({
+          message: 'Invalid rating. Please provide a value between 1 and 5.',
+        });
+      }
   
-//       // Find the doctor by ID
-//       const doctor = await Doctor.findById(docId);
-//       if (!doctor) {
-//         return res.status(404).json({
-//           message: 'Doctor not found',
-//         });
-//       }
+      // Find the doctor by ID
+      const doctor = await Doctor.findById(docId);
+      if (!doctor) {
+        return res.status(404).json({
+          message: 'Doctor not found',
+        });
+      }
   
-//       // Update the doctor's ratings
-//       const totalRatings = doctor.totalRatings || 0;
-//       const ratingCount = doctor.ratingCount || 0;
+      // Update the doctor's ratings
+      const totalRatings = doctor.totalRatings || 0;
+      const ratingCount = doctor.ratingCount || 0;
   
-//       // Calculate new average rating
-//       const newAverageRating = (totalRatings + rating) / (ratingCount + 1);
+      // Calculate new average rating
+      const newAverageRating = (totalRatings + rating) / (ratingCount + 1);
   
-//       // Update fields
-//       doctor.totalRatings = totalRatings + rating;
-//       doctor.ratingCount = ratingCount + 1;
-//       doctor.averageRating = newAverageRating;
+      // Update fields
+      doctor.totalRatings = totalRatings + rating;
+      doctor.ratingCount = ratingCount + 1;
+      doctor.averageRating = newAverageRating;
   
-//       await doctor.save();
+      await doctor.save();
   
-//       res.status(200).json({
-//         message: 'Rating submitted successfully',
-//         averageRating: doctor.averageRating,
-//       });
-//     } catch (err) {
-//       console.error(err);
-//       res.status(500).json({
-//         message: 'Failed to rate doctor',
-//       });
-//     }
-//   }
+      res.status(200).json({
+        message: 'Rating submitted successfully',
+        averageRating: doctor.averageRating,
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({
+        message: 'Failed to rate doctor',
+      });
+    }
+  }
   
   async function AddDoctorLocation(req, res) {
     try {
@@ -137,6 +137,6 @@ async function getDoctorById(req, res) {
 module.exports = {
     getAllDoctors,
     getDoctorById,
-    // rateDoctor,
+    rateDoctor,
     AddDoctorLocation
 };
