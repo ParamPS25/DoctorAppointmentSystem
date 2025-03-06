@@ -79,7 +79,7 @@ const DoctorReviewForm = () => {
 
     if (success) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-green-50">
+            <div className="flex items-center justify-center min-h-screen w-[100%] min-w-screen bg-green-50">
                 <div className="p-8 text-center bg-white rounded-lg shadow-xl">
                     <h2 className="text-3xl font-bold text-green-600 mb-4">Thank You!</h2>
                     <p className="text-green-700 text-xl">Your review has been submitted successfully.</p>
@@ -91,7 +91,7 @@ const DoctorReviewForm = () => {
 
     if (error) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-red-50">
+            <div className="flex items-center justify-center min-h-screen w-[100%] min-w-screen bg-red-50">
                 <div className="p-8 text-center bg-white rounded-lg shadow-xl">
                     <h2 className="text-3xl font-bold text-red-600 mb-4">Error</h2>
                     <p className="text-red-700">{error}</p>
@@ -101,7 +101,7 @@ const DoctorReviewForm = () => {
     }
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="flex items-center justify-center min-h-screen w-[100%] min-w-screen bg-gray-100">
             <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
                 <h2 className="text-2xl font-bold text-center text-gray-800">Rate Your Experience</h2>
                 
