@@ -6,6 +6,7 @@ import axios from 'axios';
 const QrScan = () => {
   const [result, setResult] = useState('');
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
   const handleScan = async (data) => {
@@ -29,11 +30,12 @@ const QrScan = () => {
 
         // Handle the response correctly
         if (response.data.success) {
-          alert('Appointment marked as completed successfully!');
+          // alert('Appointment marked as completed successfully!');
+          setSuccess('Appointment marked as completed successfully!');
           navigate('/Appointments');
         } else {
           setError(response.data.message || 'Failed to verify QR code');
-          alert(response.data.message || 'Failed to verify QR code');
+          //alert(response.data.message || 'Failed to verify QR code');
         }
       } catch (err) {
         console.error('Error verifying QR code:', err);
@@ -65,6 +67,12 @@ const QrScan = () => {
       {error && (
         <div className="mt-4 p-3 bg-red-100 text-red-700 rounded-md">
           Error: {error}
+        </div>
+      )}
+
+      {success && (
+        <div className="mt-4 p-3 bg-green-100 text-green-700 rounded-md">
+          Success : {success}
         </div>
       )}
       
