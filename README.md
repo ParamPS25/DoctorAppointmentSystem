@@ -6,6 +6,9 @@ BookMyDoc is a web-based doctor appointment system designed to streamline medica
 
 - **Live Demo**: [BookMyDoc - Live](https://bookmydoc-five.vercel.app/) [Backend deployed on Render free tier, may take a moment to load initially]
 
+- **Website Demo Video**: 
+[Watch Here](https://github.com/ParamPS25/DoctorAppointmentSystem/blob/main/BookMyDoc_video_final.mp4)
+
 ---
 
 ## Key Features
@@ -20,6 +23,9 @@ BookMyDoc is a web-based doctor appointment system designed to streamline medica
 - **Verification Appointment**:
    - Patients receive an email with the approval or cancellation status and a QR code.
    - When both the doctor and patient meet, the doctor scans the QR code to verify the appointment.
+- **Doctor Review**:
+   - Patients receive an email link to rate their experience with a star rating and comments.
+   - Reviews help future patients make informed decisions and assist doctors in improving service quality.
 - **Disease Prediction**:
   - Three machine learning models implemented:
     - **General Disease Prediction**:
@@ -88,7 +94,13 @@ BookMyDoc is a web-based doctor appointment system designed to streamline medica
 
 ## Installation & Setup (run locally)
 
-1. Set up Environment variables <br>
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/ParamPS25/DoctorAppointmentSystem.git
+   cd DoctorAppointmentSystem
+   ```
+
+2. Set up Environment variables <br>
 
    <h4>Frontend (.env)</h4> 
    Create a .env file in the frontend directory with the following variables: 
@@ -110,33 +122,37 @@ BookMyDoc is a web-based doctor appointment system designed to streamline medica
      MAIL_PASS = your_email_app_password
      PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true
       ```
-   
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/ParamPS25/DoctorAppointmentSystem.git
-   cd DoctorAppointmentSystem
-   ```
 
-2. Install dependencies for the frontend:
+3. Install dependencies for the frontend:
    ```bash
    cd frontend
    npm install
    npm run dev
    ```
 
-3. Install dependencies for the backend:
+4. Install dependencies for the backend:
    ```bash
    cd backend
    npm install
    npm run dev
    ```
 
-4. Run the machine learning:
+5. Run the machine learning backend:
    ```bash
    cd ml-backend
    pip install -r requirements.txt
    python app.py
    ```
+
+6. Using Conda for ML Backend (Alternative Setup):
+   ```bash
+    cd ml-backend
+    conda create -n doc_env python=3.8 -y
+    conda activate doc_env
+    pip install -r requirements.txt
+    python app.py
+    ```
+
 ---
 
 ## Contributors
@@ -145,3 +161,10 @@ BookMyDoc is a web-based doctor appointment system designed to streamline medica
 - **[Purv Patel](https://github.com/purvpatel123)** - Frontend Development  
 - **[Prit Patel](https://github.com/Pritlimbani269)** - Frontend Development  
 - **[Prince Patel](https://github.com/prince2004patel)** - Machine Learning  
+
+
+---
+
+## License
+
+- This project is licensed under the **MIT License**.
