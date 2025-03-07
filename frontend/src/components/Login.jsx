@@ -62,11 +62,11 @@ const Login = () => {
           disabled={isLoading}
           {...register('password')}
         />
-        <div className="text-right">
-{/*           <a href="#" className="text-blue-700"> */}
-{/*             Forgot Password? */}
-          // </a>
-        </div>
+    {/*    <div className="text-right"> 
+           <a href="#" className="text-blue-700"> 
+            Forgot Password? 
+           </a>
+         </div>  */}
         <button
           type="submit"
           disabled={isLoading}
