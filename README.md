@@ -6,9 +6,6 @@ BookMyDoc is a web-based doctor appointment system designed to streamline medica
 
 - **Live Demo**: [BookMyDoc - Live](https://bookmydoc-five.vercel.app/) [Backend deployed on Render free tier, may take a moment to load initially]
 
-- **Website Demo Video**: 
-[Watch Here](https://github.com/ParamPS25/DoctorAppointmentSystem/blob/main/BookMyDoc_video_final.mp4)
-
 ---
 
 ## Key Features
@@ -40,6 +37,11 @@ BookMyDoc is a web-based doctor appointment system designed to streamline medica
       - Uses features like gender, age, work type, and various health parameters.
       - Predicts whether a user is at risk of stroke.
       - Implements **Gradient Boosting** with a **91% accuracy score**.
+
+---
+
+- **Website Demo Video**: 
+[![Watch the video](https://img.youtube.com/vi/uO-ocNwpnIA/0.jpg)](https://www.youtube.com/watch?v=uO-ocNwpnIA)
 
 ---
 
