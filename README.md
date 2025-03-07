@@ -40,8 +40,8 @@ BookMyDoc is a web-based doctor appointment system designed to streamline medica
 
 ---
 
-- **Website Demo Video**: 
-[![Watch the video](https://img.youtube.com/vi/uO-ocNwpnIA/0.jpg)](https://www.youtube.com/watch?v=uO-ocNwpnIA)
+- **Website Demo Video (Youtube link)**: <br> <br>
+ [![YouTube](http://i.ytimg.com/vi/uO-ocNwpnIA/hqdefault.jpg)](https://www.youtube.com/watch?v=uO-ocNwpnIA)
 
 ---
 
