@@ -63,9 +63,9 @@ const Login = () => {
           {...register('password')}
         />
         <div className="text-right">
-          <a href="#" className="text-blue-700">
-            Forgot Password?
-          </a>
+{/*           <a href="#" className="text-blue-700"> */}
+{/*             Forgot Password? */}
+          // </a>
         </div>
         <button
           type="submit"
