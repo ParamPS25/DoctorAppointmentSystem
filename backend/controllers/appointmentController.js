@@ -1,3 +1,4 @@
+require('dotenv').config();
 const Appointment = require('../models/appointmentSchema');
 const BaseUser = require('../models/baseUserSchema')
 const Doctor = require('../models/doctorSchema');
@@ -270,7 +271,7 @@ async function sendReviewEmail(appointment) {
         });
         await review.save();
 
-        const reviewLink = `https://bookmydoc-five.vercel.app/review/${reviewToken}`;      // localhost -> for local testing        
+        const reviewLink = `${process.env.FRONTEND_URL}/review/${reviewToken}`;      // localhost -> for local testing        
         //console.log('Review Link:', reviewLink);
 
         // Email template 
