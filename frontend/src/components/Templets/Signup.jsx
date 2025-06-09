@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import LoadingSpinner from '../../reusables/LoadinSpinner';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ const Signup = () => {
     medicalHistory: [],
   });
 
+  const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate(); // For navigation
 
@@ -39,21 +41,21 @@ const Signup = () => {
     }
 
     if (name === "age") {
-  // Sanitize the input: remove all non-digit characters
-  const digitsOnly = value.replace(/\D/g, "");
+      // Sanitize the input: remove all non-digit characters
+      const digitsOnly = value.replace(/\D/g, "");
 
-  // Prevent more than 2 digits
-  if (digitsOnly.length > 2) return;
+      // Prevent more than 2 digits
+      if (digitsOnly.length > 2) return;
 
-  updatedValue = digitsOnly;
+      updatedValue = digitsOnly;
 
-  const ageNum = parseInt(digitsOnly, 10);
+      const ageNum = parseInt(digitsOnly, 10);
 
-  // Show error only if not empty and invalid
-  if (digitsOnly && (isNaN(ageNum) || ageNum < 1 || ageNum > 99)) {
-    errorMsg = "Age must be a number between 1 and 99";
-  }
-}
+      // Show error only if not empty and invalid
+      if (digitsOnly && (isNaN(ageNum) || ageNum < 1 || ageNum > 99)) {
+        errorMsg = "Age must be a number between 1 and 99";
+      }
+    }
 
     setFormData((prev) => ({
       ...prev,
@@ -70,9 +72,9 @@ const Signup = () => {
     e.preventDefault();
 
     const hasFieldErrors = Object.values(errors).some((msg) => msg);
-    if (hasFieldErrors) {
-      return; // Don't submit if real-time errors exist
-    }
+    if (hasFieldErrors) return;
+
+    setIsLoading(true);
 
     try {
       const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
@@ -81,13 +83,14 @@ const Signup = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include', // This enables the browser to include cookies
+        credentials: 'include',
         body: JSON.stringify(formData),
       });
 
       const data = await response.json();
       if (data.success === false && data.message === 'User already exists') {
         setErrors({ submit: 'User already exists' });
+        setIsLoading(false);
         return;
       }
 
@@ -102,10 +105,14 @@ const Signup = () => {
       } else {
         navigate('/AllPage/Doctor');
       }
+
     } catch (error) {
       setErrors({ submit: error.message });
+    } finally {
+      setIsLoading(false);
     }
   };
+
 
   return (
     <div className="h-full w-full py-12 sm:px-6 lg:px-8">
@@ -300,12 +307,16 @@ const Signup = () => {
             )}
 
             <div>
-              <button
-                type="submit"
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Sign up
-              </button>
+              {isLoading ? (
+                <LoadingSpinner small={true} />
+              ) : (
+                <button
+                  type="submit"
+                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                >
+                  Sign up
+                </button>
+              )}
             </div>
           </form>
         </div>
