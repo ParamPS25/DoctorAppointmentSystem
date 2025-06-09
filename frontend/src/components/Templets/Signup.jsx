@@ -38,6 +38,23 @@ const Signup = () => {
       }
     }
 
+    if (name === "age") {
+  // Sanitize the input: remove all non-digit characters
+  const digitsOnly = value.replace(/\D/g, "");
+
+  // Prevent more than 2 digits
+  if (digitsOnly.length > 2) return;
+
+  updatedValue = digitsOnly;
+
+  const ageNum = parseInt(digitsOnly, 10);
+
+  // Show error only if not empty and invalid
+  if (digitsOnly && (isNaN(ageNum) || ageNum < 1 || ageNum > 99)) {
+    errorMsg = "Age must be a number between 1 and 99";
+  }
+}
+
     setFormData((prev) => ({
       ...prev,
       [name]: updatedValue,
