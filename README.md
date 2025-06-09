@@ -122,7 +122,7 @@ BookMyDoc is a web-based doctor appointment system designed to streamline medica
      JWT_EXPIRES_IN = 1h
      COOKIE_EXPIRES_IN = 24
      MAIL_PASS = your_email_app_password
-     PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = true
+     FRONTEND_URL=http://localhost:5173
       ```
 
 3. Install dependencies for the frontend:
