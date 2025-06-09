@@ -74,7 +74,7 @@ const Login = () => {
         >
           {isLoading ? (
             <>
-              <LoadingSpinner/>
+              <LoadingSpinner small= "true"/>
               Signing in...
             </>
           ) : (

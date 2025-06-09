@@ -19,15 +19,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors({
-    origin: function (origin, callback) {
-      // Allow all requests from Vercel deployments
-      if (!origin || origin.endsWith(".vercel.app")) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    // origin : 'http://localhost:5173',
+    origin : process.env.FRONTEND_URL,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE","PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"]

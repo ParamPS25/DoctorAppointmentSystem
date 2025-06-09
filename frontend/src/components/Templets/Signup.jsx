@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const Signup = () => {
@@ -22,17 +22,44 @@ const Signup = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    let updatedValue = value;
+    let errorMsg = "";
+
+    if (name === "phoneNumber") {
+      updatedValue = value.replace(/\D/g, "");
+      if (updatedValue.length > 10) return;
+    }
+
+    if (name === "firstname" || name === "lastname") {
+      const nameRegex = /^[A-Za-z]{0,20}$/;
+      if (!nameRegex.test(updatedValue)) {
+        errorMsg = `${name === "firstname" ? "First" : "Last"} name must contain only letters (no spaces or special characters), and be max 20 characters`;
+      }
+    }
+
     setFormData((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: updatedValue,
+    }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [name]: errorMsg,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const hasFieldErrors = Object.values(errors).some((msg) => msg);
+    if (hasFieldErrors) {
+      return; // Don't submit if real-time errors exist
+    }
+
     try {
       const NODE_ENV = import.meta.env.VITE_NODE_DOC_API;
-      const response = await fetch(NODE_ENV+'/api/auth/signup', {
+      const response = await fetch(NODE_ENV + '/api/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -53,9 +80,9 @@ const Signup = () => {
 
       console.log('Signup successful');
 
-      if(data.user.role === "doctor"){
+      if (data.user.role === "doctor") {
         navigate('/AllPage/Appointments');
-      } else{
+      } else {
         navigate('/AllPage/Doctor');
       }
     } catch (error) {
@@ -88,6 +115,11 @@ const Signup = () => {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   required
                 />
+                {errors.firstname && (
+                  <p className="text-red-500 text-sm mt-1">{errors.firstname}</p>
+                )}
+
+
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700">
@@ -101,6 +133,9 @@ const Signup = () => {
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                   required
                 />
+                {errors.lastname && (
+                  <p className="text-red-500 text-sm mt-1">{errors.lastname}</p>
+                )}
               </div>
             </div>
 
@@ -141,6 +176,8 @@ const Signup = () => {
                 name="phoneNumber"
                 value={formData.phoneNumber}
                 onChange={handleChange}
+                maxLength="10"
+                pattern="[0-9]{10}"
                 className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
                 required
               />

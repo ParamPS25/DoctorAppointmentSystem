@@ -7,8 +7,8 @@ generateTokens = async (user) => {
     // Payload containing id, email, and role
     const payload = {
         id: user._id,
-        firstname : user.firstname,
-        lastname : user.lastname,
+        firstname: user.firstname,
+        lastname: user.lastname,
         email: user.email,
         role: user.role
     };
@@ -54,7 +54,7 @@ generateTokens = async (user) => {
 };
 
 
-exports.sendToken = async (user, statusCode,res) => {
+exports.sendToken = async (user, statusCode, res) => {
     const { accessToken, refreshToken } = await generateTokens(user);
 
     // Set CORS Headers for Cookies
@@ -64,21 +64,17 @@ exports.sendToken = async (user, statusCode,res) => {
     // res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
 
     const accessTokenOptions = {
-        expires: new Date(Date.now() + 50 * 60 * 1000), //expiration is set to 50 minutes from the current time.
-        httpOnly: true,                                 //option makes the cookie inaccessible to JavaScript running on the client-side
-        // secure: process.env.NODE_ENV === 'production', // Only secure cookies in production
-        secure: true,                                   //option ensures that the cookie is sent only over HTTPS
-        sameSite: 'None',
-        // sameSite : 'Strict'
+        expires: new Date(Date.now() + 50 * 60 * 1000),     //expiration is set to 50 minutes from the current time.
+        httpOnly: true,                                     //option makes the cookie inaccessible to JavaScript running on the client-side
+        secure: process.env.NODE_ENV === 'production',      // Only secure cookies in production
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Strict'
     };
 
     const refreshTokenOptions = {
         expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
         httpOnly: true,
-        // secure: process.env.NODE_ENV === 'production', // Only secure cookies in production
-        secure: true,                                   //option ensures that the cookie is sent only over HTTPS
-        sameSite: 'None',
-        // sameSite : 'Strict'
+        secure: process.env.NODE_ENV === 'production',      // Only secure cookies in production
+        sameSite: process.env.NODE_ENV === 'production' ? 'None' : 'Strict'
     };
 
     // Send user info without sensitive data
